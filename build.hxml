@@ -1,0 +1,10 @@
+-cp src
+-php app
+-main App
+
+--next
+-cp ../bootstrap
+-D noEmbedJS
+-cp src
+-js app.js
+-main App
