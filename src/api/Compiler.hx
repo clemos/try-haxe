@@ -24,7 +24,7 @@ class Compiler {
 			}
 		}
 
-		var alphaNum = ~/[a-zA-Z0-9/;
+		var alphaNum = ~/[a-zA-Z0-9]/;
 		if( !alphaNum.match(program.uid) || !alphaNum.match(program.main.name) ){
 			throw "Unauthorized";
 		}
