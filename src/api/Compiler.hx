@@ -46,7 +46,9 @@ class Compiler {
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"--times",
-			"-D","noEmbedJS"
+			"-D","noEmbedJS",
+			"--dead-code-elimination",
+			"--js-modern"
 		];
 
 		var outputUrl : String;
