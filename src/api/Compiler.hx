@@ -24,6 +24,11 @@ class Compiler {
 			}
 		}
 
+		var alphaNum = ~/[a-zA-Z0-9/;
+		if( !alphaNum.match(program.uid) || !alphaNum.match(program.main.name) ){
+			throw "Unauthorized";
+		}
+
 		var tmpDir = tmp + "/" + program.uid;
 
 		if( !FileSystem.isDirectory( tmpDir )){
@@ -47,11 +52,13 @@ class Compiler {
 		var outputUrl : String;
 		switch( program.target ){
 			case JS( name ):
+				if( !alphaNum.match(name) ) throw "Unauthorized"; 
 				outputUrl = tmpDir + "/" + name + ".js";
 				args.push( "-js" );
 				args.push( outputUrl );
 
 			case SWF( name , version ):
+				if( !alphaNum.match(name) ) throw "Unauthorized";
 				outputUrl = tmpDir + "/" + name + ".swf";
 				
 				args.push( "-swf" );
