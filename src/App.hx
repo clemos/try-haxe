@@ -89,6 +89,8 @@ class App {
   	}
 
   	public function onCompile( o : Output ){
+
+  		var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
   		
   		output = o;
   		program.uid = output.uid;
