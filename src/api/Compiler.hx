@@ -8,19 +8,23 @@ import php.FileSystem;
 import php.io.File;
 #end
 
+using Lambda;
+
 class Compiler {
 
 	static var tmp = "../tmp";
 
+	var tmpDir : String;
+	var mainFile : String;
+
 	public function new(){}
 
-	public static function checkSanity( s : String ){
+	static function checkSanity( s : String ){
 		var alphaNum = ~/[^a-zA-Z0-9]/;
 		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
 	}
 
-	public function compile( program : Program ){
-
+	function prepareProgram( program : Program ){
 		while( program.uid == null ){
 			var uid = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
 			var tmpDir = tmp + "/" + uid;
@@ -32,18 +36,68 @@ class Compiler {
 		checkSanity( program.uid );
 		checkSanity( program.main.name );
 
-		var tmpDir = tmp + "/" + program.uid;
+		tmpDir = tmp + "/" + program.uid;
 
 		if( !FileSystem.isDirectory( tmpDir )){
 			FileSystem.createDirectory( tmpDir );
 		}
 
-		var mainFile = tmpDir + "/" + program.main.name + ".hx";
+		mainFile = tmpDir + "/" + program.main.name + ".hx";
 
 		var source = program.main.source;
 		source = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild)/.customReplace( source , function( m ){ return ""; } );
 		
 		File.saveContent( mainFile , source );
+
+	}
+
+	public function autocomplete( program : Program , pos : { line : Int, ch : Int } ) : Array<String>{
+		
+		prepareProgram( program );
+
+		var source = program.main.source;
+		var lines = source.split("
+");
+		var char = 0;
+
+		for( i in 0...pos.line ){
+			char += lines[i].length + 1;
+		}
+		char += pos.ch;
+
+		var args = [
+			"-cp" , tmpDir,
+			"-main" , program.main.name,
+			"-js" , "dummy.js",
+			"-v",
+			"--display" , tmpDir + "/" + program.main.name + ".hx@" + char
+		];
+
+		var out = runHaxe( args );
+
+		try{
+			var xml = new haxe.xml.Fast( Xml.parse( out.err ).firstChild() );
+			var words = [];
+
+			for( e in xml.nodes.i ){
+				var w = e.att.n;
+				if( !words.has( w ) )
+					words.push( w );
+
+			}
+			return words;
+
+		}catch(e:Dynamic){
+			trace(e);
+		}
+
+		return [];
+		
+	}
+
+	public function compile( program : Program ){
+
+		prepareProgram( program );
 
 		var args = [
 			"-cp" , tmpDir,
@@ -53,6 +107,7 @@ class Compiler {
 		];
 
 		var outputUrl : String;
+		
 		switch( program.target ){
 			case JS( name ):
 				checkSanity( name );
@@ -74,17 +129,15 @@ class Compiler {
 				args.push( Std.string( version ) );
 		}
 
-		var proc = new sys.io.Process( "haxe" , args );
-		var exitCode = proc.exitCode();
-		var outp = proc.stdout.readAll().toString();
-		var err = proc.stderr.readAll().toString();
+		
+		var out = runHaxe( args );
 
-		var output : Program.Output = if( exitCode == 0 ){
+		var output : Program.Output = if( out.exitCode == 0 ){
 			{
 				uid : program.uid,
 				args : args,
-				stderr : err,
-				stdout : outp,
+				stderr : out.err,
+				stdout : out.out,
 				success : true,
 				message : "Build success!",
 				href : outputUrl,
@@ -94,8 +147,8 @@ class Compiler {
 			{
 				uid : program.uid,
 				args : args,
-				stderr : err,
-				stdout : outp,
+				stderr : out.err,
+				stdout : out.out,
 				success : false,
 				message : "Build failure",
 				href : "",
@@ -104,6 +157,17 @@ class Compiler {
 		}
 		
 		return output;
+	}
+
+	function runHaxe( args ){
+		var proc = new sys.io.Process( "haxe" , args );
+		return {
+			proc : proc,
+			exitCode : proc.exitCode(),
+			out : proc.stdout.readAll().toString(),
+			err : proc.stderr.readAll().toString()
+		}
+
 	}
 
 }

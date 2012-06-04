@@ -24,11 +24,16 @@ class Editor {
 
 	public function new(){
 
+		CodeMirror.commands.autocomplete = autocomplete;
+
   		haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']").get(0) , {
 			mode : "javascript",
 			theme : "cobalt",
 			lineWrapping : true,
-			lineNumbers : true
+			lineNumbers : true,
+			extraKeys : {
+				"Ctrl-Space" : "autocomplete"
+			}
 		} );
 		
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']").get(0) , {
@@ -64,6 +69,23 @@ class Editor {
 		}
   	}
 
+  	public function autocomplete( cm : CodeMirror ){
+  		updateProgram();
+  		var pos = cm.getCursor();
+
+  		cnx.Compiler.autocomplete.call( [ program , pos ] , function( comps ) displayCompletions( cm , comps ) );
+  	}
+
+  	public function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
+  		var comps = [];
+
+  		CodeMirror.simpleHint( cm , function(cm){ return {
+  			list : completions,
+  			from : cm.getCursor(),
+  			to : cm.getCursor()
+  		}; } );
+  	}
+
   	public function onKey( e : JqEvent ){
   		if( e.ctrlKey && e.keyCode == 13 ){
   			compile(e);
@@ -73,8 +95,12 @@ class Editor {
   	public function compile(?e){
   		if( e != null ) e.preventDefault();
   		compileBtn.buttonLoading();
-  		program.main.source = haxeSource.getValue();
+  		updateProgram();
   		cnx.Compiler.compile.call( [program] , onCompile );
+  	}
+
+  	function updateProgram(){
+  		program.main.source = haxeSource.getValue();
   	}
 
   	public function run(){
