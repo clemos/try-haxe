@@ -38,7 +38,7 @@ class Compiler {
 		var mainFile = tmpDir + "/" + program.main.name + ".hx";
 
 		var source = program.main.source;
-		source = ~/@:macro/.customReplace( source , function( m ){ return ""; } );
+		source = ~/@([^:]*):([^a-z]*)macro/.customReplace( source , function( m ){ return ""; } );
 		
 		File.saveContent( mainFile , source );
 
