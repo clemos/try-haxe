@@ -46,9 +46,7 @@ class Compiler {
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"--times",
-			"-D","noEmbedJS",
 			"--dead-code-elimination",
-			"--js-modern"
 		];
 
 		var outputUrl : String;
@@ -58,6 +56,10 @@ class Compiler {
 				outputUrl = tmpDir + "/" + name + ".js";
 				args.push( "-js" );
 				args.push( outputUrl );
+				args.push("--js-modern");
+				args.push("-D");
+				args.push("noEmbedJS");
+				
 
 			case SWF( name , version ):
 				if( !alphaNum.match(name) ) throw "Unauthorized";
