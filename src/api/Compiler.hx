@@ -55,10 +55,11 @@ class Compiler {
 				if( !alphaNum.match(name) ) throw "Unauthorized"; 
 				outputUrl = tmpDir + "/" + name + ".js";
 				args.push( "-js" );
+				args.push( outputUrl );
 				args.push("--js-modern");
 				args.push("-D");
 				args.push("noEmbedJS");
-				args.push( outputUrl );
+				
 
 			case SWF( name , version ):
 				if( !alphaNum.match(name) ) throw "Unauthorized";
