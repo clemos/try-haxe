@@ -14,6 +14,11 @@ class Compiler {
 
 	public function new(){}
 
+	public static function checkSanity( s : String ){
+		var alphaNum = ~/[^a-zA-Z0-9]/;
+		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
+	}
+
 	public function compile( program : Program ){
 
 		while( program.uid == null ){
@@ -24,10 +29,8 @@ class Compiler {
 			}
 		}
 
-		var alphaNum = ~/[a-zA-Z0-9]/;
-		if( !alphaNum.match(program.uid) || !alphaNum.match(program.main.name) ){
-			throw "Unauthorized";
-		}
+		checkSanity( program.uid );
+		checkSanity( program.main.name );
 
 		var tmpDir = tmp + "/" + program.uid;
 
@@ -52,7 +55,7 @@ class Compiler {
 		var outputUrl : String;
 		switch( program.target ){
 			case JS( name ):
-				if( !alphaNum.match(name) ) throw "Unauthorized"; 
+				checkSanity( name );
 				outputUrl = tmpDir + "/" + name + ".js";
 				args.push( "-js" );
 				args.push( outputUrl );
@@ -62,7 +65,7 @@ class Compiler {
 				
 
 			case SWF( name , version ):
-				if( !alphaNum.match(name) ) throw "Unauthorized";
+				checkSanity( name );
 				outputUrl = tmpDir + "/" + name + ".swf";
 				
 				args.push( "-swf" );

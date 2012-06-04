@@ -4,6 +4,7 @@
 
 --next
 -cp ../bootstrap
+-D noEmbedBootstrap
 -D noEmbedJS
 -cp src
 -js app.js
