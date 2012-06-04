@@ -88,7 +88,7 @@ class Compiler {
 			return words;
 
 		}catch(e:Dynamic){
-			trace(e);
+			return [];
 		}
 
 		return [];
