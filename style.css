@@ -1,5 +1,9 @@
 
 html {
 	overflow-y:scroll;
+	padding-top:18px
+}
 
+.CodeMirror-wrap {
+	margin-bottom:18px;
 }
