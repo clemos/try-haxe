@@ -107,6 +107,8 @@ class Editor {
   		if( output.success ){
 	  		var run = gateway + "?run=" + output.uid + "&r=" + Std.string(Math.random());
 	  		runner.attr("src" , run );
+  		}else{
+  			runner.attr("src" , "about:blank" );
   		}
   	}
 
