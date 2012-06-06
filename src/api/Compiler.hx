@@ -49,6 +49,32 @@ class Compiler {
 		
 		File.saveContent( mainFile , source );
 
+		var s = program.main.source;
+		program.main.source = null;
+		File.saveContent( tmpDir + "/program", haxe.Serializer.run(program));
+		program.main.source = s;
+
+	}
+
+	public function getProgram(uid:String):Program 
+	{
+		if (uid.length != 32) return null; // simple md5 check
+		
+		if (FileSystem.isDirectory( tmp + "/" + uid ))
+		{
+			tmpDir = tmp + "/" + uid;
+
+			var s = File.getContent(tmpDir + "/program"); 
+			var p:Program = haxe.Unserializer.run(s);
+
+			mainFile = tmpDir + "/" + p.main.name + ".hx";
+			
+			p.main.source = File.getContent(mainFile);
+
+			return p;
+		}
+
+		return null;
 	}
 
 	public function autocomplete( program : Program , pos : { line : Int, ch : Int } ) : Array<String>{

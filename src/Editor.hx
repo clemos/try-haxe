@@ -59,14 +59,32 @@ class Editor {
 		gateway = new JQuery("body").data("gateway");
 		cnx = HttpAsyncConnection.urlConnect(gateway);
 
-		program = {
-			uid : null,
-			main : {
-				name : "Test",
-				source : haxeSource.getValue()
-			},
-			target : JS( "test" )
-		}
+		var uid = js.Lib.window.location.hash;
+		if (uid.length > 0) uid = uid.substr(1);
+		cnx.Compiler.getProgram.call([uid], onProgram);
+  	}
+
+  	function onProgram(p:Program)
+  	{
+  		trace(p);
+  		if (p != null)
+  		{
+  			// sharing
+  			program = p;
+  			haxeSource.setValue(program.main.source);
+  		}
+  		else
+  		{
+  			// default program
+  			program = {
+				uid : null,
+				main : {
+					name : "Test",
+					source : haxeSource.getValue()
+				},
+				target : JS( "test" )
+			}
+  		}
   	}
 
   	public function autocomplete( cm : CodeMirror ){
@@ -113,6 +131,8 @@ class Editor {
   	}
 
   	public function onCompile( o : Output ){
+
+  		js.Lib.window.location.hash = "#" + o.uid;
 
   		var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
   		
