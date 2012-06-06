@@ -7,3 +7,7 @@ html {
 .CodeMirror-wrap {
 	margin-bottom:18px;
 }
+
+.js-run {
+	width:100%;
+}

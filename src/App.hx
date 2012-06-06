@@ -28,7 +28,7 @@ class App {
 		    var params = Web.getParams();
 		    var run = params.get('run');
 		    if( run != null ){
-		    	php.Lib.print("<html><body><script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script><script>"+File.getContent('../tmp/'+run+'/test.js')+"</script></body></html>");
+		    	php.Lib.print("<html><head><title>Haxe/JS Runner</title></head><body><script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script><script>"+File.getContent('../tmp/'+run+'/test.js')+"</script></body></html>");
 		    	return;
 		    }
 		}
