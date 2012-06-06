@@ -4,8 +4,16 @@ typedef Program = {
 	uid : String,
 	main : Module,
 	target : Target,
+	libs:Array<Library>,
 //	?modules : Hash<Module>,
 //	?libs : Array<String>
+}
+
+typedef Library =
+{
+	name:String,
+	?checked:Bool,
+	?args:Array<String> // aditional args like --remap flash:nme ...
 }
 
 typedef Module = {

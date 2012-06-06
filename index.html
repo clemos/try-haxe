@@ -42,11 +42,12 @@
           </div>
           <ul class="nav nav-tabs">
                 <li class="active"><a href="#hx-source" data-toggle="tab">Source</a></li>
+                <li><a href="#hx-libs" data-toggle="tab">haxelib</a></li>
                 
 
           </ul>
           <div class="tab-content">
-    	  	  <div class="tab-pane active">
+    	  	  <div class="tab-pane hx-source active" id="hx-source">
               <textarea name="hx-source" class="code haxe-source" rows="10">
 class Test {
   public static function main(){
@@ -56,6 +57,13 @@ class Test {
               </textarea>
               
             </div>
+
+            <div class="tab-pane hx-libs" id="hx-libs" style="height:300px">
+              <form id="hx-libs-form">
+              </form>
+              
+            </div>
+
           </div>
           <strong><a href="http://haxe.org" target="_blank" title="Haxe">Haxe</a></strong> is an awesome language that compiles to <strong>Javascript</strong>, <strong>Flash</strong>, <strong>C++</strong>, <strong>PHP</strong>, <strong>Neko</strong>, <strong>Java</strong> and <strong>C#</strong>.<br/>
           It thus allows to write applications that target native <strong>iOS</strong>, <strong>Android</strong> as well as traditional browsers (<strong>HTML5</strong> or <strong>SWF</strong>), servers and desktops (Mac, PC or Linux).

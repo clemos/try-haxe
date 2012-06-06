@@ -68,7 +68,7 @@ class Compiler {
 			var p:Program = haxe.Unserializer.run(s);
 
 			mainFile = tmpDir + "/" + p.main.name + ".hx";
-			
+
 			p.main.source = File.getContent(mainFile);
 
 			return p;
@@ -99,6 +99,8 @@ class Compiler {
 			"--display" , tmpDir + "/" + program.main.name + ".hx@" + char
 		];
 
+		addLibs(args, program);
+
 		var out = runHaxe( args );
 
 		try{
@@ -119,6 +121,19 @@ class Compiler {
 
 		return [];
 		
+	}
+
+	function addLibs(args:Array<String>, program:Program) 
+	{
+		for (l in program.libs)
+		{
+			if (l.checked)
+			{
+				args.push("-lib");
+				args.push(l.name);
+				if (l.args != null) args = args.concat(l.args);
+			}
+		}
 	}
 
 	public function compile( program : Program ){
@@ -155,6 +170,7 @@ class Compiler {
 				args.push( Std.string( version ) );
 		}
 
+		addLibs(args, program);
 		
 		var out = runHaxe( args );
 

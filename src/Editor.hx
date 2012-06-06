@@ -66,7 +66,7 @@ class Editor {
 
   	function onProgram(p:Program)
   	{
-  		trace(p);
+  		//trace(p);
   		if (p != null)
   		{
   			// sharing
@@ -82,9 +82,22 @@ class Editor {
 					name : "Test",
 					source : haxeSource.getValue()
 				},
-				target : JS( "test" )
+				target : JS( "test" ),
+				libs : new Array()
 			}
   		}
+
+  		var selectedLib = function (name:String):Bool
+  		{
+  			for (l in program.libs) if (l.name == name) return l.checked;
+  			return false;
+  		};
+
+  		var libs = new JQuery("#hx-libs-form");
+		for (l in Libs.getLibs(program.target)) // fill libs form
+		{
+			libs.append('<input type="checkbox" value="' + l.name + '" ' + ((l.checked || selectedLib(l.name)) ? "checked" : "") + ' data-args="' + (l.args != null ? l.args.join("~") : "") + '" /> ' + l.name + "<br />");
+		}
   	}
 
   	public function autocomplete( cm : CodeMirror ){
@@ -119,6 +132,19 @@ class Editor {
 
   	function updateProgram(){
   		program.main.source = haxeSource.getValue();
+
+  		var libs = new Array<api.Program.Library>();
+  		var inputs = new JQuery("#hx-libs-form input:checked");
+  		// TODO: change libs array only then need
+  		for (i in inputs)  // refill libs array, only checked libs
+  		{
+  			var l:api.Program.Library = { name:i.attr("value"), checked:true };
+  			var d = Std.string(i.data("args"));
+  			if (d.length > 0) l.args = d.split("~");
+  			libs.push(l);
+  		}
+
+  		program.libs = libs;
   	}
 
   	public function run(){
