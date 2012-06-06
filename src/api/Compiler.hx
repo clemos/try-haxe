@@ -131,7 +131,7 @@ class Compiler {
 			{
 				args.push("-lib");
 				args.push(l.name);
-				if (l.args != null) for (a in args) args.push(a);
+				if (l.args != null) for (a in l.args) args.push(a);
 			}
 		}
 	}
