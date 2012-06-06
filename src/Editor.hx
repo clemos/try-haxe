@@ -26,7 +26,7 @@ class Editor {
 
 		CodeMirror.commands.autocomplete = autocomplete;
 
-  		haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']").get()[0] , {
+  		haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
 			theme : "cobalt",
 			lineWrapping : true,
@@ -36,7 +36,7 @@ class Editor {
 			}
 		} );
 		
-		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']").get()[0] , {
+		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
 			theme : "cobalt",
 			lineWrapping : true,
