@@ -30,14 +30,18 @@ class Compiler {
 		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
 	}
 
+	static function makeUid(){
+		var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+		id = id.substr(0, 5);
+		var uid = "";
+		for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
+		return uid;
+	}
+
 	function prepareProgram( program : Program ){
 		while( program.uid == null ){
 
-			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
-			id = id.substr(0, 5);
-			var uid = "";
-			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
-
+			var uid = makeUid();
 			var tmpDir = tmp + "/" + uid;
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
@@ -187,7 +191,6 @@ class Compiler {
 				args.push("-D");
 				args.push("noEmbedJS");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
-				html.body.push("<script src='" + name + ".js'></script>");
 				
 
 			case SWF( name , version ):
@@ -198,7 +201,6 @@ class Compiler {
 				args.push( outputUrl );
 				args.push( "-swf-version" );
 				args.push( Std.string( version ) );
-				//html.body.push("swf embed source");
 		}
 
 		addLibs(args, program, html);
@@ -236,6 +238,15 @@ class Compiler {
 
 		if (out.exitCode == 0)
 		{
+			switch( program.target ){
+				case JS(name):
+					html.body.push("<script>"+File.getContent(outputUrl)+"</script>");
+
+				case SWF(name, _):
+					html.body.push("swf embed source");
+					// embed SWF
+			}
+
 			var h = new StringBuf();
 			h.add("<html><head><title>Haxe/JS Runner</title>");
 			for (i in html.head) h.add(i);
