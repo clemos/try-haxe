@@ -13,7 +13,9 @@ typedef Library =
 
 typedef LibConf = {
 	name : String,
-	?args : Array<String>
+	?args : Array<String>,
+	?head:Array<String>,
+	?body:Array<String>
 }
 
 typedef AvailableLibs = {
@@ -26,7 +28,7 @@ class Libs
 
 	public static var available : AvailableLibs = {
 		js : [
-			{name:"jeash", args : ["--remap","flash:jeash"]},
+			{name:"jeash", args : ["--remap","flash:jeash"], body:["<div id='haxe:jeash'></div>"]},
 			{name:"selecthx"},
 			{name:"modernizr"},
 			{name:"browserhx"}
