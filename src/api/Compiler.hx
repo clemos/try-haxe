@@ -58,7 +58,7 @@ class Compiler {
 
 	public function getProgram(uid:String):Program 
 	{
-		if (uid.length != 32) return null; // simple md5 check
+		checkSanity(uid);
 		
 		if (FileSystem.isDirectory( tmp + "/" + uid ))
 		{
