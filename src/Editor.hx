@@ -70,6 +70,7 @@ class Editor {
 
 		new JQuery("a[data-toggle='tab']").bind( "shown", function(e){
 			jsSource.refresh();
+      haxeSource.refresh();
 		});
 
     targets.delegate("input[name='target']" , "change" , onTarget );
