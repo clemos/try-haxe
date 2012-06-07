@@ -8,13 +8,6 @@ typedef Program = {
 //	?modules : Hash<Module>,
 }
 
-typedef Library =
-{
-	name:String,
-	?checked:Bool,
-	?args:Array<String> // aditional args like --remap flash:nme ...
-}
-
 typedef Module = {
 	name : String,
 	source : String

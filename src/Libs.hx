@@ -4,6 +4,13 @@ import api.Program;
 
 using Lambda;
 
+typedef Library =
+{
+	name:String,
+	?checked:Bool,
+	//?args:Array<String> // aditional args like --remap flash:nme ...
+}
+
 typedef LibConf = {
 	name : String,
 	?args : Array<String>
@@ -45,7 +52,7 @@ class Libs
 			res.push({
 				name:l.name, 
 				checked:defaultChecked.has( l.name ) 
-			}); // libs can be checked by default
+			});
 		}
 
 		return res;
