@@ -129,20 +129,17 @@ class Compiler {
 			case JS(_) : Libs.available.js;
 			case SWF(_,_) : Libs.available.swf;
 		}
-
-		for (l in program.libs)
-		{
-			if ( availableLibs.has(l) )
-			{
+		for( l in availableLibs ){
+			if( program.libs.has( l.name ) ){
 				args.push("-lib");
-				args.push(l);
-				/* TODO : needs to be sanitized / checked
-				if (l.args != null) 
-					for (a in l.args) 
+				args.push(l.name);
+				if( l.args != null ) 
+					for( a in l.args ){
 						args.push(a);
-				*/
+					}
 			}
 		}
+		
 	}
 
 	public function compile( program : Program ){
