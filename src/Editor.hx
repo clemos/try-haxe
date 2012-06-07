@@ -173,7 +173,8 @@ class Editor {
 
   public function onKey( e : JqEvent ){
    if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
-     compile(e);
+      e.preventDefault();
+      compile(e);
    }
   }
 
