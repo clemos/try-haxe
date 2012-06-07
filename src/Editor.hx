@@ -217,17 +217,20 @@ class Editor {
       trace(e);
       if( errLine.match( e ) ){
         var err = {
+          file : errLine.matched(1),
           line : Std.parseInt(errLine.matched(2)) - 1,
           from : Std.parseInt(errLine.matched(3)),
           to : Std.parseInt(errLine.matched(4)),
           msg : errLine.matched(5)
         };
-        //trace(err.line);
-        var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
-        lineHandles.push( l );
+        if( StringTools.trim( err.file ) == "Test.hx" ){
+          //trace(err.line);
+          var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
+          lineHandles.push( l );
 
-        var m = haxeSource.markText( { line : err.line , ch : err.from } , { line : err.line , ch : err.to } , "error");
-        markers.push( m );
+          var m = haxeSource.markText( { line : err.line , ch : err.from } , { line : err.line , ch : err.to } , "error");
+          markers.push( m );
+        }
         
       }
     }
