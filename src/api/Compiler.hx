@@ -239,13 +239,12 @@ class Compiler {
 			}
 		}
 
-		switch (program.target) {
-			case JS(_): output.source = File.getContent(outputUrl);
-			default:
-		}
-
 		if (out.exitCode == 0)
 		{
+			switch (program.target) {
+				case JS(_): output.source = File.getContent(outputUrl);
+				default:
+			}
 			var h = new StringBuf();
 			h.add("<html>\n\t<head>\n\t\t<title>Haxe/JS Runner</title>");
 			for (i in html.head) { h.add("\n\t\t"); h.add(i); }
