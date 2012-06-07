@@ -33,9 +33,8 @@ class Libs
 			{name:"modernizr"},
 			{name:"browserhx"}
 		],
-		swf : [
-			{name:"actuate" , args : []},
-			{name:"hxSet"}
+		swf : cast [
+			{name:"actuate" , args : []}
 		]
 	};
 

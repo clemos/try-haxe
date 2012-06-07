@@ -1,0 +1,17 @@
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+#editorPreloader {
+    height: 100%;
+}
+
+/* end hide */
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /*background-color: #FFF;*/
+}

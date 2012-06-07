@@ -24,6 +24,8 @@ class Editor {
 	var messages : JQuery;
 	var compileBtn : JQuery;
   var libs : JQuery;
+  var targets : JQuery;
+
   var markers : Array<MarkedText>;
   var lineHandles : Array<LineHandle>;
 
@@ -61,13 +63,16 @@ class Editor {
 		runner = new JQuery("iframe[name='js-run']");
 		messages = new JQuery(".messages");
 		compileBtn = new JQuery(".compile-btn");
-    libs = new JQuery("#hx-options-form .hx-libs .controls");
+    libs = new JQuery("#hx-options-form .hx-libs");
+    targets = new JQuery("#hx-options-form .hx-targets");
       
 		new JQuery("body").bind("keyup", onKey );
 
 		new JQuery("a[data-toggle='tab']").bind( "shown", function(e){
 			jsSource.refresh();
 		});
+
+    targets.delegate("input[name='target']" , "change" , onTarget );
 		
 		compileBtn.bind( "click" , compile );
 
@@ -86,6 +91,8 @@ class Editor {
 
     initLibs();
 
+    setTarget( api.Program.Target.JS( "test" ) );
+
 		var uid = js.Lib.window.location.hash;
 		if (uid.length > 0){
       uid = uid.substr(1);
@@ -93,17 +100,48 @@ class Editor {
     }
   }
 
+  function onTarget(e : JqEvent){
+    var cb = new JQuery( e.target );
+    var name = cb.val();
+    var target = switch( name ){
+      case "swf" : api.Program.Target.SWF('test',10);
+      case "js" : api.Program.Target.JS('test');
+    }
+    setTarget(target);
+  }
+
+  function setTarget( target : api.Program.Target ){
+    program.target = target;
+    libs.find(".controls").hide();
+    var jsTab = new JQuery("a[href='#js-source']");
+    var sel :String;
+    switch( target ){
+      case JS(_): 
+        sel = "js";
+        jsTab.fadeIn();
+
+      case SWF(_,_) : 
+        sel = "swf";
+        jsTab.hide();
+    }
+    libs.find("."+sel+"-libs").fadeIn();
+  }
+
   function initLibs(){
-    for (l in Libs.getAvailableLibs(program.target)) // fill libs form
-    {
-      libs.append(
-        
-        '<label class="checkbox"><input class="lib" type="checkbox" value="' + l.name + '" ' 
-        + ((l.checked /*|| selectedLib(l.name)*/) ? "checked='checked'" : "") 
-        + '" /> ' + l.name 
-        + "<span class='help-inline'><a href='http://lib.haxe.org/p/" + l.name +"' target='_blank'><i class='icon-question-sign'></i></a></span>"
-        + "</label>"
-        );
+    for( t in ["swf","js"] ){
+      var el = libs.find("."+t+"-libs");
+      var libs : Array<Libs.LibConf> = Reflect.field( Libs.available , t );
+      for( l in libs ){
+
+        el.append(
+          '<label class="checkbox"><input class="lib" type="checkbox" value="' + l.name + '" ' 
+          + ((Libs.defaultChecked.has(l.name) /*|| selectedLib(l.name)*/) ? "checked='checked'" : "") 
+          + '" /> ' + l.name 
+          + "<span class='help-inline'><a href='http://lib.haxe.org/p/" + l.name +"' target='_blank'><i class='icon-question-sign'></i></a></span>"
+          + "</label>"
+          );
+    
+      }
     }
   }
 
@@ -124,6 +162,7 @@ class Editor {
           }
         }
       }
+      setTarget( program.target );
 		}
 
 	}
@@ -197,7 +236,11 @@ class Editor {
 		program.main.source = haxeSource.getValue();
 
 		var libs = new Array();
-		var inputs = new JQuery("#hx-options .hx-libs input.lib:checked");
+    var sel = switch( program.target ){
+      case JS(_): "js";
+      case SWF(_,_) : "swf";
+    }
+		var inputs = new JQuery("#hx-options .hx-libs ."+sel+"-libs input.lib:checked");
 		// TODO: change libs array only then need
 		for (i in inputs)  // refill libs array, only checked libs
 		{

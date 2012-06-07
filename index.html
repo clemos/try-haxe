@@ -59,11 +59,21 @@ class Test {
 
             <div class="tab-pane hx-options" id="hx-options">
               <form id="hx-options-form" class="form-horizontal">
+                  <div class="control-group hx-targets">
+                    <label class="control-label" for="libs-checkbox">Target</label>
+                    
+                    <div class="controls">
+                      <label class="radio inline"><input type="radio" name="target" value="js" checked></input> JS</label>
+                      <label class="radio inline"><input type="radio" name="target" value="swf"></input> SWF</label>
+                    </div>
+                    
+                  </div>
                   <div class="control-group hx-libs">
                     <label class="control-label" for="libs-checkbox">Libraries</label>
-                    <div class="controls">
-                        
-                    </div>
+                    
+                    <div class="controls swf-libs"></div>
+                    <div class="controls js-libs"></div>
+                
                   </div>
               </form>
             </div>

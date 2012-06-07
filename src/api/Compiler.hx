@@ -188,6 +188,7 @@ class Compiler {
 				args.push("noEmbedJS");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
 				html.body.push("<script src='" + outputUrl + "'></script>");
+				//html.body.push("<script src='" + outputUrl + "'></script>");
 				
 
 			case SWF( name , version ):
@@ -199,26 +200,8 @@ class Compiler {
 				args.push( "-swf-version" );
 				args.push( Std.string( version ) );
 				args.push("-debug");
-				html.head.push("<style>
-        html {
-            height: 100%;
-            overflow: hidden;
-        }
-
-        #editorPreloader {
-            height: 100%;
-        }
-
-            /* end hide */
-
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #FFF;
-        }
-    </style>");
-				html.head.push("<script src='../swfobject.js'></script>");
+				html.head.push("<link rel='stylesheet' href='../swf.css' type='text/css'/>");
+				html.head.push("<script src='../lib/swfobject.js'></script>");
 				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+outputUrl+'", "flashContent", "100%", "100%", "'+version+'.0.0")</script>');
 				html.body.push('<div id="flashContent"></div>');
 		}
