@@ -46,4 +46,6 @@ typedef ChangeEvent = {
 	@:overload( function( line : LineHandle ) : Void {})
 	public function clearMarker(line:Int) : Void;
 
+	public function getWrapperElement() : js.HtmlDom;
+
 }

@@ -25,6 +25,8 @@ class Editor {
 	var compileBtn : JQuery;
   var libs : JQuery;
   var targets : JQuery;
+  var stage : JQuery;
+  var jsTab : JQuery;
 
   var markers : Array<MarkedText>;
   var lineHandles : Array<LineHandle>;
@@ -65,6 +67,8 @@ class Editor {
 		compileBtn = new JQuery(".compile-btn");
     libs = new JQuery("#hx-options-form .hx-libs");
     targets = new JQuery("#hx-options-form .hx-targets");
+    stage = new JQuery(".js-output .well");
+    jsTab = new JQuery("a[href='#js-source']");
       
 		new JQuery("body").bind("keyup", onKey );
 
@@ -114,7 +118,7 @@ class Editor {
   function setTarget( target : api.Program.Target ){
     program.target = target;
     libs.find(".controls").hide();
-    var jsTab = new JQuery("a[href='#js-source']");
+    
     var sel :String;
     switch( target ){
       case JS(_): 
@@ -271,11 +275,23 @@ class Editor {
 		program.uid = output.uid;
 		
 		jsSource.setValue( output.source );
+
+    var jsSourceElem = new JQuery(jsSource.getWrapperElement());
 		
 		if( output.success ){
 			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+      jsSourceElem.show();
+      jsSource.refresh();
+      stage.show();
+      switch( program.target ){
+        case JS(_) : jsTab.show();
+        default : jsTab.hide();
+      }
 		}else{
 			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+      stage.hide();
+      jsTab.hide();
+      jsSourceElem.hide();
       markErrors();
 		}
 
