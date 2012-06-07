@@ -100,14 +100,14 @@ class Editor {
 		}
   	}
 
-  	public function autocomplete( cm : CodeMirror ){
+  	function autocomplete( cm : CodeMirror ){
   		updateProgram();
   		var pos = cm.getCursor();
 
   		cnx.Compiler.autocomplete.call( [ program , pos ] , function( comps ) displayCompletions( cm , comps ) );
   	}
 
-  	public function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
+  	function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
   		var comps = [];
 
   		CodeMirror.simpleHint( cm , function(cm){ return {
@@ -117,13 +117,13 @@ class Editor {
   		}; } );
   	}
 
-  	public function onKey( e : JqEvent ){
+  	function onKey( e : JqEvent ){
   		if( e.ctrlKey && e.keyCode == 13 ){
   			compile(e);
   		}
   	}
 
-  	public function compile(?e){
+  	function compile(?e){
   		if( e != null ) e.preventDefault();
   		compileBtn.buttonLoading();
   		updateProgram();
@@ -147,7 +147,7 @@ class Editor {
   		program.libs = libs;
   	}
 
-  	public function run(){
+  	function run(){
   		if( output.success ){
 	  		var run = gateway + "?run=" + output.uid + "&r=" + Std.string(Math.random());
 	  		runner.attr("src" , run );
@@ -156,7 +156,7 @@ class Editor {
   		}
   	}
 
-  	public function onCompile( o : Output ){
+  	function onCompile( o : Output ){
 
   		js.Lib.window.location.hash = "#" + o.uid;
 
