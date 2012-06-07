@@ -6,6 +6,7 @@ import js.JQuery;
 
 using js.bootstrap.Button;
 using Lambda;
+using StringTools;
 
 class Editor {
 
@@ -23,21 +24,32 @@ class Editor {
 	var messages : JQuery;
 	var compileBtn : JQuery;
   var libs : JQuery;
+  var markers : Array<MarkedText>;
+  var lineHandles : Array<LineHandle>;
+
+  var completions : Array<String>;
+  var completionIndex : Int;
 
 	public function new(){
+    markers = [];
+    lineHandles = [];
 
 		CodeMirror.commands.autocomplete = autocomplete;
+    CodeMirror.commands.compile = function(_) compile();
 
-  		haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
+  	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
 			theme : "rubyblue",
 			lineWrapping : true,
 			lineNumbers : true,
 			extraKeys : {
-				"Ctrl-Space" : "autocomplete"
-			}
+				"Ctrl-Space" : "autocomplete",
+        "Ctrl-Enter" : "compile"
+			},
+      onChange : onChange
 		} );
-		
+
+   
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
 			theme : "rubyblue",
@@ -61,7 +73,6 @@ class Editor {
 
 		gateway = new JQuery("body").data("gateway");
 		cnx = HttpAsyncConnection.urlConnect(gateway);
-
 
     program = {
       uid : null,
@@ -119,29 +130,64 @@ class Editor {
 
 	public function autocomplete( cm : CodeMirror ){
 		updateProgram();
-		var pos = cm.getCursor();
+    var src = cm.getValue();
 
-		cnx.Compiler.autocomplete.call( [ program , pos ] , function( comps ) displayCompletions( cm , comps ) );
+    var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
+    if( idx == null ) return;
+
+    if( idx == completionIndex ){
+      displayCompletions( cm , completions ); 
+      return;
+    }
+    completionIndex = idx;
+    cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps ) displayCompletions( cm , comps ) );
 	}
 
-	public function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
-		var comps = [];
+  function showHint( cm : CodeMirror ){
+    var src = cm.getValue();
+    var cursor = cm.getCursor();
+    var from = SourceTools.indexToPos( src , SourceTools.getAutocompleteIndex( src, cursor ) );
+    var to = cm.getCursor();
 
-		CodeMirror.simpleHint( cm , function(cm){ return {
-			list : completions,
-			from : cm.getCursor(),
-			to : cm.getCursor()
-		}; } );
+    var token = src.substring( SourceTools.posToIndex( src, from ) , SourceTools.posToIndex( src, to ) );
+
+    var list = [];
+
+    for( c in completions ){
+      if( c.toLowerCase().startsWith( token.toLowerCase() ) ){
+        list.push( c );
+      }
+    }
+
+    return {
+        list : list,
+        from : from,
+        to : to
+    };
+  }
+
+	public function displayCompletions(cm : CodeMirror , comps : Array<String> ) {
+		completions = comps;
+    CodeMirror.simpleHint( cm , showHint );
 	}
 
-	public function onKey( e : JqEvent ){
-		if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
-			compile(e);
-		}
+  public function onKey( e : JqEvent ){
+   if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
+      e.preventDefault();
+      compile(e);
+   }
+  }
+
+	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
+    var txt :String = e.text[0];
+    if( txt.trim().endsWith( ".") ){
+      autocomplete( haxeSource );
+    }
 	}
 
 	public function compile(?e){
 		if( e != null ) e.preventDefault();
+    clearErrors();
 		compileBtn.buttonLoading();
 		updateProgram();
 		cnx.Compiler.compile.call( [program] , onCompile );
@@ -177,8 +223,6 @@ class Editor {
 
 		js.Lib.window.location.hash = "#" + o.uid;
 
-		var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
-		
 		output = o;
 		program.uid = output.uid;
 		
@@ -188,6 +232,7 @@ class Editor {
 			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
 		}else{
 			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+      markErrors();
 		}
 
 		compileBtn.buttonReset();
@@ -195,5 +240,40 @@ class Editor {
 		run();
 
 	}
+
+  public function clearErrors(){
+    for( m in markers ){
+      m.clear();
+    }
+    markers = [];
+    for( l in lineHandles ){
+      haxeSource.clearMarker( l );
+    }
+  }
+
+  public function markErrors(){
+    var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
+    
+    for( e in output.errors ){
+      if( errLine.match( e ) ){
+        var err = {
+          file : errLine.matched(1),
+          line : Std.parseInt(errLine.matched(2)) - 1,
+          from : Std.parseInt(errLine.matched(3)),
+          to : Std.parseInt(errLine.matched(4)),
+          msg : errLine.matched(5)
+        };
+        if( StringTools.trim( err.file ) == "Test.hx" ){
+          //trace(err.line);
+          var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
+          lineHandles.push( l );
+
+          var m = haxeSource.markText( { line : err.line , ch : err.from } , { line : err.line , ch : err.to } , "error");
+          markers.push( m );
+        }
+        
+      }
+    }
+  }
 
 }

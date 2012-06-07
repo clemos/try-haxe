@@ -30,6 +30,7 @@ typedef Output = {
 	stderr : String,
 	stdout : String,
 	args : Array<String>,
+	errors : Array<String>,
 	success : Bool,
 	message : String,
 	href : String,
