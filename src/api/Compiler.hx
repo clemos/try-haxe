@@ -125,13 +125,22 @@ class Compiler {
 
 	function addLibs(args:Array<String>, program:Program) 
 	{
+		var availableLibs = switch( program.target ){
+			case JS(_) : Libs.available.js;
+			case SWF(_,_) : Libs.available.swf;
+		}
+
 		for (l in program.libs)
 		{
-			if (l.checked)
+			if ( availableLibs.has(l) )
 			{
 				args.push("-lib");
-				args.push(l.name);
-				if (l.args != null) for (a in l.args) args.push(a);
+				args.push(l);
+				/* TODO : needs to be sanitized / checked
+				if (l.args != null) 
+					for (a in l.args) 
+						args.push(a);
+				*/
 			}
 		}
 	}

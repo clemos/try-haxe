@@ -4,9 +4,8 @@ typedef Program = {
 	uid : String,
 	main : Module,
 	target : Target,
-	libs:Array<Library>,
+	?libs:Array<String>,
 //	?modules : Hash<Module>,
-//	?libs : Array<String>
 }
 
 typedef Library =

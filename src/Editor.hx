@@ -5,6 +5,7 @@ import js.codemirror.CodeMirror;
 import js.JQuery;
 
 using js.bootstrap.Button;
+using Lambda;
 
 class Editor {
 
@@ -21,6 +22,7 @@ class Editor {
 	var runner : JQuery;
 	var messages : JQuery;
 	var compileBtn : JQuery;
+  var libs : JQuery;
 
 	public function new(){
 
@@ -47,7 +49,8 @@ class Editor {
 		runner = new JQuery("iframe[name='js-run']");
 		messages = new JQuery(".messages");
 		compileBtn = new JQuery(".compile-btn");
-
+    libs = new JQuery("#hx-options-form .hx-libs .controls");
+      
 		new JQuery("body").bind("keyup", onKey );
 
 		new JQuery("a[data-toggle='tab']").bind( "shown", function(e){
@@ -59,124 +62,138 @@ class Editor {
 		gateway = new JQuery("body").data("gateway");
 		cnx = HttpAsyncConnection.urlConnect(gateway);
 
+
+    program = {
+      uid : null,
+      main : {
+        name : "Test",
+        source : haxeSource.getValue()
+      },
+      target : JS( "test" ),
+      libs : new Array()
+    };
+
+    initLibs();
+
 		var uid = js.Lib.window.location.hash;
-		if (uid.length > 0) uid = uid.substr(1);
-		cnx.Compiler.getProgram.call([uid], onProgram);
-  	}
+		if (uid.length > 0){
+      uid = uid.substr(1);
+  		cnx.Compiler.getProgram.call([uid], onProgram);
+    }
+  }
 
-  	function onProgram(p:Program)
-  	{
-  		//trace(p);
-  		if (p != null)
-  		{
-  			// sharing
-  			program = p;
-  			haxeSource.setValue(program.main.source);
-  		}
-  		else
-  		{
-  			// default program
-  			program = {
-				uid : null,
-				main : {
-					name : "Test",
-					source : haxeSource.getValue()
-				},
-				target : JS( "test" ),
-				libs : new Array()
-			}
-  		}
+  function initLibs(){
+    for (l in Libs.getAvailableLibs(program.target)) // fill libs form
+    {
+      libs.append(
+        
+        '<label class="checkbox"><input class="lib" type="checkbox" value="' + l.name + '" ' 
+        + ((l.checked /*|| selectedLib(l.name)*/) ? "checked='checked'" : "") 
+        + '" /> ' + l.name 
+        + "<span class='help-inline'><a href='http://lib.haxe.org/p/" + l.name +"' target='_blank'><i class='icon-question-sign'></i></a></span>"
+        + "</label>"
+        );
+    }
+  }
 
-  		var selectedLib = function (name:String):Bool
-  		{
-  			for (l in program.libs) if (l.name == name) return l.checked;
-  			return false;
-  		};
-
-  		var libs = new JQuery("#hx-libs-form");
-		for (l in Libs.getLibs(program.target)) // fill libs form
+	function onProgram(p:Program)
+	{
+		//trace(p);
+		if (p != null)
 		{
-			libs.append('<input type="checkbox" value="' + l.name + '" ' + ((l.checked || selectedLib(l.name)) ? "checked" : "") + ' data-args="' + (l.args != null ? l.args.join("~") : "") + '" /> ' + l.name + "<br />");
+			// sharing
+			program = p;
+			haxeSource.setValue(program.main.source);
+      if( program.libs != null ){
+        for( lib in libs.find("input.lib") ){
+          if( program.libs.has( lib.val() ) ){
+            lib.attr("checked","checked");
+          }else{
+            lib.removeAttr("checked");
+          }
+        }
+      }
 		}
-  	}
 
-  	public function autocomplete( cm : CodeMirror ){
-  		updateProgram();
-  		var pos = cm.getCursor();
+	}
 
-  		cnx.Compiler.autocomplete.call( [ program , pos ] , function( comps ) displayCompletions( cm , comps ) );
-  	}
+	public function autocomplete( cm : CodeMirror ){
+		updateProgram();
+		var pos = cm.getCursor();
 
-  	public function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
-  		var comps = [];
+		cnx.Compiler.autocomplete.call( [ program , pos ] , function( comps ) displayCompletions( cm , comps ) );
+	}
 
-  		CodeMirror.simpleHint( cm , function(cm){ return {
-  			list : completions,
-  			from : cm.getCursor(),
-  			to : cm.getCursor()
-  		}; } );
-  	}
+	public function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
+		var comps = [];
 
-  	public function onKey( e : JqEvent ){
-  		if( e.ctrlKey && e.keyCode == 13 ){
-  			compile(e);
-  		}
-  	}
+		CodeMirror.simpleHint( cm , function(cm){ return {
+			list : completions,
+			from : cm.getCursor(),
+			to : cm.getCursor()
+		}; } );
+	}
 
-  	public function compile(?e){
-  		if( e != null ) e.preventDefault();
-  		compileBtn.buttonLoading();
-  		updateProgram();
-  		cnx.Compiler.compile.call( [program] , onCompile );
-  	}
+	public function onKey( e : JqEvent ){
+		if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
+			compile(e);
+		}
+	}
 
-  	function updateProgram(){
-  		program.main.source = haxeSource.getValue();
+	public function compile(?e){
+		if( e != null ) e.preventDefault();
+		compileBtn.buttonLoading();
+		updateProgram();
+		cnx.Compiler.compile.call( [program] , onCompile );
+	}
 
-  		var libs = new Array<api.Program.Library>();
-  		var inputs = new JQuery("#hx-libs-form input:checked");
-  		// TODO: change libs array only then need
-  		for (i in inputs)  // refill libs array, only checked libs
-  		{
-  			var l:api.Program.Library = { name:i.attr("value"), checked:true };
-  			var d = Std.string(i.data("args"));
-  			if (d.length > 0) l.args = d.split("~");
-  			libs.push(l);
-  		}
+	function updateProgram(){
+		program.main.source = haxeSource.getValue();
 
-  		program.libs = libs;
-  	}
+		var libs = new Array();
+		var inputs = new JQuery("#hx-options .hx-libs input.lib:checked");
+		// TODO: change libs array only then need
+		for (i in inputs)  // refill libs array, only checked libs
+		{
+			//var l:api.Program.Library = { name:i.attr("value"), checked:true };
+			//var d = Std.string(i.data("args"));
+			//if (d.length > 0) l.args = d.split("~");
+			libs.push(i.val());
+		}
 
-  	public function run(){
-  		if( output.success ){
-	  		var run = gateway + "?run=" + output.uid + "&r=" + Std.string(Math.random());
-	  		runner.attr("src" , run );
-  		}else{
-  			runner.attr("src" , "about:blank" );
-  		}
-  	}
+		program.libs = libs;
+	}
 
-  	public function onCompile( o : Output ){
+	public function run(){
+		if( output.success ){
+  		var run = gateway + "?run=" + output.uid + "&r=" + Std.string(Math.random());
+  		runner.attr("src" , run );
+		}else{
+			runner.attr("src" , "about:blank" );
+		}
+	}
 
-  		js.Lib.window.location.hash = "#" + o.uid;
+	public function onCompile( o : Output ){
 
-  		var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
-  		
-  		output = o;
-  		program.uid = output.uid;
-  		
-  		jsSource.setValue( output.source );
-  		
-  		if( output.success ){
-  			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
-  		}else{
-  			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
-  		}
+		js.Lib.window.location.hash = "#" + o.uid;
 
-  		compileBtn.buttonReset();
+		var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
+		
+		output = o;
+		program.uid = output.uid;
+		
+		jsSource.setValue( output.source );
+		
+		if( output.success ){
+			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+		}else{
+			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+		}
 
-  		run();
+		compileBtn.buttonReset();
 
-  	}
+		run();
+
+	}
 
 }
