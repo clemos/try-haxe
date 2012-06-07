@@ -10,6 +10,12 @@ import php.io.File;
 
 using Lambda;
 
+typedef HTMLConf = 
+{
+	head:Array<String>,
+	body:Array<String>
+}
+
 class Compiler {
 
 	static var tmp = "../tmp";
@@ -26,7 +32,12 @@ class Compiler {
 
 	function prepareProgram( program : Program ){
 		while( program.uid == null ){
-			var uid = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+
+			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+			id = id.substr(0, 5);
+			var uid = "";
+			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
+
 			var tmpDir = tmp + "/" + uid;
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
@@ -86,10 +97,21 @@ class Compiler {
 		var args = [
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
-			"-js" , "dummy.js",
 			"-v",
 			"--display" , tmpDir + "/" + program.main.name + ".hx@" + idx
 		];
+
+		switch (program.target) {
+			case JS(_):
+				args.push("-js");
+				args.push("dummy.js");
+
+			case SWF(_, version):
+				args.push("-swf");
+				args.push("dummy.swf");
+				args.push("-swf-version");
+				args.push(Std.string(version));
+		}
 
 		addLibs(args, program);
 
@@ -115,7 +137,7 @@ class Compiler {
 		
 	}
 
-	function addLibs(args:Array<String>, program:Program) 
+	function addLibs(args:Array<String>, program:Program, ?html:HTMLConf) 
 	{
 		var availableLibs = switch( program.target ){
 			case JS(_) : Libs.available.js;
@@ -123,6 +145,11 @@ class Compiler {
 		}
 		for( l in availableLibs ){
 			if( program.libs.has( l.name ) ){
+				if (html != null)
+				{
+					if (l.head != null) html.head = html.head.concat(l.head);
+					if (l.body != null) html.body = html.body.concat(l.body);
+				}
 				args.push("-lib");
 				args.push(l.name);
 				if( l.args != null ) 
@@ -146,7 +173,10 @@ class Compiler {
 		];
 
 		var outputUrl : String;
+		var htmlUrl : String = tmpDir + "/" + "index.html";
 		
+		var html:HTMLConf = {head:[], body:[]};
+
 		switch( program.target ){
 			case JS( name ):
 				checkSanity( name );
@@ -156,6 +186,8 @@ class Compiler {
 				args.push("--js-modern");
 				args.push("-D");
 				args.push("noEmbedJS");
+				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
+				html.body.push("<script src='" + name + ".js'></script>");
 				
 
 			case SWF( name , version ):
@@ -166,9 +198,10 @@ class Compiler {
 				args.push( outputUrl );
 				args.push( "-swf-version" );
 				args.push( Std.string( version ) );
+				//html.body.push("swf embed source");
 		}
 
-		addLibs(args, program);
+		addLibs(args, program, html);
 		
 		var out = runHaxe( args );
 		var err = out.err.split( tmpDir + "/" ).join("");
@@ -184,7 +217,7 @@ class Compiler {
 				errors : [],
 				success : true,
 				message : "Build success!",
-				href : outputUrl,
+				href : htmlUrl,
 				source : File.getContent( outputUrl )
 			}
 		}else{
@@ -199,6 +232,18 @@ class Compiler {
 				href : "",
 				source : ""
 			}
+		}
+
+		if (out.exitCode == 0)
+		{
+			var h = new StringBuf();
+			h.add("<html><head><title>Haxe/JS Runner</title>");
+			for (i in html.head) h.add(i);
+			h.add("</head><body>");
+			for (i in html.body) h.add(i); 
+			h.add('</body></html>');
+
+			File.saveContent(htmlUrl, h.toString());
 		}
 		
 		return output;

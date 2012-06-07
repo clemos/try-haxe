@@ -4,9 +4,18 @@ import api.Program;
 
 using Lambda;
 
+typedef Library =
+{
+	name:String,
+	?checked:Bool,
+	//?args:Array<String> // aditional args like --remap flash:nme ...
+}
+
 typedef LibConf = {
 	name : String,
-	?args : Array<String>
+	?args : Array<String>,
+	?head:Array<String>,
+	?body:Array<String>
 }
 
 typedef AvailableLibs = {
@@ -19,7 +28,7 @@ class Libs
 
 	public static var available : AvailableLibs = {
 		js : [
-			{name:"jeash", args : ["--remap","flash:jeash"]},
+			{name:"jeash", args : ["--remap","flash:jeash"], body:["<div id='haxe:jeash'></div>"]},
 			{name:"selecthx"},
 			{name:"modernizr"},
 			{name:"browserhx"}
@@ -45,7 +54,7 @@ class Libs
 			res.push({
 				name:l.name, 
 				checked:defaultChecked.has( l.name ) 
-			}); // libs can be checked by default
+			});
 		}
 
 		return res;
