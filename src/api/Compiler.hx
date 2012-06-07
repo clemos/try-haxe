@@ -202,7 +202,7 @@ class Compiler {
 				args.push("-debug");
 				html.head.push("<link rel='stylesheet' href='../swf.css' type='text/css'/>");
 				html.head.push("<script src='../lib/swfobject.js'></script>");
-				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+outputUrl+'", "flashContent", "100%", "100%", "'+version+'.0.0")</script>');
+				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+outputUrl+'", "flashContent", "100%", "100%", "'+version+'.0.0" , null , {} , {scale:"noscale"})</script>');
 				html.body.push('<div id="flashContent"></div>');
 		}
 
