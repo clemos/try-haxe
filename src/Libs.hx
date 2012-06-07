@@ -2,21 +2,32 @@ package ;
 
 import api.Program;
 
+using Lambda;
+
 class Libs
 {
 
-	static public function getLibs(target:Target):Array<Library> 
+	public static var available = {
+		js : ["jeash","selecthx","modernizr","divtastic","browserhx"],
+		swf : ["actuate","hxSet"]
+	};
+
+	public static var defaultChecked = [];
+
+	static public function getAvailableLibs(target:Target):Array<Library> 
 	{
 		var res:Array<Library> = new Array();
 
-		res.push({name:"hxSet"});
+		var availableOnTarget = switch (target) {
+			case JS(_): available.js;
+			case SWF(_, _): available.swf;	
+		}
 
-		switch (target) {
-			case JS(_):
-				res.push({name:"browserhx", checked:false}); // libs can be checked by default
-			case SWF(_, _):
-				res.push({name:"actuate"});
-			
+		for( name in availableOnTarget ){
+			res.push({
+				name:name, 
+				checked:defaultChecked.has( name ) 
+			}); // libs can be checked by default
 		}
 
 		return res;

@@ -4,8 +4,13 @@ html {
 	padding-top:18px
 }
 
-.CodeMirror-wrap {
+.CodeMirror-wrap, .hx-options
+ {
 	margin-bottom:18px;
+}
+
+.hx-options {
+	height:300px;
 }
 
 .js-run {

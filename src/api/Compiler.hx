@@ -26,12 +26,7 @@ class Compiler {
 
 	function prepareProgram( program : Program ){
 		while( program.uid == null ){
-
-			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
-			id = id.substr(0, 5);
-			var uid = "";
-			for (i in 0...id.length) uid += if (Math.random() > 0.5 ) id.charAt(i).toUpperCase() else id.charAt(i);
-
+			var uid = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
 			var tmpDir = tmp + "/" + uid;
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
@@ -63,7 +58,7 @@ class Compiler {
 
 	public function getProgram(uid:String):Program 
 	{
-		if (uid.length != 5) return null; // simple md5 check
+		checkSanity(uid);
 		
 		if (FileSystem.isDirectory( tmp + "/" + uid ))
 		{
@@ -130,13 +125,22 @@ class Compiler {
 
 	function addLibs(args:Array<String>, program:Program) 
 	{
+		var availableLibs = switch( program.target ){
+			case JS(_) : Libs.available.js;
+			case SWF(_,_) : Libs.available.swf;
+		}
+
 		for (l in program.libs)
 		{
-			if (l.checked)
+			if ( availableLibs.has(l) )
 			{
 				args.push("-lib");
-				args.push(l.name);
-				if (l.args != null) for (a in l.args) args.push(a);
+				args.push(l);
+				/* TODO : needs to be sanitized / checked
+				if (l.args != null) 
+					for (a in l.args) 
+						args.push(a);
+				*/
 			}
 		}
 	}
