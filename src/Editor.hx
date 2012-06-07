@@ -6,6 +6,7 @@ import js.JQuery;
 
 using js.bootstrap.Button;
 using Lambda;
+using StringTools;
 
 class Editor {
 
@@ -26,6 +27,9 @@ class Editor {
   var markers : Array<MarkedText>;
   var lineHandles : Array<LineHandle>;
 
+  var completions : Array<String>;
+  var completionIndex : Int;
+
 	public function new(){
     markers = [];
     lineHandles = [];
@@ -39,9 +43,11 @@ class Editor {
 			lineNumbers : true,
 			extraKeys : {
 				"Ctrl-Space" : "autocomplete"
-			}
+			},
+      onChange : onChange
 		} );
-		
+
+   
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
 			theme : "rubyblue",
@@ -55,7 +61,7 @@ class Editor {
 		compileBtn = new JQuery(".compile-btn");
     libs = new JQuery("#hx-options-form .hx-libs .controls");
       
-		new JQuery("body").bind("keyup", onKey );
+		//new JQuery("body").bind("keyup", onKey );
 
 		new JQuery("a[data-toggle='tab']").bind( "shown", function(e){
 			jsSource.refresh();
@@ -65,7 +71,6 @@ class Editor {
 
 		gateway = new JQuery("body").data("gateway");
 		cnx = HttpAsyncConnection.urlConnect(gateway);
-
 
     program = {
       uid : null,
@@ -123,25 +128,52 @@ class Editor {
 
 	public function autocomplete( cm : CodeMirror ){
 		updateProgram();
-		var pos = cm.getCursor();
+    var src = cm.getValue();
 
-		cnx.Compiler.autocomplete.call( [ program , pos ] , function( comps ) displayCompletions( cm , comps ) );
+    var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
+    if( idx == null ) return;
+
+    if( idx == completionIndex ){
+      displayCompletions( cm , completions ); 
+      return;
+    }
+    completionIndex = idx;
+    cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps ) displayCompletions( cm , comps ) );
 	}
 
-	public function displayCompletions(cm : CodeMirror , completions : Array<String> ) {
-		var comps = [];
+  function showHint( cm : CodeMirror ){
+    var src = cm.getValue();
+    var cursor = cm.getCursor();
+    var from = SourceTools.indexToPos( src , SourceTools.getAutocompleteIndex( src, cursor ) );
+    var to = cm.getCursor();
 
-		CodeMirror.simpleHint( cm , function(cm){ return {
-			list : completions,
-			from : cm.getCursor(),
-			to : cm.getCursor()
-		}; } );
+    var token = src.substring( SourceTools.posToIndex( src, from ) , SourceTools.posToIndex( src, to ) );
+
+    var list = [];
+
+    for( c in completions ){
+      if( c.toLowerCase().startsWith( token.toLowerCase() ) ){
+        list.push( c );
+      }
+    }
+
+    return {
+        list : list,
+        from : from,
+        to : to
+    };
+  }
+
+	public function displayCompletions(cm : CodeMirror , comps : Array<String> ) {
+		completions = comps;
+    CodeMirror.simpleHint( cm , showHint );
 	}
 
-	public function onKey( e : JqEvent ){
-		if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
-			compile(e);
-		}
+	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
+    var txt :String = e.text[0];
+    if( txt.trim().endsWith( ".") ){
+      autocomplete( haxeSource );
+    }
 	}
 
 	public function compile(?e){
@@ -214,7 +246,6 @@ class Editor {
     var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
     
     for( e in output.errors ){
-      trace(e);
       if( errLine.match( e ) ){
         var err = {
           file : errLine.matched(1),

@@ -77,26 +77,18 @@ class Compiler {
 		return null;
 	}
 
-	public function autocomplete( program : Program , pos : { line : Int, ch : Int } ) : Array<String>{
+	public function autocomplete( program : Program , idx : Int ) : Array<String>{
 		
 		prepareProgram( program );
 
 		var source = program.main.source;
-		var lines = source.split("
-");
-		var char = 0;
-
-		for( i in 0...pos.line ){
-			char += lines[i].length + 1;
-		}
-		char += pos.ch;
-
+		
 		var args = [
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"-js" , "dummy.js",
 			"-v",
-			"--display" , tmpDir + "/" + program.main.name + ".hx@" + char
+			"--display" , tmpDir + "/" + program.main.name + ".hx@" + idx
 		];
 
 		addLibs(args, program);

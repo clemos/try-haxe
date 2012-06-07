@@ -20,6 +20,13 @@ typedef MarkedText = {
 
 typedef LineHandle = {};
 
+typedef ChangeEvent = {
+	from : Pos,
+	to : Pos,
+	text : Array<String>,
+	?next : ChangeEvent
+}
+
 @:native('CodeMirror') extern class CodeMirror {
 
 	public static var commands (default,null) : Dynamic<CodeMirror->Void>;
