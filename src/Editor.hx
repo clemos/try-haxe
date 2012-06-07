@@ -35,6 +35,7 @@ class Editor {
     lineHandles = [];
 
 		CodeMirror.commands.autocomplete = autocomplete;
+    CodeMirror.commands.compile = function(_) compile();
 
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
@@ -42,7 +43,8 @@ class Editor {
 			lineWrapping : true,
 			lineNumbers : true,
 			extraKeys : {
-				"Ctrl-Space" : "autocomplete"
+				"Ctrl-Space" : "autocomplete",
+        "Ctrl-Enter" : "compile"
 			},
       onChange : onChange
 		} );
@@ -61,7 +63,7 @@ class Editor {
 		compileBtn = new JQuery(".compile-btn");
     libs = new JQuery("#hx-options-form .hx-libs .controls");
       
-		//new JQuery("body").bind("keyup", onKey );
+		new JQuery("body").bind("keyup", onKey );
 
 		new JQuery("a[data-toggle='tab']").bind( "shown", function(e){
 			jsSource.refresh();
@@ -168,6 +170,12 @@ class Editor {
 		completions = comps;
     CodeMirror.simpleHint( cm , showHint );
 	}
+
+  public function onKey( e : JqEvent ){
+   if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
+     compile(e);
+   }
+  }
 
 	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
     var txt :String = e.text[0];
