@@ -30,18 +30,14 @@ class Compiler {
 		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
 	}
 
-	static function makeUid(){
-		var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
-		id = id.substr(0, 5);
-		var uid = "";
-		for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
-		return uid;
-	}
-
 	function prepareProgram( program : Program ){
 		while( program.uid == null ){
 
-			var uid = makeUid();
+			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+			id = id.substr(0, 5);
+			var uid = "";
+			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
+
 			var tmpDir = tmp + "/" + uid;
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
@@ -191,6 +187,7 @@ class Compiler {
 				args.push("-D");
 				args.push("noEmbedJS");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
+				html.body.push("<script src='" + outputUrl + "'></script>");
 				
 
 			case SWF( name , version ):
@@ -201,6 +198,29 @@ class Compiler {
 				args.push( outputUrl );
 				args.push( "-swf-version" );
 				args.push( Std.string( version ) );
+				args.push("-debug");
+				html.head.push("<style>
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #editorPreloader {
+            height: 100%;
+        }
+
+            /* end hide */
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #FFF;
+        }
+    </style>");
+				html.head.push("<script src='../swfobject.js'></script>");
+				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+outputUrl+'", "flashContent", "100%", "100%", "'+version+'.0.0")</script>');
+				html.body.push('<div id="flashContent"></div>');
 		}
 
 		addLibs(args, program, html);
@@ -220,7 +240,7 @@ class Compiler {
 				success : true,
 				message : "Build success!",
 				href : htmlUrl,
-				source : File.getContent( outputUrl )
+				source : ""
 			}
 		}else{
 			{
@@ -236,23 +256,19 @@ class Compiler {
 			}
 		}
 
+		switch (program.target) {
+			case JS(_): output.source = File.getContent(outputUrl);
+			default:
+		}
+
 		if (out.exitCode == 0)
 		{
-			switch( program.target ){
-				case JS(name):
-					html.body.push("<script>"+File.getContent(outputUrl)+"</script>");
-
-				case SWF(name, _):
-					html.body.push("swf embed source");
-					// embed SWF
-			}
-
 			var h = new StringBuf();
-			h.add("<html><head><title>Haxe/JS Runner</title>");
-			for (i in html.head) h.add(i);
-			h.add("</head><body>");
-			for (i in html.body) h.add(i); 
-			h.add('</body></html>');
+			h.add("<html>\n\t<head>\n\t\t<title>Haxe/JS Runner</title>");
+			for (i in html.head) { h.add("\n\t\t"); h.add(i); }
+			h.add("\n\t</head>\n\t<body>");
+			for (i in html.body) { h.add("\n\t\t"); h.add(i); } 
+			h.add('\n\t</body>\n</html>');
 
 			File.saveContent(htmlUrl, h.toString());
 		}
