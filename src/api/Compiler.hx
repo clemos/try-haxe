@@ -26,7 +26,12 @@ class Compiler {
 
 	function prepareProgram( program : Program ){
 		while( program.uid == null ){
-			var uid = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+			
+			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+			id = id.substr(0, 5);
+			var uid = "";
+			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
+
 			var tmpDir = tmp + "/" + uid;
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
