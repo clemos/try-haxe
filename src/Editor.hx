@@ -80,7 +80,7 @@ class Editor {
         name : "Test",
         source : haxeSource.getValue()
       },
-      target : SWF( "test", 10 ),
+      target : JS( "test" ),
       libs : new Array()
     };
 

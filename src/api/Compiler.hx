@@ -187,7 +187,7 @@ class Compiler {
 				args.push("-D");
 				args.push("noEmbedJS");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
-				html.body.push("<script src='" + name + ".js'></script>");
+				html.body.push("<script src='" + outputUrl + "'></script>");
 				
 
 			case SWF( name , version ):
