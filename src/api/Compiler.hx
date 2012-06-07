@@ -205,11 +205,9 @@ class Compiler {
             overflow: hidden;
         }
 
-        #editorPreloader {
+        #flashContent {
             height: 100%;
         }
-
-            /* end hide */
 
         body {
             height: 100%;
