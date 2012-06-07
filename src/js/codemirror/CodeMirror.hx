@@ -13,6 +13,13 @@ typedef Pos = {
 	ch : Int
 }
 
+typedef MarkedText = {
+	clear : Void->Void,
+	find : Void->Pos
+}
+
+typedef LineHandle = {};
+
 @:native('CodeMirror') extern class CodeMirror {
 
 	public static var commands (default,null) : Dynamic<CodeMirror->Void>;
@@ -25,5 +32,11 @@ typedef Pos = {
 	public function refresh() : Void;
 
 	public function getCursor( ?start : Bool ) : Pos;
+
+	public function markText(from : Pos, to : Pos, className : String ) : MarkedText;
+	
+	public function setMarker( line : Int , ?text : String , ?className : String ) : LineHandle;
+	@:overload( function( line : LineHandle ) : Void {})
+	public function clearMarker(line:Int) : Void;
 
 }

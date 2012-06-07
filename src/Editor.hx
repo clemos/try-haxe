@@ -23,12 +23,16 @@ class Editor {
 	var messages : JQuery;
 	var compileBtn : JQuery;
   var libs : JQuery;
+  var markers : Array<MarkedText>;
+  var lineHandles : Array<LineHandle>;
 
 	public function new(){
+    markers = [];
+    lineHandles = [];
 
 		CodeMirror.commands.autocomplete = autocomplete;
 
-  		haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
+  	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
 			theme : "rubyblue",
 			lineWrapping : true,
@@ -142,6 +146,7 @@ class Editor {
 
 	public function compile(?e){
 		if( e != null ) e.preventDefault();
+    clearErrors();
 		compileBtn.buttonLoading();
 		updateProgram();
 		cnx.Compiler.compile.call( [program] , onCompile );
@@ -177,8 +182,6 @@ class Editor {
 
 		js.Lib.window.location.hash = "#" + o.uid;
 
-		var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
-		
 		output = o;
 		program.uid = output.uid;
 		
@@ -188,6 +191,7 @@ class Editor {
 			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
 		}else{
 			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+      markErrors();
 		}
 
 		compileBtn.buttonReset();
@@ -195,5 +199,38 @@ class Editor {
 		run();
 
 	}
+
+  public function clearErrors(){
+    for( m in markers ){
+      m.clear();
+    }
+    markers = [];
+    for( l in lineHandles ){
+      haxeSource.clearMarker( l );
+    }
+  }
+
+  public function markErrors(){
+    var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
+    
+    for( e in output.errors ){
+      trace(e);
+      if( errLine.match( e ) ){
+        var err = {
+          line : Std.parseInt(errLine.matched(2)) - 1,
+          from : Std.parseInt(errLine.matched(3)),
+          to : Std.parseInt(errLine.matched(4)),
+          msg : errLine.matched(5)
+        };
+        //trace(err.line);
+        var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
+        lineHandles.push( l );
+
+        var m = haxeSource.markText( { line : err.line , ch : err.from } , { line : err.line , ch : err.to } , "error");
+        markers.push( m );
+        
+      }
+    }
+  }
 
 }

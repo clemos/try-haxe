@@ -182,13 +182,17 @@ class Compiler {
 		addLibs(args, program);
 		
 		var out = runHaxe( args );
+		var err = out.err.split( tmpDir + "/" ).join("");
+		var errors = err.split("
+");
 
 		var output : Program.Output = if( out.exitCode == 0 ){
 			{
 				uid : program.uid,
 				args : args,
-				stderr : out.err,
+				stderr : err,
 				stdout : out.out,
+				errors : [],
 				success : true,
 				message : "Build success!",
 				href : outputUrl,
@@ -198,8 +202,9 @@ class Compiler {
 			{
 				uid : program.uid,
 				args : args,
-				stderr : out.err,
+				stderr : err,
 				stdout : out.out,
+				errors : errors,
 				success : false,
 				message : "Build failure",
 				href : "",

@@ -8,7 +8,7 @@ class Libs
 {
 
 	public static var available = {
-		js : ["jeash","selecthx","modernizr","divtastic","browserhx"],
+		js : ["jeash","selecthx","modernizr","divtastic","browserhx","zpartanlite"],
 		swf : ["actuate","hxSet"]
 	};
 

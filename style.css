@@ -12,7 +12,14 @@ html {
 .hx-options {
 	height:300px;
 }
+.js-output .well {
+	height:260px;
+}
 
 .js-run {
 	width:100%;
+}
+
+.CodeMirror .error {
+	background-color:#600;
 }
