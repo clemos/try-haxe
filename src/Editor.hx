@@ -162,6 +162,10 @@ class Editor {
 		{
 			// sharing
 			program = p;
+
+      // auto-fork
+      program.uid = null;
+      
 			haxeSource.setValue(program.main.source);
       setTarget( program.target );
 
