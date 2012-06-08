@@ -69,6 +69,21 @@ class Editor {
     targets = new JQuery("#hx-options-form .hx-targets");
     stage = new JQuery(".js-output .well");
     jsTab = new JQuery("a[href='#js-source']");
+
+    new JQuery(".fullscreen-btn").bind("click" , function(e){
+      var _this = new JQuery(e.target);
+      e.preventDefault();
+      if( _this.attr('href') != "#" ){
+        var r = this.runner;
+        untyped __js__("el = r.get(0)
+            , rfs =
+                   el.requestFullScreen
+                || el.webkitRequestFullScreen
+                || el.mozRequestFullScreen
+        ;
+        rfs.call(el);");
+      }
+    });
       
 		new JQuery("body").bind("keyup", onKey );
 
@@ -165,7 +180,7 @@ class Editor {
 
       // auto-fork
       program.uid = null;
-      
+
 			haxeSource.setValue(program.main.source);
       setTarget( program.target );
 
@@ -273,8 +288,15 @@ class Editor {
 		if( output.success ){
   		var run = gateway + "?run=" + output.uid + "&r=" + Std.string(Math.random());
   		runner.attr("src" , run );
+      new JQuery(".link-btn, .fullscreen-btn")
+        .buttonReset()
+        .attr("href" , run );
+
 		}else{
 			runner.attr("src" , "about:blank" );
+      new JQuery(".link-btn, .fullscreen-btn")
+        .addClass("disabled")
+        .attr("href" , "#" );
 		}
 	}
 
@@ -294,11 +316,14 @@ class Editor {
       jsSourceElem.show();
       jsSource.refresh();
       stage.show();
+      
+      //var ifr=$('.js-run').get(0); console.log(ifr);var rfs = ifr.requestFullScreen || ifr.webkitRequestFullScreen || ifr.mozRequestFullScreen; rfs.call(ifr)  
       switch( program.target ){
         case JS(_) : jsTab.show();
         default : jsTab.hide();
       }
 		}else{
+      
 			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
       stage.hide();
       jsTab.hide();

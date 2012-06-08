@@ -94,20 +94,27 @@ class Test {
           
       </div>
       <div class="compiler-out span6">
+        <div class="btn-group pull-right">
+          <a href="#" class="link-btn btn disabled"><i class="icon-share"></i> Link</a>
+          <a href="#" class="fullscreen-btn btn disabled"><i class="icon-resize-full"></i> Fullscreen</a>
+        </div>
+        
         <ul class="nav nav-tabs">
               <li class="active"><a href="#js-output" data-toggle="tab">Output</a></li>
               <li><a href="#js-source" data-toggle="tab">JS Source</a></li>
               
         </ul>
+
         <div class="tab-content">
           <div class="tab-pane js-output active" id="js-output">
+
             <div class="well">
+
       				<iframe class="js-run" src="about:blank" name="js-run" frameborder="no" scrolling="no">
       				</iframe>
             </div>
             
             
-
           </div>
           <div class="tab-pane js-source" id="js-source">
             <textarea name="js-source" class="code js-source">
