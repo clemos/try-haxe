@@ -28,7 +28,7 @@ class Libs
 
 	public static var available : AvailableLibs = {
 		js : [
-			{name:"jeash", args : ["--remap","flash:jeash"], body:["<div id='haxe:jeash'></div>"]},
+			{name:"jeash", args : ["--remap","flash:jeash"], head : ["<link rel='stylesheet' href='../swf.css' type='text/css'/>"], body:["<div id='haxe:jeash'></div>"]},
 			{name:"selecthx"},
 			{name:"modernizr"},
 			{name:"browserhx"},
