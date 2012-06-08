@@ -4,7 +4,7 @@ html {
 	padding-top:18px
 }
 
-.CodeMirror-wrap, .hx-options
+.CodeMirror-wrap, .hx-options, .js-canvas
  {
 	margin-bottom:18px;
 }
@@ -12,8 +12,8 @@ html {
 .hx-options {
 	height:300px;
 }
-.js-output .well {
-	height:258px;
+.js-output .js-run {
+	height:285px;
 }
 
 .js-run {

@@ -69,7 +69,7 @@ class Editor {
 		compileBtn = new JQuery(".compile-btn");
     libs = new JQuery("#hx-options-form .hx-libs");
     targets = new JQuery("#hx-options-form .hx-targets");
-    stage = new JQuery(".js-output .well");
+    stage = new JQuery(".js-output .js-canvas");
     jsTab = new JQuery("a[href='#js-source']");
 
     new JQuery(".link-btn").bind("click", function(e){
@@ -251,7 +251,7 @@ class Editor {
 	}
 
   public function onKey( e : JqEvent ){
-   
+
    if( ( e.ctrlKey && e.keyCode == 13 ) || e.keyCode == 119 ){ // Ctrl+Enter and F8
       e.preventDefault();
       compile(e);
@@ -268,6 +268,7 @@ class Editor {
 
 	public function compile(?e){
 		if( e != null ) e.preventDefault();
+    messages.fadeOut(0);
     clearErrors();
 		compileBtn.buttonLoading();
 		updateProgram();
@@ -321,10 +322,17 @@ class Editor {
 		jsSource.setValue( output.source );
 
     var jsSourceElem = new JQuery(jsSource.getWrapperElement());
-		
+		var msg : String = "";
+    var msgType : String = "";
+
 		if( output.success ){
-			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
-      jsSourceElem.show();
+      msg = "<strong>"+output.stderr
+                .replace("\n","<br/>")
+                .replace("<br/>------------------------------------","</strong>");
+                
+
+      msgType = "success";
+			jsSourceElem.show();
       jsSource.refresh();
       stage.show();
       
@@ -334,14 +342,16 @@ class Editor {
         default : jsTab.hide();
       }
 		}else{
-      
-			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+      msg = output.stderr.replace("\n","<br/>");
+      msgType = "error";
       stage.hide();
       jsTab.hide();
       jsSourceElem.hide();
       markErrors();
 		}
 
+    messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4>"+msg+"</div>" );
+    messages.fadeIn();
 		compileBtn.buttonReset();
 
 		run();
