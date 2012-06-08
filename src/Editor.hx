@@ -120,6 +120,7 @@ class Editor {
     libs.find(".controls").hide();
     
     var sel :String;
+    
     switch( target ){
       case JS(_): 
         sel = "js";
@@ -129,6 +130,10 @@ class Editor {
         sel = "swf";
         jsTab.hide();
     }
+
+    var radio = new JQuery( "input[name='target'][value='" + sel +"']" );
+    radio.attr( 'checked' ,'checked' );
+
     libs.find("."+sel+"-libs").fadeIn();
   }
 
@@ -158,6 +163,8 @@ class Editor {
 			// sharing
 			program = p;
 			haxeSource.setValue(program.main.source);
+      setTarget( program.target );
+
       if( program.libs != null ){
         for( lib in libs.find("input.lib") ){
           if( program.libs.has( lib.val() ) ){
@@ -167,7 +174,7 @@ class Editor {
           }
         }
       }
-      setTarget( program.target );
+     
 		}
 
 	}
