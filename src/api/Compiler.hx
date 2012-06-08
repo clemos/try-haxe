@@ -187,8 +187,7 @@ class Compiler {
 				args.push("-D");
 				args.push("noEmbedJS");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
-				html.body.push("<script src='" + outputUrl + "'></script>");
-				//html.body.push("<script src='" + outputUrl + "'></script>");
+				
 				
 
 			case SWF( name , version ):
@@ -242,7 +241,9 @@ class Compiler {
 		if (out.exitCode == 0)
 		{
 			switch (program.target) {
-				case JS(_): output.source = File.getContent(outputUrl);
+				case JS(_): 
+					output.source = File.getContent(outputUrl);
+					html.body.push("<script>" + output.source + "</script>");
 				default:
 			}
 			var h = new StringBuf();

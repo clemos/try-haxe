@@ -31,7 +31,8 @@ class Libs
 			{name:"jeash", args : ["--remap","flash:jeash"], body:["<div id='haxe:jeash'></div>"]},
 			{name:"selecthx"},
 			{name:"modernizr"},
-			{name:"browserhx"}
+			{name:"browserhx"},
+			{name:"actuate"}
 		],
 		swf : cast [
 			{name:"actuate" , args : []}
