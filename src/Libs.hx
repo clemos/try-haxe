@@ -39,7 +39,7 @@ class Libs
 		]
 	};
 
-	public static var defaultChecked : Array<String> = []; // array of lib names
+	public static var defaultChecked : Array<String> = ["jeash"]; // array of lib names
 
 	static public function getAvailableLibs(target:Target):Array<Library> 
 	{
