@@ -251,6 +251,7 @@ class Editor {
 	}
 
   public function onKey( e : JqEvent ){
+   
    if( ( e.ctrlKey && e.keyCode == 13 ) || e.keyCode == 119 ){ // Ctrl+Enter and F8
       e.preventDefault();
       compile(e);
