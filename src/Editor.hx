@@ -48,7 +48,9 @@ class Editor {
 			lineNumbers : true,
 			extraKeys : {
 				"Ctrl-Space" : "autocomplete",
-        "Ctrl-Enter" : "compile"
+        "Ctrl-Enter" : "compile",
+        "F8" : "compile",
+        "F5" : "compile"
 			},
       onChange : onChange
 		} );
@@ -76,6 +78,7 @@ class Editor {
         e.preventDefault();
       }
     });
+
     new JQuery(".fullscreen-btn").bind("click" , function(e){
       var _this = new JQuery(e.target);
       e.preventDefault();
@@ -248,10 +251,11 @@ class Editor {
 	}
 
   public function onKey( e : JqEvent ){
-   if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
+   if( ( e.ctrlKey && e.keyCode == 13 ) || e.keyCode == 119 ){ // Ctrl+Enter and F8
       e.preventDefault();
       compile(e);
    }
+   
   }
 
 	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
