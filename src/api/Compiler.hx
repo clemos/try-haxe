@@ -202,7 +202,7 @@ class Compiler {
 				html.head.push("<link rel='stylesheet' href='../swf.css' type='text/css'/>");
 				html.head.push("<script src='../lib/swfobject.js'></script>");
 				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+outputUrl+'", "flashContent", "100%", "100%", "'+version+'.0.0" , null , {} , {wmode:"direct", scale:"noscale"})</script>');
-				html.body.push('<div id="flashContent"></div>');
+				html.body.push('<div id="flashContent"><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p></div>');
 		}
 
 		addLibs(args, program, html);
