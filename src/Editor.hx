@@ -77,8 +77,7 @@ class Editor {
         var r = this.runner;
         this.runner.attr('src', _this.attr('href'));
         untyped __js__("el = r.get(0)
-            , rfs =
-                   el.requestFullScreen
+            , rfs = el.requestFullScreen
                 || el.webkitRequestFullScreen
                 || el.mozRequestFullScreen
         ;
