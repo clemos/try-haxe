@@ -70,6 +70,12 @@ class Editor {
     stage = new JQuery(".js-output .well");
     jsTab = new JQuery("a[href='#js-source']");
 
+    new JQuery(".link-btn").bind("click", function(e){
+      var _this = new JQuery(e.target);
+      if( _this.attr('href') == "#" ){
+        e.preventDefault();
+      }
+    });
     new JQuery(".fullscreen-btn").bind("click" , function(e){
       var _this = new JQuery(e.target);
       e.preventDefault();
