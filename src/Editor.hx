@@ -90,7 +90,7 @@ class Editor {
         name : "Test",
         source : haxeSource.getValue()
       },
-      target : SWF( "test", 10 ),
+      target : SWF( "test", 11 ),
       libs : new Array()
     };
 
@@ -109,7 +109,7 @@ class Editor {
     var cb = new JQuery( e.target );
     var name = cb.val();
     var target = switch( name ){
-      case "swf" : api.Program.Target.SWF('test',10);
+      case "swf" : api.Program.Target.SWF('test',11);
       case "js" : api.Program.Target.JS('test');
     }
     setTarget(target);
