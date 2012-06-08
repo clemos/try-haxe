@@ -75,6 +75,7 @@ class Editor {
       e.preventDefault();
       if( _this.attr('href') != "#" ){
         var r = this.runner;
+        this.runner.attr('src', _this.attr('href'));
         untyped __js__("el = r.get(0)
             , rfs =
                    el.requestFullScreen
@@ -286,11 +287,11 @@ class Editor {
 
 	public function run(){
 		if( output.success ){
-  		var run = gateway + "?run=" + output.uid + "&r=" + Std.string(Math.random());
-  		runner.attr("src" , run );
+  		var run = gateway + "?run=" + output.uid ;
+  		runner.attr("src" , run + "&r=" + Std.string(Math.random()) );
       new JQuery(".link-btn, .fullscreen-btn")
         .buttonReset()
-        .attr("href" , run );
+        .attr("href" , run + "&r=" + Std.string(Math.random()) );
 
 		}else{
 			runner.attr("src" , "about:blank" );
