@@ -35,10 +35,10 @@ class Libs
 			{name:"browserhx"},
 			{name:"format"}
 		],
-		swf : cast [
+		swf : untyped { [
 			{name:"actuate" , args : []},
 			{name:"format"}
-		]
+		]; }
 	};
 
 	public static var defaultChecked : Array<String> = ["jeash"]; // array of lib names
