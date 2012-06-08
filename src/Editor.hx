@@ -326,11 +326,6 @@ class Editor {
     var msgType : String = "";
 
 		if( output.success ){
-      msg = "<strong>"+output.stderr
-                .replace("\n","<br/>")
-                .replace("<br/>------------------------------------","</strong>");
-                
-
       msgType = "success";
 			jsSourceElem.show();
       jsSource.refresh();
@@ -351,6 +346,12 @@ class Editor {
 		}
 
     messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4>"+msg+"</div>" );
+
+    if( output.success ){
+      messages.append( "<pre>"+output.stderr +"</pre>");
+      
+    }
+
     messages.fadeIn();
 		compileBtn.buttonReset();
 
