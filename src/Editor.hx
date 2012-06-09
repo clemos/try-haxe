@@ -220,7 +220,9 @@ class Editor {
       return;
     }
     completionIndex = idx;
-    program.main.source = src.substring( 0 , completionIndex+1 );
+    if( src.length > 1000 ){
+      program.main.source = src.substring( 0 , completionIndex+1 );
+    }
     cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps ) displayCompletions( cm , comps ) );
 	}
 
