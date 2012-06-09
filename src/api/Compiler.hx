@@ -160,8 +160,16 @@ class Compiler {
 					if (l.head != null) html.head = html.head.concat(l.head);
 					if (l.body != null) html.body = html.body.concat(l.body);
 				}
-				args.push("-lib");
-				args.push(l.name);
+				if (l.swf != null)
+				{
+					args.push("-swf-lib");
+					args.push("../../lib/swf/" + l.swf.src);
+				}
+				else
+				{
+					args.push("-lib");
+					args.push(l.name);
+				}
 				if( l.args != null ) 
 					for( a in l.args ){
 						args.push(a);
