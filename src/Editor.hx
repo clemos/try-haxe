@@ -48,7 +48,9 @@ class Editor {
 			lineNumbers : true,
 			extraKeys : {
 				"Ctrl-Space" : "autocomplete",
-        "Ctrl-Enter" : "compile"
+        "Ctrl-Enter" : "compile",
+        "F8" : "compile",
+        "F5" : "compile"
 			},
       onChange : onChange
 		} );
@@ -67,7 +69,7 @@ class Editor {
 		compileBtn = new JQuery(".compile-btn");
     libs = new JQuery("#hx-options-form .hx-libs");
     targets = new JQuery("#hx-options-form .hx-targets");
-    stage = new JQuery(".js-output .well");
+    stage = new JQuery(".js-output .js-canvas");
     jsTab = new JQuery("a[href='#js-source']");
 
     new JQuery(".link-btn").bind("click", function(e){
@@ -76,6 +78,7 @@ class Editor {
         e.preventDefault();
       }
     });
+
     new JQuery(".fullscreen-btn").bind("click" , function(e){
       var _this = new JQuery(e.target);
       e.preventDefault();
@@ -248,10 +251,12 @@ class Editor {
 	}
 
   public function onKey( e : JqEvent ){
-   if( e.ctrlKey && e.keyCode == 13 ){ // Ctrl+Enter
+
+   if( ( e.ctrlKey && e.keyCode == 13 ) || e.keyCode == 119 ){ // Ctrl+Enter and F8
       e.preventDefault();
       compile(e);
    }
+   
   }
 
 	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
@@ -263,6 +268,7 @@ class Editor {
 
 	public function compile(?e){
 		if( e != null ) e.preventDefault();
+    messages.fadeOut(0);
     clearErrors();
 		compileBtn.buttonLoading();
 		updateProgram();
@@ -316,10 +322,12 @@ class Editor {
 		jsSource.setValue( output.source );
 
     var jsSourceElem = new JQuery(jsSource.getWrapperElement());
-		
+		var msg : String = "";
+    var msgType : String = "";
+
 		if( output.success ){
-			messages.html( "<div class='alert alert-success'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
-      jsSourceElem.show();
+      msgType = "success";
+			jsSourceElem.show();
       jsSource.refresh();
       stage.show();
       
@@ -329,14 +337,22 @@ class Editor {
         default : jsTab.hide();
       }
 		}else{
-      
-			messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>" + output.message + "</h4><pre>"+output.stderr+"</pre></div>" );
+      msg = output.stderr.replace("\n","<br/>");
+      msgType = "error";
       stage.hide();
       jsTab.hide();
       jsSourceElem.hide();
       markErrors();
 		}
 
+    messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4>"+msg+"</div>" );
+
+    if( output.success ){
+      messages.append( "<pre>"+output.stderr +"</pre>");
+      
+    }
+
+    messages.fadeIn();
 		compileBtn.buttonReset();
 
 		run();
