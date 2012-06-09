@@ -55,7 +55,7 @@ class Compiler {
 
 		mainFile = tmpDir + "/" + program.main.name + ".hx";
 
-		var source = program.main.source;
+		var source = program.main.source.toString();
 		source = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild)/.customReplace( source , function( m ){ return ""; } );
 		
 		File.saveContent( mainFile , source );
@@ -80,7 +80,7 @@ class Compiler {
 
 			mainFile = tmpDir + "/" + p.main.name + ".hx";
 
-			p.main.source = File.getContent(mainFile);
+			p.main.source = haxe.io.Bytes.ofString(File.getContent(mainFile));
 
 			return p;
 		}
@@ -92,7 +92,7 @@ class Compiler {
 		
 		prepareProgram( program );
 
-		var source = program.main.source;
+		var source = program.main.source.toString();
 		
 		var args = [
 			"-cp" , tmpDir,
@@ -230,7 +230,7 @@ class Compiler {
 				success : true,
 				message : "Build success!",
 				href : htmlUrl,
-				source : ""
+				source : null
 			}
 		}else{
 			{
@@ -242,7 +242,7 @@ class Compiler {
 				success : false,
 				message : "Build failure",
 				href : "",
-				source : ""
+				source : null
 			}
 		}
 
@@ -250,7 +250,7 @@ class Compiler {
 		{
 			switch (program.target) {
 				case JS(_): 
-					output.source = File.getContent(outputUrl);
+					output.source = haxe.io.Bytes.ofString(File.getContent(outputUrl));
 					html.body.push("<script>" + output.source + "</script>");
 				default:
 			}
