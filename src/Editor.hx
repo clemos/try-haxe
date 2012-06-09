@@ -112,7 +112,7 @@ class Editor {
       uid : null,
       main : {
         name : "Test",
-        source : haxeSource.getValue()
+        source : haxe.io.Bytes.ofString(haxeSource.getValue())
       },
       target : SWF( "test", 11 ),
       libs : new Array()
@@ -191,7 +191,7 @@ class Editor {
       // auto-fork
       program.uid = null;
 
-			haxeSource.setValue(program.main.source);
+			haxeSource.setValue(program.main.source.toString());
       setTarget( program.target );
 
       if( program.libs != null ){
@@ -280,7 +280,7 @@ class Editor {
 	}
 
 	function updateProgram(){
-		program.main.source = haxeSource.getValue();
+		program.main.source = haxe.io.Bytes.ofString(haxeSource.getValue());
 
 		var libs = new Array();
     var sel = switch( program.target ){
@@ -323,7 +323,7 @@ class Editor {
 		output = o;
 		program.uid = output.uid;
 		
-		jsSource.setValue( output.source );
+		jsSource.setValue( output.source.toString() );
 
     var jsSourceElem = new JQuery(jsSource.getWrapperElement());
 		var msg : String = "";
