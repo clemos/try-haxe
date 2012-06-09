@@ -30,7 +30,13 @@ class Compiler {
 		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
 	}
 
+	static function checkMacros( s : String ){
+		var forbidden = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild|file|audio|bitmap)/;
+		if( forbidden.match( s ) ) throw "Unauthorized : @:"+forbidden.matched(3)+"";  
+	}
+
 	function prepareProgram( program : Program ){
+
 		while( program.uid == null ){
 
 			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
@@ -56,7 +62,7 @@ class Compiler {
 		mainFile = tmpDir + "/" + program.main.name + ".hx";
 
 		var source = program.main.source;
-		source = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild)/.customReplace( source , function( m ){ return ""; } );
+		checkMacros( source );
 		
 		File.saveContent( mainFile , source );
 
@@ -90,7 +96,11 @@ class Compiler {
 
 	public function autocomplete( program : Program , idx : Int ) : Array<String>{
 		
-		prepareProgram( program );
+		try{
+			prepareProgram( program );
+		}catch(err:String){
+			return [];
+		}
 
 		var source = program.main.source;
 		
@@ -162,8 +172,21 @@ class Compiler {
 	}
 
 	public function compile( program : Program ){
-
-		prepareProgram( program );
+		try{
+			prepareProgram( program );
+		}catch(err:String){
+			return {
+				uid : program.uid,
+				args : [],
+				stderr : err,
+				stdout : "",
+				errors : [err],
+				success : false,
+				message : "Build failure",
+				href : "",
+				source : ""
+			}
+		}
 
 		var args = [
 			"-cp" , tmpDir,
@@ -215,9 +238,9 @@ class Compiler {
 		var output : Program.Output = if( out.exitCode == 0 ){
 			{
 				uid : program.uid,
-				args : args,
 				stderr : err,
 				stdout : out.out,
+				args : args,
 				errors : [],
 				success : true,
 				message : "Build success!",
@@ -227,9 +250,9 @@ class Compiler {
 		}else{
 			{
 				uid : program.uid,
-				args : args,
 				stderr : err,
 				stdout : out.out,
+				args : args,
 				errors : errors,
 				success : false,
 				message : "Build failure",
