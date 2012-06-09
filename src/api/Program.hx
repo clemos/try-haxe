@@ -10,7 +10,7 @@ typedef Program = {
 
 typedef Module = {
 	name : String,
-	source : haxe.io.Bytes
+	source : String
 }
 
 enum Target {
@@ -27,5 +27,5 @@ typedef Output = {
 	success : Bool,
 	message : String,
 	href : String,
-	source : haxe.io.Bytes
+	source : String
 }
