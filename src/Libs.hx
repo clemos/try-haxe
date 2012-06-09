@@ -15,7 +15,8 @@ typedef LibConf = {
 	name : String,
 	?args : Array<String>,
 	?head:Array<String>,
-	?body:Array<String>
+	?body:Array<String>,
+	?swf:String
 }
 
 typedef AvailableLibs = {
@@ -37,7 +38,8 @@ class Libs
 		],
 		swf : untyped { [
 			{name:"actuate" , args : []},
-			{name:"format"}
+			{name:"format"},
+			{name:"away3d 4.0.0", swf:"away3d4.swf"}
 		]; }
 	};
 
