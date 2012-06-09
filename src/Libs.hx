@@ -11,11 +11,17 @@ typedef Library =
 	//?args:Array<String> // aditional args like --remap flash:nme ...
 }
 
+typedef SWFInfo = {
+	src:String,
+	help:String
+}
+
 typedef LibConf = {
 	name : String,
 	?args : Array<String>,
 	?head:Array<String>,
-	?body:Array<String>
+	?body:Array<String>,
+	?swf:SWFInfo
 }
 
 typedef AvailableLibs = {
@@ -37,7 +43,8 @@ class Libs
 		],
 		swf : untyped { [
 			{name:"actuate" , args : []},
-			{name:"format"}
+			{name:"format"},
+			{name:"away3d 4.0.0", swf:{src:"away3d4.swf", help:"http://away3d.com/livedocs/away3d/4.0/"}}
 		]; }
 	};
 
