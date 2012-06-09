@@ -44,7 +44,7 @@ class Libs
 		swf : untyped { [
 			{name:"actuate" , args : []},
 			{name:"format"},
-			{name:"away3d 4.0.0", swf:{src:"away3d4.swf", help:"http://away3d.com/livedocs/away3d/4.0/"}}
+			{name:"away3d", swf:{src:"away3d4.swf", help:"http://away3d.com/livedocs/away3d/4.0/"}}
 		]; }
 	};
 
