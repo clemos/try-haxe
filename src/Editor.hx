@@ -168,7 +168,7 @@ class Editor {
           '<label class="checkbox"><input class="lib" type="checkbox" value="' + l.name + '" ' 
           + ((Libs.defaultChecked.has(l.name) /*|| selectedLib(l.name)*/) ? "checked='checked'" : "") 
           + '" /> ' + l.name 
-          + "<span class='help-inline'><a href='http://lib.haxe.org/p/" + l.name +"' target='_blank'><i class='icon-question-sign'></i></a></span>"
+          +(l.swf == null ? "<span class='help-inline'><a href='http://lib.haxe.org/p/" + l.name +"' target='_blank'><i class='icon-question-sign'></i></a></span>" : "")
           + "</label>"
           );
     
