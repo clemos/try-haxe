@@ -153,7 +153,7 @@ class Compiler {
 				if (l.swf != null)
 				{
 					args.push("-swf-lib");
-					args.push("../../lib/swf/" + l.swf);
+					args.push("../../lib/swf/" + l.swf.src);
 				}
 				else
 				{
