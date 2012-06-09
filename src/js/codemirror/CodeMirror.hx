@@ -48,4 +48,7 @@ typedef ChangeEvent = {
 
 	public function getWrapperElement() : js.HtmlDom;
 
+	public function somethingSelected() : Bool;
+	public function focus() : Void;
+
 }
