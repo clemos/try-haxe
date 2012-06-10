@@ -27,8 +27,15 @@ html {
 
 /* from rubyblue */
 .CodeMirror-completions {
+	/* rubyblue
 	background:#112435;
 	border:4px solid #112435 ;
+	*/
+	
+	/* cobalt */
+	background:#002240;
+	border:4px solid #002240;
+
 }
 .CodeMirror-completions select,
 .CodeMirror-completions option {
