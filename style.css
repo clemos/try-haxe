@@ -32,9 +32,17 @@ html {
 }
 .CodeMirror-completions select,
 .CodeMirror-completions option {
+	/* rubyblue
 	background:#112435;
 	color:#fff;
 	font: 13px/1.4em Trebuchet, Verdana, sans-serif;
+	*/
+	
+	/* cobalt */
+	background:#002240;
+	color:#fff;
+	font-family:monospace;
+	
 }
 
 .span-fb, .span-plusone, .span-twitter {

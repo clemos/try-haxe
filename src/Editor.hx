@@ -43,7 +43,7 @@ class Editor {
 
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
-			theme : "rubyblue",
+			theme : "cobalt",
 			lineWrapping : true,
 			lineNumbers : true,
 			extraKeys : {
@@ -58,7 +58,7 @@ class Editor {
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
-			theme : "rubyblue",
+			theme : "cobalt",
 			lineWrapping : true,
 			lineNumbers : true,
 			readOnly : true
