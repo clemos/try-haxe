@@ -16,6 +16,6 @@ RewriteRule ^app/(.*)$ /~%1/try-haxe/app/index.php?_url=$1 [L,QSA]
 # try.haxe.org
 RewriteCond %{HTTP_HOST} try\.haxe\.org
 RewriteCond %{REQUEST_URI} !index.php
-RewriteRule ^app/(.*)$ /app/index.php?_url=$1 [L,QSA]
+RewriteRule ^app/(.*)$ /app/index.php?_url=$1&_root= [L,QSA]
 
 RewriteRule app/(.*)$ app/index.php?_url=$1 [L,QSA]

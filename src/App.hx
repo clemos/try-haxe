@@ -16,13 +16,18 @@ class App {
 	  		var url = params.get('_url');
 	  		params.remove('_url');
 
-	  		var base :String = untyped __php__("$_SERVER['SCRIPT_NAME']");
-	  		var spl = base.split("/");
-	  		spl.pop();
+	  		if( params.exists('_root') ){
+	  			Api.root = params.get('_root');
+	  			Api.base = Api.root + "/app";
+	  		}else{
+		  		var base :String = untyped __php__("$_SERVER['SCRIPT_NAME']");
+		  		var spl = base.split("/");
+		  		spl.pop();
 
-	  		Api.base = spl.join("/");
-	  		spl.pop();
-	  		Api.root = spl.join("/");
+		  		Api.base = spl.join("/");
+		  		spl.pop();
+		  		Api.root = spl.join("/");
+	  		}
 
 	  		var api = new Api();
 
