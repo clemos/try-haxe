@@ -306,7 +306,7 @@ class Editor {
   		runner.attr("src" , run + "?r=" + Std.string(Math.random()) );
       new JQuery(".link-btn, .fullscreen-btn")
         .buttonReset()
-        .attr("href" , run + "r=" + Std.string(Math.random()) );
+        .attr("href" , run + "?r=" + Std.string(Math.random()) );
 
 		}else{
 			runner.attr("src" , "about:blank" );
