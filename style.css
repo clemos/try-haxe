@@ -24,6 +24,9 @@ html {
 .CodeMirror .error {
 	background-color:#600;
 }
+.CodeMirror {
+	line-height:1.2em;
+}
 
 /* from rubyblue */
 .CodeMirror-completions {
@@ -31,7 +34,7 @@ html {
 	background:#112435;
 	border:4px solid #112435 ;
 	*/
-	
+
 	/* cobalt */
 	background:#002240;
 	border:4px solid #002240;
