@@ -36,3 +36,7 @@ html {
 	color:#fff;
 	font: 13px/1.4em Trebuchet, Verdana, sans-serif;
 }
+
+.span-fb, .span-plusone {
+	margin-top:8px;
+}
