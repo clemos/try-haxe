@@ -105,8 +105,8 @@ class Editor {
 		
 		compileBtn.bind( "click" , compile );
 
-		gateway = new JQuery("body").data("gateway");
-		cnx = HttpAsyncConnection.urlConnect(gateway);
+		var apiRoot = new JQuery("body").data("api");
+		cnx = HttpAsyncConnection.urlConnect(apiRoot+"/compiler");
 
     program = {
       uid : null,
@@ -182,7 +182,7 @@ class Editor {
 
 	function onProgram(p:Program)
 	{
-		//trace(p);
+		
 		if (p != null)
 		{
 			// sharing
@@ -302,7 +302,7 @@ class Editor {
 
 	public function run(){
 		if( output.success ){
-  		var run = gateway + "?run=" + output.uid ;
+  		var run = output.href ;
   		runner.attr("src" , run + "&r=" + Std.string(Math.random()) );
       new JQuery(".link-btn, .fullscreen-btn")
         .buttonReset()
@@ -318,10 +318,9 @@ class Editor {
 
 	public function onCompile( o : Output ){
 
-		js.Lib.window.location.hash = "#" + o.uid;
-
 		output = o;
 		program.uid = output.uid;
+    js.Lib.window.location.hash = "#" + output.uid;
 		
 		jsSource.setValue( output.source );
 
