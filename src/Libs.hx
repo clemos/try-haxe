@@ -45,7 +45,8 @@ class Libs
 		swf : untyped { [
 			{name:"actuate" , args : []},
 			{name:"format"},
-			{name:"away3d", swf:{src:"away3d4.swf", help:"http://away3d.com/livedocs/away3d/4.0/"}}
+			{name:"away3d", swf:{src:"away3d4.swf", help:"http://away3d.com/livedocs/away3d/4.0/"}},
+			{name:"starling", args:['--macro', '"patchTypes(\'../../lib/swf/starling.patch\')"'], swf:{src:"starling.swf", help:"http://doc.starling-framework.org/core/"}}
 		]; }
 	};
 

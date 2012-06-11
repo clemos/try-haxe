@@ -180,13 +180,13 @@ class Editor {
     }
   }
 
-	function onProgram(p:Program)
+	function onProgram(p:{p:Program, o:Output})
 	{
-		
+		trace(p);
 		if (p != null)
 		{
 			// sharing
-			program = p;
+			program = p.p;
 
       // auto-fork
       program.uid = null;
@@ -203,6 +203,8 @@ class Editor {
           }
         }
       }
+
+      if (p.o != null) onCompile(p.o);
      
 		}
 
@@ -350,7 +352,7 @@ class Editor {
 
     messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4>"+msg+"</div>" );
 
-    if( output.success ){
+    if( output.success && output.stderr != null ){
       messages.append( "<pre>"+output.stderr +"</pre>");
       
     }
