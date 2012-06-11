@@ -180,13 +180,15 @@ class Editor {
     }
   }
 
-	function onProgram(p:{p:Program, o:Output})
+	//function onProgram(p:{p:Program, o:Output})
+  function onProgram(p:Program)
 	{
-		trace(p);
+		//trace(p);
 		if (p != null)
 		{
 			// sharing
-			program = p.p;
+			//program = p.p;
+      program = p;
 
       // auto-fork
       program.uid = null;
@@ -204,7 +206,7 @@ class Editor {
         }
       }
 
-      if (p.o != null) onCompile(p.o);
+      //if (p.o != null) onCompile(p.o);
      
 		}
 

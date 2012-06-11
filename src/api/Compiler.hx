@@ -66,7 +66,8 @@ class Compiler {
 
 	}
 
-	public function getProgram(uid:String):{p:Program, o:Program.Output} 
+	//public function getProgram(uid:String):{p:Program, o:Program.Output} 
+	public function getProgram(uid:String):Program
 	{
 		Api.checkSanity(uid);
 		
@@ -81,6 +82,7 @@ class Compiler {
 
 			p.main.source = File.getContent(mainFile);
 
+			/*
 			var o:Program.Output = null;
 
 			var htmlPath : String = tmpDir + "/" + "index.html";
@@ -107,8 +109,9 @@ class Compiler {
 					default:
 				}
 			}
-
-			return {p:p, o:o};
+			*/
+			//return {p:p, o:o};
+			return p;
 		}
 
 		return null;
