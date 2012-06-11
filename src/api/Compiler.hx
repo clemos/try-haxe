@@ -66,7 +66,7 @@ class Compiler {
 
 	}
 
-	public function getProgram(uid:String):Program 
+	public function getProgram(uid:String):{p:Program, o:Program.Output} 
 	{
 		Api.checkSanity(uid);
 		
@@ -81,7 +81,7 @@ class Compiler {
 
 			p.main.source = File.getContent(mainFile);
 
-			return p;
+			return {p:p, o:compile(p)};
 		}
 
 		return null;
