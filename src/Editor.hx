@@ -43,7 +43,7 @@ class Editor {
 
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
-			theme : "rubyblue",
+			theme : "default",
 			lineWrapping : true,
 			lineNumbers : true,
 			extraKeys : {
@@ -58,7 +58,7 @@ class Editor {
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
-			theme : "rubyblue",
+			theme : "default",
 			lineWrapping : true,
 			lineNumbers : true,
 			readOnly : true
@@ -105,8 +105,8 @@ class Editor {
 		
 		compileBtn.bind( "click" , compile );
 
-		gateway = new JQuery("body").data("gateway");
-		cnx = HttpAsyncConnection.urlConnect(gateway);
+		var apiRoot = new JQuery("body").data("api");
+		cnx = HttpAsyncConnection.urlConnect(apiRoot+"/compiler");
 
     program = {
       uid : null,
@@ -182,7 +182,7 @@ class Editor {
 
 	function onProgram(p:Program)
 	{
-		//trace(p);
+		
 		if (p != null)
 		{
 			// sharing
@@ -302,11 +302,11 @@ class Editor {
 
 	public function run(){
 		if( output.success ){
-  		var run = gateway + "?run=" + output.uid ;
-  		runner.attr("src" , run + "&r=" + Std.string(Math.random()) );
+  		var run = output.href ;
+  		runner.attr("src" , run + "?r=" + Std.string(Math.random()) );
       new JQuery(".link-btn, .fullscreen-btn")
         .buttonReset()
-        .attr("href" , run + "&r=" + Std.string(Math.random()) );
+        .attr("href" , run + "?r=" + Std.string(Math.random()) );
 
 		}else{
 			runner.attr("src" , "about:blank" );
@@ -318,10 +318,9 @@ class Editor {
 
 	public function onCompile( o : Output ){
 
-		js.Lib.window.location.hash = "#" + o.uid;
-
 		output = o;
 		program.uid = output.uid;
+    js.Lib.window.location.hash = "#" + output.uid;
 		
 		jsSource.setValue( output.source );
 

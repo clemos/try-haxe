@@ -29,10 +29,12 @@
   <link rel="stylesheet" href="lib/CodeMirror2/lib/codemirror.css"/>
   <link rel="stylesheet" href="lib/CodeMirror2/lib/util/simple-hint.css"/>
   <link rel="stylesheet" href="lib/CodeMirror2/theme/rubyblue.css"/>
+  <link rel="stylesheet" href="lib/CodeMirror2/theme/cobalt.css"/>
+  <link rel="stylesheet" href="lib/CodeMirror2/theme/default.css"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
 
-<body data-gateway="app/">
+<body data-api="app">
  
   <div role="main" class="container-fluid">
     <div class="row-fluid">
@@ -51,7 +53,7 @@
     	  	  <div class="tab-pane hx-source active" id="hx-source">
               <textarea name="hx-source" class="code haxe-source" rows="10">
 class Test {
-  public static function main(){
+  static function main(){
     #if js
   	new js.JQuery("body").html("Haxe is great :)");
     #elseif flash
@@ -92,7 +94,24 @@ class Test {
             <li>If you're more into <strong>Javascript</strong>, check <strong><a href="http://haxejs.org" target="_blank" title="Haxe">HaxeJS.org</a></strong></li> 
             <li><strong>try-haxe</strong>'s source code is <strong><a href="https://github.com/clemos/try-haxe" title="Try-Haxe">available on github</a></strong>. Of course, it's written in Haxe ;)</li>
           </ul>
+          <!-- Place this tag where you want the +1 button to render -->
+
+            <div class="span2 span-plusone">
+              <g:plusone size="medium" href="http://try.haxe.org"></g:plusone>
+            </div>
+
+            <div class="span2 span-twitter">
+              <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+            </div>
+
+            <div class="span2 span-hn">
+              <iframe frameborder="no" scrolling="no" height="36px" width="100px" src="http://hnlike.com/upvote.php?link=http%3A%2F%2Ftry.haxe.org&title=Try+Haxe+%21">iframes not supported by your browser</iframe>
+            </div>
+
+            <div class="span2 span-fb">
+              <div class="fb-like" data-send="true" data-layout="button_count" data-width="100" data-show-faces="true"></div>
           
+        </div>
       </div>
       <div class="compiler-out span6">
         <div class=" pull-right">
@@ -171,6 +190,27 @@ class Test {
   })();
 
 </script>
+
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=114114245328430";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
        chromium.org/developers/how-tos/chrome-frame-getting-started -->

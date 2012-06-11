@@ -18,17 +18,10 @@ typedef HTMLConf =
 
 class Compiler {
 
-	static var tmp = "../tmp";
-
 	var tmpDir : String;
 	var mainFile : String;
 
 	public function new(){}
-
-	static function checkSanity( s : String ){
-		var alphaNum = ~/[^a-zA-Z0-9]/;
-		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
-	}
 
 	static function checkMacros( s : String ){
 		var forbidden = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild|file|audio|bitmap)/;
@@ -44,16 +37,16 @@ class Compiler {
 			var uid = "";
 			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
 
-			var tmpDir = tmp + "/" + uid;
+			var tmpDir = Api.tmp + "/" + uid;
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
 			}
 		}
 
-		checkSanity( program.uid );
-		checkSanity( program.main.name );
+		Api.checkSanity( program.uid );
+		Api.checkSanity( program.main.name );
 
-		tmpDir = tmp + "/" + program.uid;
+		tmpDir = Api.tmp + "/" + program.uid;
 
 		if( !FileSystem.isDirectory( tmpDir )){
 			FileSystem.createDirectory( tmpDir );
@@ -75,11 +68,11 @@ class Compiler {
 
 	public function getProgram(uid:String):Program 
 	{
-		checkSanity(uid);
+		Api.checkSanity(uid);
 		
-		if (FileSystem.isDirectory( tmp + "/" + uid ))
+		if (FileSystem.isDirectory( Api.tmp + "/" + uid ))
 		{
-			tmpDir = tmp + "/" + uid;
+			tmpDir = Api.tmp + "/" + uid;
 
 			var s = File.getContent(tmpDir + "/program"); 
 			var p:Program = haxe.Unserializer.run(s);
@@ -203,17 +196,18 @@ class Compiler {
 			"--dead-code-elimination",
 		];
 
-		var outputUrl : String;
-		var htmlUrl : String = tmpDir + "/" + "index.html";
+		var outputPath : String;
+		var htmlPath : String = tmpDir + "/" + "index.html";
+		var runUrl = Api.base + "/program/"+program.uid+"/run";
 		
 		var html:HTMLConf = {head:[], body:[]};
 
 		switch( program.target ){
 			case JS( name ):
-				checkSanity( name );
-				outputUrl = tmpDir + "/" + name + ".js";
+				Api.checkSanity( name );
+				outputPath = tmpDir + "/" + name + ".js";
 				args.push( "-js" );
-				args.push( outputUrl );
+				args.push( outputPath );
 				args.push("--js-modern");
 				args.push("-D");
 				args.push("noEmbedJS");
@@ -222,21 +216,22 @@ class Compiler {
 				
 
 			case SWF( name , version ):
-				checkSanity( name );
-				outputUrl = tmpDir + "/" + name + ".swf";
+				Api.checkSanity( name );
+				outputPath = tmpDir + "/" + name + ".swf";
 				
 				args.push( "-swf" );
-				args.push( outputUrl );
+				args.push( outputPath );
 				args.push( "-swf-version" );
 				args.push( Std.string( version ) );
 				args.push("-debug");
-				html.head.push("<link rel='stylesheet' href='../swf.css' type='text/css'/>");
-				html.head.push("<script src='../lib/swfobject.js'></script>");
-				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+outputUrl+'", "flashContent", "100%", "100%", "'+version+'.0.0" , null , {} , {wmode:"direct", scale:"noscale"})</script>');
+				html.head.push("<link rel='stylesheet' href='"+Api.root+"/swf.css' type='text/css'/>");
+				html.head.push("<script src='"+Api.root+"/lib/swfobject.js'></script>");
+				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+Api.base+"/"+outputPath+'?r='+Math.random()+'", "flashContent", "100%", "100%", "'+version+'.0.0" , null , {} , {wmode:"direct", scale:"noscale"})</script>');
 				html.body.push('<div id="flashContent"><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p></div>');
 		}
 
 		addLibs(args, program, html);
+		//trace(args);
 		
 		var out = runHaxe( args );
 		var err = out.err.split( tmpDir + "/" ).join("");
@@ -252,7 +247,7 @@ class Compiler {
 				errors : [],
 				success : true,
 				message : "Build success!",
-				href : htmlUrl,
+				href : runUrl,
 				source : ""
 			}
 		}else{
@@ -273,18 +268,18 @@ class Compiler {
 		{
 			switch (program.target) {
 				case JS(_): 
-					output.source = File.getContent(outputUrl);
+					output.source = File.getContent(outputPath);
 					html.body.push("<script>" + output.source + "</script>");
 				default:
 			}
 			var h = new StringBuf();
-			h.add("<html>\n\t<head>\n\t\t<title>Haxe/JS Runner</title>");
+			h.add("<html>\n\t<head>\n\t\t<title>Haxe Run</title>");
 			for (i in html.head) { h.add("\n\t\t"); h.add(i); }
 			h.add("\n\t</head>\n\t<body>");
 			for (i in html.body) { h.add("\n\t\t"); h.add(i); } 
 			h.add('\n\t</body>\n</html>');
 
-			File.saveContent(htmlUrl, h.toString());
+			File.saveContent(htmlPath, h.toString());
 		}
 		
 		return output;
