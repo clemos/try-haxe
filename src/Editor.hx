@@ -204,7 +204,7 @@ class Editor {
         }
       }
 
-      onCompile(p.o);
+      if (p.o != null) onCompile(p.o);
      
 		}
 
@@ -352,7 +352,7 @@ class Editor {
 
     messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4>"+msg+"</div>" );
 
-    if( output.success ){
+    if( output.success && output.stderr != null ){
       messages.append( "<pre>"+output.stderr +"</pre>");
       
     }

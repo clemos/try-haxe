@@ -81,7 +81,34 @@ class Compiler {
 
 			p.main.source = File.getContent(mainFile);
 
-			return {p:p, o:compile(p)};
+			var o:Program.Output = null;
+
+			var htmlPath : String = tmpDir + "/" + "index.html";
+
+			if (FileSystem.exists(htmlPath))
+			{
+				var runUrl = Api.base + "/program/"+p.uid+"/run";
+				o = {
+					uid : p.uid,
+					stderr : null,
+					stdout : "",
+					args : [],
+					errors : [],
+					success : true,
+					message : "Build success!",
+					href : runUrl,
+					source : ""
+				}
+
+				switch (p.target) {
+					case JS(name):
+					var outputPath = tmpDir + "/" + name + ".js";
+					o.source = File.getContent(outputPath);
+					default:
+				}
+			}
+
+			return {p:p, o:o};
 		}
 
 		return null;
@@ -280,6 +307,10 @@ class Compiler {
 			h.add('\n\t</body>\n</html>');
 
 			File.saveContent(htmlPath, h.toString());
+		}
+		else
+		{
+			if (FileSystem.exists(htmlPath)) FileSystem.deleteFile(htmlPath);
 		}
 		
 		return output;
