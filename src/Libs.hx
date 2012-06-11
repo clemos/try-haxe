@@ -40,7 +40,7 @@ class Libs
 			{name:"modernizr"},
 			{name:"browserhx"},
 			{name:"format"},
-			{name:"three.js", head: ["<script src='../../../lib/js/stats-min.js'></script>, <script src='../../../lib/js/three-min.js'></script>"]}
+			{name:"three.js", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]}
 		],
 		swf : untyped { [
 			{name:"actuate" , args : []},
