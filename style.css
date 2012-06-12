@@ -22,7 +22,7 @@ html {
 }
 
 .CodeMirror .error {
-	background-color:#600;
+	background-color:#F2DEDE;
 }
 .CodeMirror {
 	line-height:1.2em;
