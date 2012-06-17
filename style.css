@@ -1,5 +1,5 @@
 
-html {
+body {
 	overflow-y:scroll;
 	padding-top:18px
 }
@@ -79,4 +79,25 @@ html {
 
 .span-fb, .span-plusone, .span-twitter {
 	padding:8px;
+}
+.fullscreen .hx-source {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background:#fff;
+	z-index:1500;
+	margin:0;
+	padding:0;
+	border:0;
+}
+body.fullscreen {
+	overflow:hidden;
+}
+
+.fullscreen .CodeMirror,
+.fullscreen .CodeMirror-scroll {
+	height:100%;
+	border:0;
 }

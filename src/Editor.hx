@@ -40,6 +40,7 @@ class Editor {
 
 		CodeMirror.commands.autocomplete = autocomplete;
     CodeMirror.commands.compile = function(_) compile();
+    CodeMirror.commands.togglefullscreen = toggleFullscreen;
 
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
@@ -50,7 +51,8 @@ class Editor {
 				"Ctrl-Space" : "autocomplete",
         "Ctrl-Enter" : "compile",
         "F8" : "compile",
-        "F5" : "compile"
+        "F5" : "compile",
+        "F11" : "togglefullscreen"
 			},
       onChange : onChange
 		} );
@@ -127,6 +129,11 @@ class Editor {
       uid = uid.substr(1);
   		cnx.Compiler.getProgram.call([uid], onProgram);
     }
+  }
+
+  function toggleFullscreen(_){
+    new JQuery("body").toggleClass("fullscreen");
+    haxeSource.refresh();
   }
 
   function onTarget(e : JqEvent){
