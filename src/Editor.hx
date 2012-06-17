@@ -40,7 +40,7 @@ class Editor {
 
 		CodeMirror.commands.autocomplete = autocomplete;
     CodeMirror.commands.compile = function(_) compile();
-    CodeMirror.commands.togglefullscreen = toggleFullscreen;
+    CodeMirror.commands.togglefullscreen = toggleFullscreenSource;
 
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "javascript",
@@ -81,20 +81,7 @@ class Editor {
       }
     });
 
-    new JQuery(".fullscreen-btn").bind("click" , function(e){
-      var _this = new JQuery(e.target);
-      e.preventDefault();
-      if( _this.attr('href') != "#" ){
-        var r = this.runner;
-        this.runner.attr('src', _this.attr('href'));
-        untyped __js__("el = r.get(0)
-            , rfs = el.requestFullScreen
-                || el.webkitRequestFullScreen
-                || el.mozRequestFullScreen
-        ;
-        rfs.call(el);");
-      }
-    });
+    new JQuery(".fullscreen-btn").bind("click" , toggleFullscreenRunner);
       
 		new JQuery("body").bind("keyup", onKey );
 
@@ -131,9 +118,28 @@ class Editor {
     }
   }
 
-  function toggleFullscreen(_){
-    new JQuery("body").toggleClass("fullscreen");
+  function fullscreen(){
+     untyped __js__("var el = window.document.documentElement;
+            var rfs = el.requestFullScreen
+                || el.webkitRequestFullScreen
+                || el.mozRequestFullScreen;
+              rfs.call(el); ");
+    
+  }
+
+  function toggleFullscreenRunner(e : JqEvent){
+    var _this = new JQuery(e.target);
+    e.preventDefault();
+    if( _this.attr('href') != "#" ){
+      new JQuery("body").addClass("fullscreen-runner");
+      fullscreen();
+    }
+  }
+
+  function toggleFullscreenSource(_){
+    new JQuery("body").toggleClass("fullscreen-source");
     haxeSource.refresh();
+    fullscreen();
   }
 
   function onTarget(e : JqEvent){
@@ -266,11 +272,19 @@ class Editor {
 	}
 
   public function onKey( e : JqEvent ){
-
-   if( ( e.ctrlKey && e.keyCode == 13 ) || e.keyCode == 119 ){ // Ctrl+Enter and F8
-      e.preventDefault();
-      compile(e);
-   }
+     /*if( e.keyCode == 27 ){ // Escape
+        new JQuery("body").removeClass("fullscreen-source fullscreen-runner");
+     }*/
+     if( e.keyCode == 122 ){
+        var b = new JQuery("body");
+        if( b.hasClass("fullscreen-runner") ){
+          b.removeClass("fullscreen-runner");
+        }
+     }
+     if( ( e.ctrlKey && e.keyCode == 13 ) || e.keyCode == 119 ){ // Ctrl+Enter and F8
+        e.preventDefault();
+        compile(e);
+     }
    
   }
 
