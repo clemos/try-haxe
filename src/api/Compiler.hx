@@ -319,14 +319,22 @@ class Compiler {
 		return output;
 	}
 
-	function runHaxe( args ){
+	function runHaxe( args : Array<String> ){
+		
 		var proc = new sys.io.Process( "haxe" , args );
-		return {
+		
+		var exit = proc.exitCode();
+		var out = proc.stdout.readAll().toString();
+		var err = proc.stderr.readAll().toString();
+		
+		var o = {
 			proc : proc,
-			exitCode : proc.exitCode(),
-			out : proc.stdout.readAll().toString(),
-			err : proc.stderr.readAll().toString()
-		}
+			exitCode : exit,
+			out : out,
+			err : err
+		};
+
+		return o;
 
 	}
 
