@@ -43,7 +43,7 @@ class Editor {
     CodeMirror.commands.togglefullscreen = toggleFullscreenSource;
 
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
-			mode : "javascript",
+			mode : "haxe",
 			//theme : "default",
 			lineWrapping : true,
 			lineNumbers : true,
