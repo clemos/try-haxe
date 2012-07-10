@@ -3,7 +3,7 @@
 -main App
 
 --next
--cp ../bootstrap
+-cp lib/haxe-bootstrap
 -D noEmbedBootstrap
 -D noEmbedJS
 -cp src
