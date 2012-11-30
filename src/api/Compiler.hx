@@ -223,7 +223,8 @@ class Compiler {
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"--times",
-			"--dce", "full"
+			//"--dce", "full"
+			"--dead-code-elimination"
 		];
 
 		var outputPath : String;
