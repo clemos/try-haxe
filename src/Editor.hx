@@ -350,7 +350,7 @@ class Editor {
 		jsSource.setValue( output.source );
 
     var jsSourceElem = new JQuery(jsSource.getWrapperElement());
-		var msg : String = "";
+		var msg : Array<String> = [];
     var msgType : String = "";
 
 		if( output.success ){
@@ -365,7 +365,7 @@ class Editor {
         default : jsTab.hide();
       }
 		}else{
-      msg = output.stderr.replace("\n","<br/>");
+      msg = output.stderr.split("\n");
       msgType = "error";
       stage.hide();
       jsTab.hide();
@@ -373,10 +373,14 @@ class Editor {
       markErrors();
 		}
 
-    messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4>"+msg+"</div>" );
+    messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4><div class='message'></div></div>" );
+    for( m in msg ){
+      messages.find(".message").append( new JQuery("<div>").text(m) );  
+    }
+    
 
     if( output.success && output.stderr != null ){
-      messages.append( "<pre>"+output.stderr +"</pre>");
+      messages.append( new JQuery("<pre>").text(output.stderr) );
       
     }
 
