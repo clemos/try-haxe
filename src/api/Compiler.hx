@@ -2,10 +2,10 @@ package api;
 
 #if php
 import php.Web;
-import php.Sys;
+import Sys;
 import php.Lib;
-import php.FileSystem;
-import php.io.File;
+import sys.FileSystem;
+import sys.io.File;
 #end
 
 using Lambda;
@@ -24,7 +24,7 @@ class Compiler {
 	public function new(){}
 
 	static function checkMacros( s : String ){
-		var forbidden = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild|file|audio|bitmap)/;
+		var forbidden = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild|file|audio|bitmap|font)/;
 		if( forbidden.match( s ) ) throw "Unauthorized : @:"+forbidden.matched(3)+"";  
 	}
 
@@ -32,12 +32,12 @@ class Compiler {
 
 		while( program.uid == null ){
 
-			var id = haxe.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
+			var id = haxe.crypto.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
 			id = id.substr(0, 5);
 			var uid = "";
 			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
 
-			var tmpDir = Api.tmp + "/" + uid;
+			var tmpDir = Api.tmp + "/" + uid + "/";
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
 			}
@@ -46,13 +46,13 @@ class Compiler {
 		Api.checkSanity( program.uid );
 		Api.checkSanity( program.main.name );
 
-		tmpDir = Api.tmp + "/" + program.uid;
+		tmpDir = Api.tmp + "/" + program.uid + "/";
 
 		if( !FileSystem.isDirectory( tmpDir )){
 			FileSystem.createDirectory( tmpDir );
 		}
 
-		mainFile = tmpDir + "/" + program.main.name + ".hx";
+		mainFile = tmpDir + program.main.name + ".hx";
 
 		var source = program.main.source;
 		checkMacros( source );
@@ -61,7 +61,7 @@ class Compiler {
 
 		var s = program.main.source;
 		program.main.source = null;
-		File.saveContent( tmpDir + "/program", haxe.Serializer.run(program));
+		File.saveContent( tmpDir + "program", haxe.Serializer.run(program));
 		program.main.source = s;
 
 	}
@@ -73,12 +73,12 @@ class Compiler {
 		
 		if (FileSystem.isDirectory( Api.tmp + "/" + uid ))
 		{
-			tmpDir = Api.tmp + "/" + uid;
+			tmpDir = Api.tmp + "/" + uid + "/";
 
-			var s = File.getContent(tmpDir + "/program"); 
+			var s = File.getContent(tmpDir + "program"); 
 			var p:Program = haxe.Unserializer.run(s);
 
-			mainFile = tmpDir + "/" + p.main.name + ".hx";
+			mainFile = tmpDir + p.main.name + ".hx";
 
 			p.main.source = File.getContent(mainFile);
 
@@ -131,7 +131,7 @@ class Compiler {
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"-v",
-			"--display" , tmpDir + "/" + program.main.name + ".hx@" + idx
+			"--display" , tmpDir + program.main.name + ".hx@" + idx
 		];
 
 		switch (program.target) {
@@ -223,12 +223,12 @@ class Compiler {
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"--times",
-			//"--dce", "full"
-			"--dead-code-elimination"
+			"-dce", "full"
+			//"--dead-code-elimination"
 		];
 
 		var outputPath : String;
-		var htmlPath : String = tmpDir + "/" + "index.html";
+		var htmlPath : String = tmpDir + "index.html";
 		var runUrl = Api.base + "/program/"+program.uid+"/run";
 		
 		var html:HTMLConf = {head:[], body:[]};
@@ -236,7 +236,7 @@ class Compiler {
 		switch( program.target ){
 			case JS( name ):
 				Api.checkSanity( name );
-				outputPath = tmpDir + "/" + name + ".js";
+				outputPath = tmpDir + name + ".js";
 				args.push( "-js" );
 				args.push( outputPath );
 				args.push("--js-modern");
@@ -248,7 +248,7 @@ class Compiler {
 
 			case SWF( name , version ):
 				Api.checkSanity( name );
-				outputPath = tmpDir + "/" + name + ".swf";
+				outputPath = tmpDir + name + ".swf";
 				
 				args.push( "-swf" );
 				args.push( outputPath );
@@ -265,7 +265,7 @@ class Compiler {
 		//trace(args);
 		
 		var out = runHaxe( args );
-		var err = out.err.split( tmpDir + "/" ).join("");
+		var err = out.err.split( tmpDir ).join("");
 		var errors = err.split("
 ");
 
@@ -322,7 +322,8 @@ class Compiler {
 
 	function runHaxe( args : Array<String> ){
 		
-		var proc = new sys.io.Process( "haxe" , args );
+		//var proc = new sys.io.Process( "haxe" , args );
+		var proc = new sys.io.Process( "C:\\Motion-Twin\\haxe_night\\haxe" , args ); // deep test path
 		
 		var exit = proc.exitCode();
 		var out = proc.stdout.readAll().toString();

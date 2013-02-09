@@ -3,3 +3,4 @@ app/*
 *.sublime-project
 *.sublime-workspace
 tmp/*
+*.hxproj

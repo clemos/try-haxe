@@ -1,6 +1,7 @@
 package js.codemirror;
 
-import js.Dom;
+import js.html.HtmlElement;
+import js.html.TextAreaElement;
 
 typedef Completions = {
 	list : Array<String>,
@@ -32,7 +33,7 @@ typedef ChangeEvent = {
 	public static var commands (default,null) : Dynamic<CodeMirror->Void>;
 	public static function simpleHint( cm : CodeMirror , getCompletions : CodeMirror -> Completions ) : Void;
 
-	public static function fromTextArea( textarea : Textarea , ?config : Dynamic ) : CodeMirror;
+	public static function fromTextArea( textarea : TextAreaElement , ?config : Dynamic ) : CodeMirror;
 
 	public function setValue( v : String ) : Void;
 	public function getValue() : String;
@@ -46,7 +47,7 @@ typedef ChangeEvent = {
 	@:overload( function( line : LineHandle ) : Void {})
 	public function clearMarker(line:Int) : Void;
 
-	public function getWrapperElement() : js.HtmlDom;
+	public function getWrapperElement() : HtmlElement;
 
 	public function somethingSelected() : Bool;
 	public function focus() : Void;

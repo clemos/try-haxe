@@ -34,19 +34,20 @@ class Libs
 
 	public static var available : AvailableLibs = {
 		js : [
-			{name:"jeash", args : ["--remap","flash:jeash"], head : ["<link rel='stylesheet' href='../swf.css' type='text/css'/>"], body:["<div id='haxe:jeash'></div>"]},
-			{name:"actuate"},
-			{name:"selecthx"},
-			{name:"modernizr"},
-			{name:"browserhx"},
-			{name:"format"},
-			{name:"three.js", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]}
+			//{name:"nme", args : ["--remap","flash:browser"], head : ["<link rel='stylesheet' href='../swf.css' type='text/css'/>"], body:["<div id='haxe:jeash'></div>"]},
+			//{name:"actuate"},
+			//{name:"selecthx"},
+			//{name:"modernizr"},
+			//{name:"browserhx"},
+			//{name:"format" },
+			//{name:"three.js", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]}
 		],
 		swf : untyped { [
-			{name:"actuate" , args : []},
-			{name:"format"},
+			//{name:"actuate" , args : []},
+			//{name:"format"},
 			{name:"away3d", swf:{src:"away3d4.swf", help:"http://away3d.com/livedocs/away3d/4.0/"}},
-			{name:"starling", args:['--macro', '"patchTypes(\'../../lib/swf/starling.patch\')"'], swf:{src:"starling.swf", help:"http://doc.starling-framework.org/core/"}}
+			{name:"h3d"},
+			//{name:"starling" },
 		]; }
 	};
 

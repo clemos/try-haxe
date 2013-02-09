@@ -1,6 +1,7 @@
 
 import api.Program;
 import haxe.remoting.HttpAsyncConnection;
+import js.Browser;
 import js.codemirror.CodeMirror;
 import js.JQuery;
 
@@ -111,7 +112,7 @@ class Editor {
 
     setTarget( api.Program.Target.JS( "test" ) );
 
-		var uid = js.Lib.window.location.hash;
+		var uid = Browser.window.location.hash;
 		if (uid.length > 0){
       uid = uid.substr(1);
   		cnx.Compiler.getProgram.call([uid], onProgram);
@@ -147,7 +148,7 @@ class Editor {
     var name = cb.val();
     var target = switch( name ){
       case "swf" : api.Program.Target.SWF('test',11);
-      case "js" : api.Program.Target.JS('test');
+      case _ : api.Program.Target.JS('test');
     }
     setTarget(target);
   }
@@ -345,7 +346,7 @@ class Editor {
 
 		output = o;
 		program.uid = output.uid;
-    js.Lib.window.location.hash = "#" + output.uid;
+    Browser.window.location.hash = "#" + output.uid;
 		
 		jsSource.setValue( output.source );
 
