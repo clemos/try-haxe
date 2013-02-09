@@ -172,10 +172,7 @@ class Compiler {
 
 	function addLibs(args:Array<String>, program:Program, ?html:HTMLConf) 
 	{
-		var availableLibs = switch( program.target ){
-			case JS(_) : Libs.available.js;
-			case SWF(_,_) : Libs.available.swf;
-		}
+		var availableLibs = Libs.getLibsConfig(program.target);
 		for( l in availableLibs ){
 			if( program.libs.has( l.name ) ){
 				if (html != null)
@@ -239,9 +236,6 @@ class Compiler {
 				outputPath = tmpDir + name + ".js";
 				args.push( "-js" );
 				args.push( outputPath );
-				args.push("--js-modern");
-				args.push("-D");
-				args.push("noEmbedJS");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
 				
 				
@@ -255,6 +249,8 @@ class Compiler {
 				args.push( "-swf-version" );
 				args.push( Std.string( version ) );
 				args.push("-debug");
+				args.push("-D");
+				args.push("advanced-telemetry"); // for Scout
 				html.head.push("<link rel='stylesheet' href='"+Api.root+"/swf.css' type='text/css'/>");
 				html.head.push("<script src='"+Api.root+"/lib/swfobject.js'></script>");
 				html.head.push('<script type="text/javascript">swfobject.embedSWF("'+Api.base+"/"+outputPath+'?r='+Math.random()+'", "flashContent", "100%", "100%", "'+version+'.0.0" , null , {} , {wmode:"direct", scale:"noscale"})</script>');

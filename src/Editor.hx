@@ -147,7 +147,7 @@ class Editor {
     var cb = new JQuery( e.target );
     var name = cb.val();
     var target = switch( name ){
-      case "swf" : api.Program.Target.SWF('test',11);
+      case "SWF" : api.Program.Target.SWF('test',11);
       case _ : api.Program.Target.JS('test');
     }
     setTarget(target);
@@ -161,32 +161,34 @@ class Editor {
     
     switch( target ){
       case JS(_): 
-        sel = "js";
+        sel = "JS";
         jsTab.fadeIn();
 
       case SWF(_,_) : 
-        sel = "swf";
+        sel = "SWF";
         jsTab.hide();
     }
 
-    var radio = new JQuery( "input[name='target'][value='" + sel +"']" );
-    radio.attr( 'checked' ,'checked' );
+    var radio = new JQuery( 'input[name=\'target\'][value=\'$sel\']' );
+    radio.attr( "checked" ,"checked" );
 
     libs.find("."+sel+"-libs").fadeIn();
   }
 
   function initLibs(){
-    for( t in ["swf","js"] ){
+    for( t in Type.getEnumConstructs(api.Program.Target) ){
       var el = libs.find("."+t+"-libs");
-      var libs : Array<Libs.LibConf> = Reflect.field( Libs.available , t );
+      var libs : Array<Libs.LibConf> = Libs.getLibsConfig(t);
+      var def : Array<String> = Libs.getDefaultLibs(t);
+	  if (def == null) def = [];
       for( l in libs ){
 
         el.append(
-          '<label class="checkbox"><input class="lib" type="checkbox" value="' + l.name + '" ' 
-          + ((Libs.defaultChecked.has(l.name) /*|| selectedLib(l.name)*/) ? "checked='checked'" : "") 
-          + '" /> ' + l.name 
-          + "<span class='help-inline'><a href='" + (l.swf == null ? "http://lib.haxe.org/p/" + l.name : l.swf.help) 
-          +"' target='_blank'><i class='icon-question-sign'></i></a></span>"
+            '<label class="checkbox"><input class="lib" type="checkbox" value="${l.name}"' 
+          + (Lambda.has(def, l.name) ? "checked='checked'" : "") 
+          + ' /> ${l.name}'
+          + "<span class='help-inline'><a href='" + (l.help == null ? "http://lib.haxe.org/p/" + l.name : l.help) 
+          + "' target='_blank'><i class='icon-question-sign'></i></a></span>"
           + "</label>"
           );
     
@@ -309,10 +311,8 @@ class Editor {
 		program.main.source = haxeSource.getValue();
 
 		var libs = new Array();
-    var sel = switch( program.target ){
-      case JS(_): "js";
-      case SWF(_,_) : "swf";
-    }
+    var sel = Type.enumConstructor(program.target);
+	
 		var inputs = new JQuery("#hx-options .hx-libs ."+sel+"-libs input.lib:checked");
 		// TODO: change libs array only then need
 		for (i in inputs)  // refill libs array, only checked libs
