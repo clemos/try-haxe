@@ -157,15 +157,13 @@ class Editor {
     program.target = target;
     libs.find(".controls").hide();
     
-    var sel :String;
+    var sel :String = Type.enumConstructor(target);
     
     switch( target ){
       case JS(_): 
-        sel = "JS";
         jsTab.fadeIn();
 
       case SWF(_,_) : 
-        sel = "SWF";
         jsTab.hide();
     }
 
