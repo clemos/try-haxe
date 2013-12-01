@@ -25,8 +25,11 @@ class Compiler {
 	public function new(){}
 
 	static function checkMacros( s : String ){
-		var forbidden = ~/@([^:]*):([^ ]*)(macro|build|autoBuild|file|audio|bitmap|font)/;
-		if( forbidden.match( s ) ) throw "Unauthorized : @:"+forbidden.matched(3)+"";  
+		var forbidden = [
+			~/@([^:]*):([\/*a-zA-Z\s]*)(macro|build|autoBuild|file|audio|bitmap|font)/,
+			~/macro/
+		];
+		for( f in forbidden ) if( f.match( s ) ) throw "Unauthorized : "+f.matched(0)+"";  
 	}
 
 	function prepareProgram( program : Program ){
