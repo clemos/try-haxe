@@ -20,11 +20,12 @@ class Compiler {
 
 	var tmpDir : String;
 	var mainFile : String;
+	public static var haxePath = "haxe";
 
 	public function new(){}
 
 	static function checkMacros( s : String ){
-		var forbidden = ~/@([^:]*):([^a-z]*)(macro|build|autoBuild|file|audio|bitmap|font)/;
+		var forbidden = ~/@([^:]*):([^ ]*)(macro|build|autoBuild|file|audio|bitmap|font)/;
 		if( forbidden.match( s ) ) throw "Unauthorized : @:"+forbidden.matched(3)+"";  
 	}
 
@@ -318,8 +319,7 @@ class Compiler {
 
 	function runHaxe( args : Array<String> ){
 		
-		//var proc = new sys.io.Process( "haxe" , args );
-		var proc = new sys.io.Process( "C:\\Motion-Twin\\haxe_night\\haxe" , args ); // deep test path
+		var proc = new sys.io.Process( haxePath , args );
 		
 		var exit = proc.exitCode();
 		var out = proc.stdout.readAll().toString();
