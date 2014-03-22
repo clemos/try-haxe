@@ -41,7 +41,7 @@ class Compiler {
 			var uid = "";
 			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
 
-			var tmpDir = Api.tmp + "/" + uid + "/";
+			var tmpDir = Api.tmp + '/$uid/';
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
 			}

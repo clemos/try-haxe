@@ -19,7 +19,7 @@ class Api {
 
 	public static function checkSanity( s : String ){
 		var alphaNum = ~/[^a-zA-Z0-9]/;
-		if( alphaNum.match(s) ) throw "Unauthorized :" + s + "";
+		if( alphaNum.match(s) ) throw 'Unauthorized :$s';
 	}
 
 	public function doCompiler(){
@@ -35,7 +35,7 @@ class Api {
 
 	public function doProgram( id : String , d : Dispatch ){
 		checkSanity( id );
-		dir = tmp + "/" + id;
+		dir = '$tmp/$id';
 		if( FileSystem.exists( dir ) && FileSystem.isDirectory( dir ) ){
 			d.dispatch( {
 				doRun : runProgram,
@@ -47,11 +47,11 @@ class Api {
 	}
 
 	public function runProgram( ){
-		php.Lib.print(File.getContent(dir+'/index.html'));
+		php.Lib.print(File.getContent('$dir/index.html'));
 	}
 
 	public function getProgram( ){
-		php.Lib.print(File.getContent(dir+'/program'));
+		php.Lib.print(File.getContent('$dir/program'));
 	}
 
 

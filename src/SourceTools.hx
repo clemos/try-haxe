@@ -6,8 +6,7 @@ class SourceTools {
 			line : 0,
 			ch : 0
 		};
-		var lines = src.split("
-");
+		var lines = ~/[\n|\r|\r\n]/g.split(src);
 		for( l in lines ){
 			if( idx >= l.length+1 ){
 				idx -= l.length+1;
@@ -23,8 +22,7 @@ class SourceTools {
 	}
 	public static function posToIndex( src :String, pos : { line : Int, ch : Int } ){
 		var char = 0;
-		var lines = src.split("
-");
+		var lines = ~/[\n|\r|\r\n]/g.split(src);
 
 		for( i in 0...pos.line ){
 			char += lines[i].length + 1;
@@ -37,7 +35,7 @@ class SourceTools {
 		var char = posToIndex( src , pos );
 		var iniChar = char;
 
-		while( !".".split("").has( src.charAt( char ) ) ){
+		while( ".".code != src.charCodeAt( char ) ){
 			char--;
 			if( char < 0 ) return null;
 		}
