@@ -1,4 +1,6 @@
 
+import api.Completion.CompletionResult;
+import api.Completion.CompletionType;
 import api.Program;
 import haxe.remoting.HttpAsyncConnection;
 import js.Browser;
@@ -8,6 +10,7 @@ import js.JQuery;
 using js.bootstrap.Button;
 using Lambda;
 using StringTools;
+using haxe.EnumTools;
 
 class Editor {
 
@@ -104,7 +107,7 @@ class Editor {
         name : "Test",
         source : haxeSource.getValue()
       },
-      target : SWF( "test", 11 ),
+      target : SWF( "test", 11.4 ),
       libs : new Array()
     };
 
@@ -147,7 +150,7 @@ class Editor {
     var cb = new JQuery( e.target );
     var name = cb.val();
     var target = switch( name ){
-      case "SWF" : api.Program.Target.SWF('test',11);
+      case "SWF" : api.Program.Target.SWF('test',11.4);
       case _ : api.Program.Target.JS('test');
     }
     setTarget(target);
@@ -227,21 +230,30 @@ class Editor {
 	}
 
 	public function autocomplete( cm : CodeMirror ){
+    clearErrors();
+    messages.fadeOut(0);
 		updateProgram();
     var src = cm.getValue();
 
-    var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
-    if( idx == null ) return;
+    var completion = CompletionType.DEFAULT;
 
-    if( idx == completionIndex ){
-      displayCompletions( cm , completions ); 
-      return;
+    var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
+    if( idx == null ) {
+      return ;
+      // TODO: topLevel completion?
+      //idx = SourceTools.posToIndex(src, cm.getCursor());
     }
+
+    // sometimes show incorrect result (time.getDate| change to value.length| -> completionIndex are equals)
+    // if( idx == completionIndex && completions != null ){ 
+    //   displayCompletions( cm , {list:completions} ); 
+    //   return;
+    // }
     completionIndex = idx;
     if( src.length > 1000 ){
       program.main.source = src.substring( 0 , completionIndex+1 );
     }
-    cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps ) displayCompletions( cm , comps ) );
+    cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps:CompletionResult ) displayCompletions( cm , comps ) );
 	}
 
   function showHint( cm : CodeMirror ){
@@ -267,9 +279,27 @@ class Editor {
     };
   }
 
-	public function displayCompletions(cm : CodeMirror , comps : Array<String> ) {
-		completions = comps;
-    CodeMirror.simpleHint( cm , showHint );
+	public function displayCompletions(cm : CodeMirror , comps : CompletionResult ) {
+    completions = null;
+    if (comps.list != null) {
+  		completions = comps.list;
+      CodeMirror.simpleHint( cm , showHint );
+    }
+    if (comps.type != null) {
+      trace(comps.type);
+      var pos = cm.getCursor();
+      var end = {line:pos.line, ch:pos.ch+comps.type.length};
+      cm.replaceRange(comps.type, pos, pos);
+      cm.setSelection(pos, end);
+    } 
+    if (comps.errors != null) {
+      messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>Completion error</h4><div class='message'></div></div>" );
+      for( m in comps.errors ){
+        messages.find(".message").append( new JQuery("<div>").text(m) );  
+      }
+      messages.fadeIn();
+      markErrors(comps.errors);
+    }
 	}
 
   public function onKey( e : JqEvent ){
@@ -291,7 +321,7 @@ class Editor {
 
 	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
     var txt :String = e.text[0];
-    if( txt.trim().endsWith( ".") ){
+    if( txt.trim().endsWith( "." ) || txt.trim().endsWith( "(" ) ){
       autocomplete( haxeSource );
     }
 	}
@@ -364,12 +394,12 @@ class Editor {
         default : jsTab.hide();
       }
 		}else{
-      msg = output.stderr.split("\n");
+      msg = SourceTools.splitLines(output.stderr);
       msgType = "error";
       stage.hide();
       jsTab.hide();
       jsSourceElem.hide();
-      markErrors();
+      markErrors(output.errors);
 		}
 
     messages.html( "<div class='alert alert-"+msgType+"'><h4 class='alert-heading'>" + output.message + "</h4><div class='message'></div></div>" );
@@ -400,10 +430,10 @@ class Editor {
     }
   }
 
-  public function markErrors(){
+  public function markErrors(errors:Array<String>){
     var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
     
-    for( e in output.errors ){
+    for( e in errors ){
       if( errLine.match( e ) ){
         var err = {
           file : errLine.matched(1),
