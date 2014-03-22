@@ -1,5 +1,3 @@
-package ;
-
 import api.Program;
 
 typedef SWFInfo = {

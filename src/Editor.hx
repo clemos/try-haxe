@@ -1,4 +1,3 @@
-
 import api.Completion.CompletionResult;
 import api.Completion.CompletionType;
 import api.Program;
