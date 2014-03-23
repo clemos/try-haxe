@@ -1,6 +1,8 @@
 package api;
 
 #if php
+import api.Completion.CompletionResult;
+import api.Completion.CompletionType;
 import php.Web;
 import Sys;
 import php.Lib;
@@ -8,6 +10,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+using StringTools;
 using Lambda;
 
 typedef HTMLConf = 
@@ -41,7 +44,7 @@ class Compiler {
 			var uid = "";
 			for (i in 0...id.length) uid += if (Math.random() > 0.5) id.charAt(i).toUpperCase() else id.charAt(i);
 
-			var tmpDir = Api.tmp + "/" + uid + "/";
+			var tmpDir = Api.tmp + '/$uid/';
 			if( !(FileSystem.exists( tmpDir )) ){
 				program.uid = uid;
 			}
@@ -121,21 +124,23 @@ class Compiler {
 		return null;
 	}
 
-	public function autocomplete( program : Program , idx : Int ) : Array<String>{
+	// TODO: topLevel competion
+	public function autocomplete( program : Program , idx : Int ) : CompletionResult{
 		
 		try{
 			prepareProgram( program );
 		}catch(err:String){
-			return [];
+			return {};
 		}
 
 		var source = program.main.source;
-		
+		var display = tmpDir + program.main.name + ".hx@" + idx;
+
 		var args = [
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"-v",
-			"--display" , tmpDir + program.main.name + ".hx@" + idx
+			"--display" , display
 		];
 
 		switch (program.target) {
@@ -156,21 +161,32 @@ class Compiler {
 
 		try{
 			var xml = new haxe.xml.Fast( Xml.parse( out.err ).firstChild() );
-			var words = [];
+			
+			if (xml.name == "type") {
+				var res = xml.innerData.trim().htmlUnescape();
+				res = res.replace(" ->", ",");
+				if (res == "Dynamic") res = ""; // empty enum ctor completion
+				var pos = res.lastIndexOf(","); // result type
+				res = if (pos != -1) res.substr(0, pos) else "";
+				if (res == "Void") res = ""; // no args methods
 
+				return {type:res};
+			}
+
+			var words = [];
 			for( e in xml.nodes.i ){
 				var w = e.att.n;
 				if( !words.has( w ) )
 					words.push( w );
 
 			}
-			return words;
+			return {list:words};
 
 		}catch(e:Dynamic){
-			return [];
+			
 		}
 
-		return [];
+		return {errors:SourceTools.splitLines(out.err.replace(tmpDir, ""))};
 		
 	}
 
@@ -265,9 +281,8 @@ class Compiler {
 		//trace(args);
 		
 		var out = runHaxe( args );
-		var err = out.err.split( tmpDir ).join("");
-		var errors = err.split("
-");
+		var err = out.err.replace(tmpDir, "");
+		var errors = SourceTools.splitLines(err);
 
 		var output : Program.Output = if( out.exitCode == 0 ){
 			{

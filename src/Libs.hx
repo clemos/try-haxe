@@ -1,5 +1,3 @@
-package ;
-
 import api.Program;
 
 typedef SWFInfo = {
@@ -22,19 +20,17 @@ class Libs
 	static var available : Map<String, Array<LibConf>> = [
 		"JS" => [
 			//{name:"nme", args : ["--remap","flash:browser"], head : ["<link rel='stylesheet' href='../swf.css' type='text/css'/>"], body:["<div id='haxe:jeash'></div>"]},
-			//{name:"actuate"},
+			{name:"actuate"},
 			//{name:"selecthx"},
 			//{name:"modernizr"},
 			//{name:"browserhx"},
-			//{name:"format" },
+			{name:"format" },
 			//{name:"three.js", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]}
 		],
 		"SWF" => new Array<LibConf>().concat([
-			//{name:"actuate" , args : []},
-			//{name:"format"},
+			{name:"actuate" , args : []},
+			{name:"format"},
 			{name:"away3d", swf:{src:"away3d4.swf"}, help:"http://away3d.com/livedocs/away3d/4.0/"},
-			{name:"h3d", help:"https://github.com/ncannasse/h3d#readme"},
-			{name:"hxsl", help:"https://github.com/ncannasse/hxsl#readme"},
 			//{name:"starling" },
 		])
 	];
@@ -45,14 +41,12 @@ class Libs
 	static public function getLibsConfig(?target:Target, ?targetName:String):Array<LibConf>
 	{
 		var name = targetName != null ? targetName : Type.enumConstructor(target);
-		if (available.exists(name)) return available.get(name);
-		return [];
+		return if (available.exists(name)) return available.get(name) else [];
 	}
 
 	static public function getDefaultLibs(?target:Target, ?targetName:String):Array<String>
 	{
 		var name = targetName != null ? targetName : Type.enumConstructor(target);
-		if (defaultChecked.exists(name)) return defaultChecked.get(name);
-		return [];
+		return if (defaultChecked.exists(name)) return defaultChecked.get(name) else [];
 	}
 }

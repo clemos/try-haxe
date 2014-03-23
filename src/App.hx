@@ -18,7 +18,7 @@ class App {
 
 	  		if( params.exists('_root') ){
 	  			Api.root = params.get('_root');
-	  			Api.base = Api.root + "/app";
+	  			Api.base = '${Api.root}/app';
 	  		}else{
 		  		var base :String = untyped __php__("$_SERVER['SCRIPT_NAME']");
 		  		var spl = base.split("/");

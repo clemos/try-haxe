@@ -52,4 +52,7 @@ typedef ChangeEvent = {
 	public function somethingSelected() : Bool;
 	public function focus() : Void;
 
+	public function replaceRange(string:String, from:Pos, to:Pos):Void;
+	public function setSelection(start:Pos, end:Pos):Void;
+
 }
