@@ -1,0 +1,22 @@
+{
+     "type" : 2
+    ,"target" : null
+    ,"name" : "\\try-haxe"
+    ,"main" : "build.hxml"
+    ,"projectPackage" : null
+    ,"company" : null
+    ,"license" : null
+    ,"url" : null
+    ,"args" : [
+
+    ]
+    ,"files" : [
+         "src\\Editor.hx"
+        ,"build.hxml"
+    ]
+    ,"activeFile" : "src\\Editor.hx"
+    ,"openFLTarget" : null
+    ,"runActionType" : 0
+    ,"runActionText" : null
+    ,"buildActionCommand" : null
+}

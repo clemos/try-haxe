@@ -26,11 +26,15 @@
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-responsive.min.css" />
   
-  <link rel="stylesheet" href="lib/CodeMirror2/lib/codemirror.css"/>
-  <link rel="stylesheet" href="lib/CodeMirror2/lib/util/simple-hint.css"/>
-  <link rel="stylesheet" href="lib/CodeMirror2/theme/rubyblue.css"/>
-  <link rel="stylesheet" href="lib/CodeMirror2/theme/cobalt.css"/>
+  <link rel="stylesheet" href="lib/CodeMirror-4/lib/codemirror.css"/>
+  <link rel="stylesheet" href="lib/CodeMirror-4/addon/hint/show-hint.css"/>
+  <link rel="stylesheet" href="lib/CodeMirror-4/theme/rubyblue.css"/>
+  <link rel="stylesheet" href="lib/CodeMirror-4/theme/cobalt.css"/>
   <link rel="stylesheet" href="style.css"/>
+    
+  <link rel="stylesheet" href="lib/CodeMirror-4/addon/fold/foldgutter.css">
+  <link rel="stylesheet" href="lib/CodeMirror-4/addon/dialog/dialog.css">
+  <link href="lib/CodeMirror-4/addon/lint/lint.css" type="text/css" rel="stylesheet">
 </head>
 
 <body data-api="app">
@@ -172,11 +176,26 @@ class Test {
 
 
   <!-- scripts concatenated and minified via build script -->
-  <script src="lib/CodeMirror2/lib/codemirror.js"></script>
-  <script src="lib/CodeMirror2/mode/haxe/haxe.js"></script>
-  <script src="lib/CodeMirror2/mode/javascript/javascript.js"></script>
-  <script src="lib/haxe-hint.js"></script>
+  <script src="lib/CodeMirror-4/lib/codemirror.js"></script>
+  <script src="lib/CodeMirror-4/addon/hint/show-hint.js"></script>
+  <script src="lib/CodeMirror-4/mode/haxe/haxe.js"></script>
+  <script src="lib/CodeMirror-4/mode/javascript/javascript.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="lib/CodeMirror-4/addon/search/searchcursor.js"></script>
+	<script src="lib/CodeMirror-4/addon/search/search.js"></script>
+	<script src="lib/CodeMirror-4/addon/dialog/dialog.js"></script>
+	<script src="lib/CodeMirror-4/addon/comment/comment.js"></script>
+	<script src="lib/CodeMirror-4/addon/lint/lint.js"></script>
+	<script src="lib/CodeMirror-4/addon/wrap/hardwrap.js"></script>
+	<script src="lib/CodeMirror-4/keymap/sublime.js"></script>
+	
+	<script src="lib/CodeMirror-4/addon/hint/show-hint.js"></script>
+	<script src="lib/CodeMirror-4/addon/edit/matchbrackets.js"></script>
+	<script src="lib/CodeMirror-4/addon/edit/closebrackets.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/foldcode.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/foldgutter.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/brace-fold.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/comment-fold.js"></script>
   <script src="app.js"></script>
   <!-- end scripts -->
 

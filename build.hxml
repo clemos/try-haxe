@@ -9,3 +9,5 @@
 -cp src
 -js app.js
 -main App
+-D source-map-content
+-debug

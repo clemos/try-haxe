@@ -3,7 +3,7 @@ import api.Completion.CompletionType;
 import api.Program;
 import haxe.remoting.HttpAsyncConnection;
 import js.Browser;
-import js.codemirror.CodeMirror;
+//import js.codemirror.CodeMirror;
 import js.JQuery;
 
 using js.bootstrap.Button;
@@ -31,35 +31,47 @@ class Editor {
   var stage : JQuery;
   var jsTab : JQuery;
 
-  var markers : Array<MarkedText>;
-  var lineHandles : Array<LineHandle>;
+  var markers : Array<CodeMirror.MarkedText>;
+  var lineHandles : Array<CodeMirror.LineHandle>;
 
   var completions : Array<String>;
   var completionIndex : Int;
 
 	public function new(){
+        
     markers = [];
     lineHandles = [];
 
-		CodeMirror.commands.autocomplete = autocomplete;
+		//CodeMirror.commands.autocomplete = autocomplete;
     CodeMirror.commands.compile = function(_) compile();
     CodeMirror.commands.togglefullscreen = toggleFullscreenSource;
-
+        
+    HaxeLint.load();
+        
   	haxeSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='hx-source']")[0] , {
 			mode : "haxe",
 			//theme : "default",
 			lineWrapping : true,
 			lineNumbers : true,
 			extraKeys : {
-				"Ctrl-Space" : "autocomplete",
+				"Ctrl-Space" : function (cm:CodeMirror) {autocomplete(cm);},
         "Ctrl-Enter" : "compile",
         "F8" : "compile",
         "F5" : "compile",
         "F11" : "togglefullscreen"
-			},
-      onChange : onChange
+			}
+        	,
+            lint: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
+            indentUnit: 4,
+            tabSize: 4,
+            keyMap: "sublime"
 		} );
 
+    Completion.registerHelper();
+     haxeSource.on("change", onChange);
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
@@ -252,44 +264,55 @@ class Editor {
     if( src.length > 1000 ){
       program.main.source = src.substring( 0 , completionIndex+1 );
     }
+	
+	
     cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps:CompletionResult ) displayCompletions( cm , comps ) );
 	}
 
-  function showHint( cm : CodeMirror ){
-    var src = cm.getValue();
-    var cursor = cm.getCursor();
-    var from = SourceTools.indexToPos( src , SourceTools.getAutocompleteIndex( src, cursor ) );
-    var to = cm.getCursor();
+//   function showHint( cm : CodeMirror ){
+//     var src = cm.getValue();
+//     var cursor = cm.getCursor();
+//     var from = SourceTools.indexToPos( src , SourceTools.getAutocompleteIndex( src, cursor ) );
+//     var to = cm.getCursor();
 
-    var token = src.substring( SourceTools.posToIndex( src, from ) , SourceTools.posToIndex( src, to ) );
+//     var token = src.substring( SourceTools.posToIndex( src, from ) , SourceTools.posToIndex( src, to ) );
 
-    var list = [];
+//     var list = [];
 
-    for( c in completions ){
-      if( c.toLowerCase().startsWith( token.toLowerCase() ) ){
-        list.push( c );
-      }
-    }
+//     for( c in completions ){
+//       if( c.toLowerCase().startsWith( token.toLowerCase() ) ){
+//         list.push( c );
+//       }
+//     }
 
-    return {
-        list : list,
-        from : from,
-        to : to
-    };
-  }
+//     return {
+//         list : list,
+//         from : from,
+//         to : to
+//     };
+//   }
 
 	public function displayCompletions(cm : CodeMirror , comps : CompletionResult ) {
+	
     completions = null;
     if (comps.list != null) {
   		completions = comps.list;
-      CodeMirror.simpleHint( cm , showHint );
+        
+        Completion.completions = [];
+        
+        for (completion in completions)
+        {
+        	Completion.completions.push({n: completion});
+        }
+        
+      	cm.execCommand("autocomplete");
     }
     if (comps.type != null) {
       trace(comps.type);
-      var pos = cm.getCursor();
-      var end = {line:pos.line, ch:pos.ch+comps.type.length};
-      cm.replaceRange(comps.type, pos, pos);
-      cm.setSelection(pos, end);
+       var pos = cm.getCursor();
+       var end = {line:pos.line, ch:pos.ch+comps.type.length};
+       cm.replaceRange(comps.type, pos, pos);
+       cm.setSelection(pos, end);
     } 
     if (comps.errors != null) {
       messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>Completion error</h4><div class='message'></div></div>" );
@@ -320,7 +343,8 @@ class Editor {
 
 	public function onChange( cm :CodeMirror, e : js.codemirror.CodeMirror.ChangeEvent ){
     var txt :String = e.text[0];
-    if( txt.trim().endsWith( "." ) || txt.trim().endsWith( "(" ) ){
+        
+    if( txt.trim().endsWith( "." ) || txt.trim().endsWith( "()" ) ){
       autocomplete( haxeSource );
     }
 	}
@@ -420,16 +444,20 @@ class Editor {
 	}
 
   public function clearErrors(){
-    for( m in markers ){
-      m.clear();
-    }
-    markers = [];
-    for( l in lineHandles ){
-      haxeSource.clearMarker( l );
-    }
+      HaxeLint.data = [];
+      HaxeLint.updateLinting(haxeSource);
+//     for( m in markers ){
+//       m.clear();
+//     }
+//     markers = [];
+//     for( l in lineHandles ){
+//       haxeSource.clearMarker( l );
+//     }
   }
 
   public function markErrors(errors:Array<String>){
+    HaxeLint.data = [];  
+      
     var errLine = ~/([^:]*):([0-9]+): characters ([0-9]+)-([0-9]+) :(.*)/g;
     
     for( e in errors ){
@@ -441,17 +469,21 @@ class Editor {
           to : Std.parseInt(errLine.matched(4)),
           msg : errLine.matched(5)
         };
+        
         if( StringTools.trim( err.file ) == "Test.hx" ){
+            HaxeLint.data.push({from:CodeMirrorPos.from(err.line, err.from), to:CodeMirrorPos.from(err.line, err.to), message:err.msg, severity:"error"});
           //trace(err.line);
-          var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
-          lineHandles.push( l );
+//           var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
+//           lineHandles.push( l );
 
-          var m = haxeSource.markText( { line : err.line , ch : err.from } , { line : err.line , ch : err.to } , "error");
-          markers.push( m );
+//           var m = haxeSource.markText( { line : err.line , ch : err.from } , { line : err.line , ch : err.to } , "error");
+//           markers.push( m );
         }
         
       }
     }
+
+	HaxeLint.updateLinting(haxeSource);
   }
 
 }

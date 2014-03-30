@@ -31,7 +31,7 @@ typedef ChangeEvent = {
 @:native('CodeMirror') extern class CodeMirror {
 
 	public static var commands (default,null) : Dynamic<CodeMirror->Void>;
-	public static function simpleHint( cm : CodeMirror , getCompletions : CodeMirror -> Completions ) : Void;
+	public static function showHint( cm : CodeMirror , ?getCompletions : CodeMirror -> Completions ) : Void;
 
 	public static function fromTextArea( textarea : TextAreaElement , ?config : Dynamic ) : CodeMirror;
 
