@@ -21,9 +21,7 @@ class HaxeLint
 	{
 		CodeMirror.registerHelper("lint", "haxe", function (text:String) 
 		{
-			var found = [];
-			found = data;
-			return found;
+			return data;
 		}
 		);
 	}

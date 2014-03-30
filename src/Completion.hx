@@ -67,7 +67,7 @@ class Completion
 			
 			list = Filter.filter(list, curWord);
 			
-			var data:Dynamic = { list: list, from: CodeMirrorPos.from(cur.line, start), to: CodeMirrorPos.from(cur.line, end) };
+        var data:Dynamic = { list: list, from: {line:cur.line, ch:start}, to: {line:cur.line, ch:end} };
 			return data;
 		});
 	}

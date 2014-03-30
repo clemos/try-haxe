@@ -471,7 +471,7 @@ class Editor {
         };
         
         if( StringTools.trim( err.file ) == "Test.hx" ){
-            HaxeLint.data.push({from:CodeMirrorPos.from(err.line, err.from), to:CodeMirrorPos.from(err.line, err.to), message:err.msg, severity:"error"});
+            HaxeLint.data.push({from:{line:err.line, ch:err.from}, to:{line:err.line, ch:err.to}, message:err.msg, severity:"error"});
           //trace(err.line);
 //           var l = haxeSource.setMarker( err.line , "<i class='icon-warning-sign icon-white'></i>" , "error");
 //           lineHandles.push( l );
