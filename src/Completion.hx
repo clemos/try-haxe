@@ -2,6 +2,7 @@ package;
 import haxe.xml.Fast;
 import js.Browser;
 import js.html.DivElement;
+import js.codemirror.*;
 /**
  * ...
  * @author AS3Boyan

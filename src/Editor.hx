@@ -3,7 +3,7 @@ import api.Completion.CompletionType;
 import api.Program;
 import haxe.remoting.HttpAsyncConnection;
 import js.Browser;
-//import js.codemirror.CodeMirror;
+import js.codemirror.*;
 import js.JQuery;
 
 using js.bootstrap.Button;
@@ -70,6 +70,18 @@ class Editor {
             keyMap: "sublime"
 		} );
 
+    ColorPreview.create(haxeSource);
+        
+    haxeSource.on("cursorActivity", function()
+    {
+        ColorPreview.update(haxeSource);             
+});  
+      
+     haxeSource.on("scroll", function ()
+                  {
+                      ColorPreview.scroll(haxeSource);
+});   
+        
     Completion.registerHelper();
      haxeSource.on("change", onChange);
    

@@ -1,4 +1,5 @@
 package ;
+import js.codemirror.*;
 
 typedef Info = {
 	var from:CodeMirror.Pos;

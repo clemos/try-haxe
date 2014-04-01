@@ -104,3 +104,13 @@ body.fullscreen-runner {
 	height:100%;
 	border:0;
 }
+
+.colorPreview
+{
+	border:1px solid;
+	border-radius:5px;
+	width: 25px;
+	height: 25px;
+	position: fixed;
+	z-index: 10;
+}

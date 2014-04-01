@@ -13,10 +13,13 @@
     ,"files" : [
          "src\\Editor.hx"
         ,"build.hxml"
+        ,"src\\js\\codemirror\\ColorPreview.hx"
+        ,"index.html"
     ]
     ,"activeFile" : "src\\Editor.hx"
     ,"openFLTarget" : null
     ,"runActionType" : 0
     ,"runActionText" : null
     ,"buildActionCommand" : null
+    ,"path" : "C:\\GitHub\\try-haxe"
 }
