@@ -8,7 +8,7 @@
 -D noEmbedJS
 -cp src
 -js app.js
--lib jQueryExtern
+# -lib jQueryExtern
 -main App
 -D source-map-content
 -debug

@@ -1,6 +1,6 @@
 package js.codemirror;
 import Completion;
-import jQuery.JQuery;
+import js.JQuery;
 import js.Browser;
 import js.html.DivElement;
 import js.codemirror.*;
@@ -74,7 +74,7 @@ class ColorPreview
 			var editor = cm.getWrapperElement().getBoundingClientRect();
 			var newTop = top + startScroll.top - curScroll.top;
 			
-			var point = newTop - new JQuery().scrollTop();
+			var point = newTop - new JQuery(js.Browser.window).scrollTop();
 			if (point <= editor.top || point >= editor.bottom)
 			{
 				new JQuery(preview).fadeOut();
