@@ -15,7 +15,7 @@ typedef Module = {
 
 enum Target {
 	JS( name : String );
-	SWF( name : String , ?version : Int );
+	SWF( name : String , ?version : Float );
 }
 
 typedef Output = {
