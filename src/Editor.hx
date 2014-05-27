@@ -173,9 +173,17 @@ class Editor {
     var cb = new JQuery( e.target );
     var name = cb.val();
     var target = switch( name ){
-      case "SWF" : api.Program.Target.SWF('test',11.4);
-      case _ : api.Program.Target.JS('test');
+      case "SWF" : 
+        api.Program.Target.SWF('test',11.4);
+      case _ : 
+        api.Program.Target.JS('test');
     }
+     
+   	if (name == "SWF")
+    {
+      new JQuery("#output").click();
+    }
+      
     setTarget(target);
   }
 
