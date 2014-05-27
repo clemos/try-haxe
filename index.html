@@ -58,12 +58,15 @@
               <textarea name="hx-source" class="code haxe-source" rows="10">
 class Test {
     static function main() {
+        log("Haxe is great!");
+    }
+
+    static function log(value:Dynamic) {
         #if js
-        new js.JQuery("body").html("Haxe is great :)");
-        #elseif flash
-        trace("Haxe is great :)");
+        new js.JQuery("body").append(value + "<br/>");
         #end
-	}
+        trace(value);
+    }
 }</textarea>
               
             </div>
