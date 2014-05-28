@@ -58,14 +58,7 @@
               <textarea name="hx-source" class="code haxe-source" rows="10">
 class Test {
     static function main() {
-        log("Haxe is great!");
-    }
-
-    static function log(value:Dynamic) {
-        #if js
-        new js.JQuery("body").append(value + "<br/>");
-        #end
-        trace(value);
+        trace("Haxe is great!");
     }
 }</textarea>
               
@@ -109,10 +102,6 @@ class Test {
 
             <div class="span2 span-twitter">
               <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
-            </div>
-
-            <div class="span2 span-hn">
-              <iframe frameborder="no" scrolling="no" height="36px" width="160px" src="http://hnlike.com/upvote.php?link=http%3A%2F%2Ftry.haxe.org&title=Try+Haxe+%21">iframes not supported by your browser</iframe>
             </div>
 
             <div class="span2 span-fb">

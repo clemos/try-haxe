@@ -257,7 +257,19 @@ class Compiler {
 				args.push( "-js" );
 				args.push( outputPath );
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
-				
+				html.body.push("<script src='//markknol.github.io/console-log-viewer/console-log-viewer.js'></script>");
+				html.body.push("<style type='text/css'>
+					#debug_console {
+						background:#fff;
+						font-size:14px;
+					}
+					#debug_console font.log-normal {
+						color:#000;
+					}
+					#debug_console a.log-button  {
+						display:none;
+					}
+					</style>");
 				
 
 			case SWF( name , version ):
