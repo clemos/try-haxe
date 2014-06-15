@@ -3,4 +3,4 @@
 	url = git://github.com/clemos/haxe-bootstrap.git
 [submodule "lib/CodeMirror-4"]
 	path = lib/CodeMirror-4
-	url = git@github.com:marijnh/CodeMirror.git
+	url = git://github.com/marijnh/CodeMirror.git
