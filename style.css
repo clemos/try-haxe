@@ -1,8 +1,25 @@
 
 body {
 	overflow-y:scroll;
-	padding-top:18px
+	font-size:14px;
+	font-family:"Open Sans", sans-serif;
+	color:#1E1E1E;
 }
+.navbar {
+	background:#000; 
+	color:#fff; 
+	padding:15px 0;
+}
+
+.navbar a {color:#F48821}
+
+.navbar a.logo-link, .logo-link:hover, .logo-link:active, .logo-link:link {text-decoration:none; color:#FFF; }
+a.logo-link strong {font-size:18px; vertical-align: middle; padding-right:3px;}
+.logo {margin-right:25px}
+.logo-github {margin-right:15px}
+
+.haxe-code-template {display: none;}
+a.btn i {margin-top:3px}
 
 .CodeMirror-wrap, .hx-options, .js-canvas
  {
@@ -10,10 +27,10 @@ body {
 }
 
 .hx-options {
-	height:302px;
+	height:420px;
 }
 .js-output .js-run {
-	height:291px;
+	height:461px;
 }
 
 .js-run {
@@ -25,9 +42,9 @@ body {
 	background-color:#F2DEDE;
 }
 .CodeMirror {
+	font-size:13px;
 	line-height:1.2em;
-}
-.CodeMirror {
+	
 	border: 1px solid #DDD;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -35,6 +52,8 @@ body {
 	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 	-moz-box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 	box-shadow: 0 1px 1px rgba(0,0,0,0.075);
+	
+	height:381px;
 }
 
 

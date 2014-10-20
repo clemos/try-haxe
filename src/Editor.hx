@@ -5,6 +5,7 @@ import haxe.remoting.HttpAsyncConnection;
 import js.Browser;
 import js.codemirror.*;
 import js.JQuery;
+import js.Lib;
 
 using js.bootstrap.Button;
 using Lambda;
@@ -17,6 +18,7 @@ class Editor {
 	
 	var program : Program;
 	var output : Output;
+	
 	
 	var gateway : String;
 	
@@ -109,6 +111,7 @@ class Editor {
     });
 
     new JQuery(".fullscreen-btn").bind("click" , toggleFullscreenRunner);
+    new JQuery("#hx-example-select").bind("change" , toggleExampleChange);
       
 		new JQuery("body").bind("keyup", onKey );
 
@@ -143,6 +146,17 @@ class Editor {
       uid = uid.substr(1);
   		cnx.Compiler.getProgram.call([uid], onProgram);
     }
+  }
+  
+  function toggleExampleChange(e : JqEvent) {
+    var _this = new JQuery(e.target);
+	var ajax = untyped __js__("$.ajax");
+	ajax({
+		url:'examples/Example-${_this.val()}.hx',
+		dataType: "text"
+	}).done(function(data) {
+		haxeSource.setValue(data);
+	});
   }
 
   function fullscreen(){
