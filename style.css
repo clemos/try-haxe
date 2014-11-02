@@ -1,9 +1,9 @@
-
 body {
 	overflow-y:scroll;
 	font-size:14px;
 	font-family:"Open Sans", sans-serif;
 	color:#1E1E1E;
+	min-width:350px;
 }
 .navbar {
 	background:#000; 
@@ -11,15 +11,53 @@ body {
 	padding:15px 0;
 }
 
-.navbar a {color:#F48821}
+@media (max-width: 767px) {
+	.navbar {
+		margin-left:-20px;
+		margin-right:-20px;
+	}
+	
+	.navbar .container-fluid {
+		text-align:center;
+	}
+	
+	.navbar .pull-right {
+		display:block;
+		float:none;
+		margin-bottom:1em;
+	}
+}
 
-.navbar a.logo-link, .logo-link:hover, .logo-link:active, .logo-link:link {text-decoration:none; color:#FFF; }
-a.logo-link strong {font-size:18px; vertical-align: middle; padding-right:3px;}
-.logo {margin-right:25px}
-.logo-github {margin-right:15px}
+.navbar a {
+    color: #F48821;
+}
 
-.haxe-code-template {display: none;}
-a.btn i {margin-top:3px}
+.navbar a.logo-link, .logo-link:hover, .logo-link:active, .logo-link:link {
+    text-decoration: none;
+    color: #FFF;
+}
+
+a.logo-link strong {
+    font-size: 18px;
+    vertical-align: middle;
+    padding-right: 3px;
+}
+
+.logo {
+    margin-right: 25px;
+}
+
+.logo-github {
+    margin-right: 15px;
+}
+
+.haxe-code-template {
+    display: none;
+}
+
+a.btn i {
+    margin-top: 3px;
+}
 
 .CodeMirror-wrap, .hx-options, .js-canvas
  {
