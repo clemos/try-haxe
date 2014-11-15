@@ -1,6 +1,8 @@
+import haxe.ds.IntMap;
+
 class Test {
 	static public function main() {
-		var map = new Map<Int,String>();
+		var map:IntMap<String> = new IntMap<String>();
 		var f = map.set.bind(_, "12");
 		$type(map.set); // Int -> String -> Void
 		$type(f); // Int -> Void
