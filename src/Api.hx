@@ -68,6 +68,8 @@ class Api {
 
 		if ( program == null ) {
 			var req = new haxe.Http( url );
+			req.addHeader("User-Agent","try.haxe.org (Haxe/PHP)");
+			req.addHeader("Accept","*/*");
 			req.onError = function(m){
 				throw m;
 			}
