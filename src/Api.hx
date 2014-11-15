@@ -58,34 +58,49 @@ class Api {
 
 	public function doLoad( d : Dispatch ) {
 		var url = d.params.get('url');
-		var tpl = '../redirect.html';
 		if( url == null ){
 			throw "Url required";
 		}
-		var req = new haxe.Http( url );
-		req.onError = function(m){
-			throw m;
-		}
-		req.onData = function(src){
-			var program : api.Program = {
-		      uid : null,
-		      main : {
-		        name : "Test",
-		        source : src
-		      },
-		      target : SWF( "test", 11.4 ),
-		      libs : new Array()
+		var uid = 'u'+haxe.crypto.Md5.encode(url);
+		var compiler = new api.Compiler();
+
+		var program : api.Program = compiler.getProgram(uid);
+
+		if ( program == null ) {
+			var req = new haxe.Http( url );
+			req.onError = function(m){
+				throw m;
 			}
-			var compiler = new api.Compiler();
-			compiler.prepareProgram( program );
+			req.onData = function(src){
+				var program : api.Program = {
+			      uid : uid,
+			      main : {
+			        name : "Test",
+			        source : src
+			      },
+			      target : SWF( "test", 11.4 ),
+			      libs : new Array()
+				}
+				
+				compiler.prepareProgram( program );
 
-			var redirect = File.getContent(tpl);
-			redirect = redirect.replace('__url__','/#' + program.uid );
+				redirectToProgram( program.uid );
 
-			php.Lib.print( redirect );
+			}
 
+			req.request(false);
+
+		} else {
+			redirectToProgram( program.uid );
 		}
-		req.request(false);
+	}
+
+	function redirectToProgram( uid : String ) {
+		var tpl = '../redirect.html';
+		var redirect = File.getContent(tpl);
+
+		redirect = redirect.replace('__url__','/#' + uid );
+		php.Lib.print( redirect );
 	}
 
 
