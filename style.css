@@ -65,7 +65,7 @@ a.btn i {
 }
 
 .hx-options {
-	height:420px;
+	height:473px;
 }
 .js-output .js-run {
 	height:461px;
@@ -90,8 +90,10 @@ a.btn i {
 	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 	-moz-box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 	box-shadow: 0 1px 1px rgba(0,0,0,0.075);
-	
-	height:381px;
+	height:425px;
+}
+.js-source .CodeMirror {	
+	height:471px;
 }
 
 
