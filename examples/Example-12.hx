@@ -16,9 +16,8 @@ class MyClass {
 class Test {
   static public function main() {
     var value = new MyClass();
-    var meta = Meta.getType(MyClass);
     // { author : ["Nicolas"], debug : null }
-    trace(Std.string(meta));
+    trace(Std.string(Meta.getType(MyClass)));
     // [1,8]
     trace(Meta.getFields(MyClass).value.range);
     // { broken: null }
