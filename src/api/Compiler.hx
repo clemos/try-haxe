@@ -35,7 +35,7 @@ class Compiler {
 		for( f in forbidden ) if( f.match( s ) ) throw "Unauthorized : "+f.matched(0)+"";  
 	}
 
-	function prepareProgram( program : Program ){
+	public function prepareProgram( program : Program ){
 
 		while( program.uid == null ){
 

@@ -6,6 +6,8 @@ import php.Web;
 import php.Lib;
 import haxe.web.Dispatch;
 
+using StringTools;
+
 class Api {
 
 	var program : api.Program;
@@ -52,6 +54,38 @@ class Api {
 
 	public function getProgram( ){
 		php.Lib.print(File.getContent('$dir/program'));
+	}
+
+	public function doLoad( d : Dispatch ) {
+		var url = d.params.get('url');
+		var tpl = '../redirect.html';
+		if( url == null ){
+			throw "Url required";
+		}
+		var req = new haxe.Http( url );
+		req.onError = function(m){
+			throw m;
+		}
+		req.onData = function(src){
+			var program : api.Program = {
+		      uid : null,
+		      main : {
+		        name : "Test",
+		        source : src
+		      },
+		      target : SWF( "test", 11.4 ),
+		      libs : new Array()
+			}
+			var compiler = new api.Compiler();
+			compiler.prepareProgram( program );
+
+			var redirect = File.getContent(tpl);
+			redirect = redirect.replace('__url__','/#' + program.uid );
+
+			php.Lib.print( redirect );
+
+		}
+		req.request(false);
 	}
 
 
