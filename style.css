@@ -96,7 +96,10 @@ a.btn i {
 	height:471px;
 }
 
-
+div.CodeMirror span.CodeMirror-matchingbracket {
+	color: #D76900;
+	text-shadow: 0 0 5px #D76900;
+}
 /* from rubyblue */
 .CodeMirror-completions {
 	/* rubyblue
