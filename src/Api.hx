@@ -31,6 +31,19 @@ class Api {
       		return;
 	}
 
+	public function doEmbed( uid:String ){
+		var program = new api.Compiler().getProgram( uid );
+		if( program != null ) {
+			var frameUrl = 'http://try.haxe.org/app/program/$uid/run?r=';
+			var source = program.main.source;
+			var template = Templates.getCopy(Templates.MAIN_TEMPLATE);
+			Lib.println(template);
+		} else {
+			var template = Templates.getCopy(Templates.ERROR_TEMPLATE);
+			Lib.println(template);
+		}
+	}
+
 	function notFound(){
 		Web.setReturnCode(404);
 	}
