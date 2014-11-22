@@ -11,11 +11,15 @@ RewriteRule ^(.*)$ http://try.haxe.org/$1 [R=301]
 RewriteCond %{HTTP_HOST} localhost
 RewriteCond %{REQUEST_URI} !index.php
 RewriteCond %{REQUEST_URI} ^/~([^/]*)/
-RewriteRule ^app/(.*)$ /~%1/try-haxe/app/index.php?_url=$1 [L,QSA]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^/(.*)$ /~%1/try-haxe/app/index.php?_url=$1 [L,QSA]
 
 # try.haxe.org
 RewriteCond %{HTTP_HOST} try\.haxe\.org
 RewriteCond %{REQUEST_URI} !index.php
-RewriteRule ^app/(.*)$ /app/index.php?_url=$1&_root= [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^/(.*)$ /app/index.php?_url=$1&_root= [L,QSA]
 
-RewriteRule app/(.*)$ app/index.php?_url=$1 [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app/index.php?_url=$1 [L,QSA]

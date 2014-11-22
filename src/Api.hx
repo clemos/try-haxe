@@ -5,6 +5,7 @@ import sys.FileSystem;
 import php.Web;
 import php.Lib;
 import haxe.web.Dispatch;
+import template.Templates;
 
 using StringTools;
 
@@ -14,6 +15,7 @@ class Api {
 	var dir : String;
 	public static var base : String;
 	public static var root : String;
+	public static var host : String;
 
 	public static var tmp = "../tmp";
 	
@@ -21,7 +23,7 @@ class Api {
 
 	public static function checkSanity( s : String ){
 		var alphaNum = ~/[^a-zA-Z0-9]/;
-		if( alphaNum.match(s) ) throw 'Unauthorized :$s';
+		if( alphaNum.match(s) ) throw 'Unauthorized id :$s';
 	}
 
 	public function doCompiler(){
@@ -34,7 +36,7 @@ class Api {
 	public function doEmbed( uid:String ){
 		var program = new api.Compiler().getProgram( uid );
 		if( program != null ) {
-			var frameUrl = 'http://try.haxe.org/app/program/$uid/run?r=';
+			var frameUrl = 'http://$host/$base/program/$uid/run?r=';
 			var source = program.main.source;
 			var template = Templates.getCopy(Templates.MAIN_TEMPLATE);
 			Lib.println(template);

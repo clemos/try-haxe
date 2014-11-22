@@ -95,6 +95,24 @@ a.btn i {
 .js-source .CodeMirror {	
 	height:471px;
 }
+.embed-source .CodeMirror {
+	height:auto;
+	min-height:68px;
+}
+
+.embed-source .CodeMirror-scroll {
+  height: auto;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.embed-preview {
+	margin-bottom:18px;
+}
+
+.compiler-out .tab-content {
+	height:491px;
+}
 
 div.CodeMirror span.CodeMirror-matchingbracket {
 	color: #D76900;

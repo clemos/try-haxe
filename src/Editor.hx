@@ -32,6 +32,9 @@ class Editor {
   var targets : JQuery;
   var stage : JQuery;
   var jsTab : JQuery;
+  var embedTab : JQuery;
+  var embedSource : CodeMirror;
+  var embedPreview : JQuery;
 
   var markers : Array<CodeMirror.MarkedText>;
   var lineHandles : Array<CodeMirror.LineHandle>;
@@ -77,15 +80,15 @@ class Editor {
     haxeSource.on("cursorActivity", function()
     {
         ColorPreview.update(haxeSource);             
-});  
+    });  
       
-     haxeSource.on("scroll", function ()
-                  {
-                      ColorPreview.scroll(haxeSource);
-});   
+    haxeSource.on("scroll", function ()
+    {
+        ColorPreview.scroll(haxeSource);
+    });   
         
     Completion.registerHelper();
-     haxeSource.on("change", onChange);
+    haxeSource.on("change", onChange);
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
 			mode : "javascript",
@@ -94,6 +97,12 @@ class Editor {
 			lineNumbers : true,
 			readOnly : true
 		} );
+
+    embedSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='embed-source']")[0] , {
+      mode : "htmlmixed",
+      lineWrapping : true,
+      readonly : true
+    });
 		
 		runner = new JQuery("iframe[name='js-run']");
 		messages = new JQuery(".messages");
@@ -102,6 +111,11 @@ class Editor {
     targets = new JQuery("#hx-options-form .hx-targets");
     stage = new JQuery(".js-output .js-canvas");
     jsTab = new JQuery("a[href='#js-source']");
+    embedTab = new JQuery("a[href='#embed-source']");
+    embedPreview = new JQuery("#embed-preview");
+
+    jsTab.hide();
+    embedTab.hide();
 
     new JQuery(".link-btn").bind("click", function(e){
       var _this = new JQuery(e.target);
@@ -118,6 +132,7 @@ class Editor {
 		new JQuery("a[data-toggle='tab']").bind( "shown", function(e){
 			jsSource.refresh();
       haxeSource.refresh();
+      embedSource.refresh();
 		});
 
     targets.delegate("input[name='target']" , "change" , onTarget );
@@ -209,7 +224,7 @@ class Editor {
     
     switch( target ){
       case JS(_): 
-        jsTab.fadeIn();
+        //jsTab.fadeIn();
 
       case SWF(_,_) : 
         jsTab.hide();
@@ -434,6 +449,14 @@ class Editor {
     Browser.window.location.hash = "#" + output.uid;
 		
 		jsSource.setValue( output.source );
+    embedSource.setValue( output.embed );
+    embedPreview.html( output.embed );
+
+    if( output.embed != "" && output.embed != null ){
+      embedTab.show();
+    }else{
+      embedTab.hide();
+    }
 
     var jsSourceElem = new JQuery(jsSource.getWrapperElement());
 		var msg : Array<String> = [];

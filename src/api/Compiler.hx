@@ -32,7 +32,7 @@ class Compiler {
 			~/@([^:]*):([\/*a-zA-Z\s]*)(macro|build|autoBuild|file|audio|bitmap|font)/,
 			~/macro/
 		];
-		for( f in forbidden ) if( f.match( s ) ) throw "Unauthorized : "+f.matched(0)+"";  
+		for( f in forbidden ) if( f.match( s ) ) throw "Unauthorized macro : "+f.matched(0)+"";  
 	}
 
 	public function prepareProgram( program : Program ){
@@ -246,7 +246,10 @@ class Compiler {
 
 		var outputPath : String;
 		var htmlPath : String = tmpDir + "index.html";
-		var runUrl = Api.base + "/program/"+program.uid+"/run";
+		var runUrl = '${Api.base}/program/${program.uid}/run';
+		var embedSrc = '<iframe src="http://${Api.host}${Api.base}/embed/${program.uid}" width="100%" height="300" frameborder="no" allowfullscreen>
+	<a href="http://${Api.host}/#${program.uid}">Try Haxe !</a>
+</iframe>';
 		
 		var html:HTMLConf = {head:[], body:[]};
 
@@ -306,6 +309,7 @@ class Compiler {
 				success : true,
 				message : "Build success!",
 				href : runUrl,
+				embed : embedSrc,
 				source : ""
 			}
 		}else{
@@ -318,6 +322,7 @@ class Compiler {
 				success : false,
 				message : "Build failure",
 				href : "",
+				embed : "",
 				source : ""
 			}
 		}

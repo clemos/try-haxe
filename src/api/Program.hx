@@ -27,5 +27,6 @@ typedef Output = {
 	success : Bool,
 	message : String,
 	href : String,
-	source : String
+	source : String,
+	embed : String
 }
