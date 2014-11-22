@@ -30,8 +30,8 @@ class App {
 
 		  		// / is rewritten to /app
 		  		Api.base = Api.root;
-		  		Api.host = Web.getHostName();
 	  		}
+	  		Api.host = Web.getHostName();
 
 	  		var api = new Api();
 
