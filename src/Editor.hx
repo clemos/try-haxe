@@ -449,8 +449,6 @@ class Editor {
 
 	public function onCompile( o : Output ){
 
-    trace(o);
-
 		output = o;
 		program.uid = output.uid;
     Browser.window.location.hash = "#" + output.uid;
