@@ -232,7 +232,8 @@ class Compiler {
 				success : false,
 				message : "Build failure",
 				href : "",
-				source : ""
+				source : "",
+				embed : ""
 			}
 		}
 

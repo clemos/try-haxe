@@ -30,6 +30,7 @@ class Editor {
 	var compileBtn : JQuery;
   var libs : JQuery;
   var targets : JQuery;
+  var mainName : JQuery;
   var stage : JQuery;
   var jsTab : JQuery;
   var embedTab : JQuery;
@@ -113,6 +114,7 @@ class Editor {
     jsTab = new JQuery("a[href='#js-source']");
     embedTab = new JQuery("a[href='#embed-source']");
     embedPreview = new JQuery("#embed-preview");
+    mainName = new JQuery("#hx-options-form input[name='main']");
 
     jsTab.hide();
     embedTab.hide();
@@ -283,6 +285,8 @@ class Editor {
         }
       }
 
+      mainName.val(program.main.name);
+
       //if (p.o != null) onCompile(p.o);
      
 		}
@@ -409,6 +413,7 @@ class Editor {
 
 	function updateProgram(){
 		program.main.source = haxeSource.getValue();
+    program.main.name = mainName.val();
 
 		var libs = new Array();
     var sel = Type.enumConstructor(program.target);
@@ -443,6 +448,8 @@ class Editor {
 	}
 
 	public function onCompile( o : Output ){
+
+    trace(o);
 
 		output = o;
 		program.uid = output.uid;

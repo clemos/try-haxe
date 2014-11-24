@@ -23,7 +23,7 @@ class Api {
 
 	public static function checkSanity( s : String ){
 		var alphaNum = ~/[^a-zA-Z0-9]/;
-		if( alphaNum.match(s) ) throw 'Unauthorized id :$s';
+		if( alphaNum.match(s) ) throw 'Unauthorized identifier : $s';
 	}
 
 	public function doCompiler(){
