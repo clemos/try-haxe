@@ -76,6 +76,12 @@ class Api {
 		if( url == null ){
 			throw "Url required";
 		}
+		var main = d.params.get('main');
+		if( main == null ){
+			main = "Test";
+		}else{
+			checkSanity( main );
+		}
 		var uid = 'u'+haxe.crypto.Md5.encode(url);
 		var compiler = new api.Compiler();
 
@@ -92,7 +98,7 @@ class Api {
 				var program : api.Program = {
 			      uid : uid,
 			      main : {
-			        name : "Test",
+			        name : main,
 			        source : src
 			      },
 			      target : SWF( "test", 11.4 ),
