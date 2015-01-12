@@ -27,7 +27,7 @@ class Api {
 	}
 	
 	public static function checkDCE(s : String){
-		if (s != "full" && s != "no") throw 'Invalid dce : $s';
+		if (s != "full" && s != "no" && s != "std") throw 'Invalid dce : $s';
 	}
 
 	public function doCompiler(){
