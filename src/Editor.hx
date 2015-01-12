@@ -173,7 +173,7 @@ class Editor {
     var cb = new JQuery( e.target );
     var name = cb.val();
     switch( name ){
-      case "no", "full" : 
+      case "no", "full", "std": 
         setDCE(name);
       default: 
     }
