@@ -31,6 +31,7 @@ class Editor {
   var libs : JQuery;
   var targets : JQuery;
   var mainName : JQuery;
+  var dceName : JQuery;
   var stage : JQuery;
   var jsTab : JQuery;
   var embedTab : JQuery;
@@ -115,6 +116,7 @@ class Editor {
     embedTab = new JQuery("a[href='#embed-source']");
     embedPreview = new JQuery("#embed-preview");
     mainName = new JQuery("#hx-options-form input[name='main']");
+    dceName = new JQuery("#hx-options-form .hx-dce-name");
 
     jsTab.hide();
     embedTab.hide();
@@ -137,6 +139,7 @@ class Editor {
       embedSource.refresh();
 		});
 
+    dceName.delegate("input[name='dce']" , "change" , onDce );
     targets.delegate("input[name='target']" , "change" , onTarget );
 		
 		compileBtn.bind( "click" , compile );
@@ -148,6 +151,7 @@ class Editor {
       uid : null,
       main : {
         name : "Test",
+		dce : "full",
         source : haxeSource.getValue()
       },
       target : SWF( "test", 11.4 ),
@@ -163,6 +167,23 @@ class Editor {
       uid = uid.substr(1);
   		cnx.Compiler.getProgram.call([uid], onProgram);
     }
+  }
+  
+  function  onDce(e : JqEvent){
+    var cb = new JQuery( e.target );
+    var name = cb.val();
+    switch( name ){
+      case "no", "full", "std": 
+        setDCE(name);
+      default: 
+    }
+  }
+  
+  function setDCE(dce:String) 
+  {
+	  program.main.dce = dce;
+	  var radio = new JQuery( 'input[name=\'dce\'][value=\'$dce\']' );
+	  radio.attr( "checked" ,"checked" );
   }
   
   function toggleExampleChange(e : JqEvent) {
@@ -272,8 +293,9 @@ class Editor {
       // auto-fork
       program.uid = null;
 
-			haxeSource.setValue(program.main.source);
+	  haxeSource.setValue(program.main.source);
       setTarget( program.target );
+      setDCE(program.main.dce);
 
       if( program.libs != null ){
         for( lib in libs.find("input.lib") ){
@@ -413,7 +435,7 @@ class Editor {
 
 	function updateProgram(){
 		program.main.source = haxeSource.getValue();
-    program.main.name = mainName.val();
+		program.main.name = mainName.val();
 
 		var libs = new Array();
     var sel = Type.enumConstructor(program.target);

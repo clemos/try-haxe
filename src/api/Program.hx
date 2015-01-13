@@ -10,7 +10,8 @@ typedef Program = {
 
 typedef Module = {
 	name : String,
-	source : String
+	source : String,
+	dce : String
 }
 
 enum Target {
