@@ -5,13 +5,13 @@ typedef Program = {
 	main : Module,
 	target : Target,
 	libs:Array<String>,
+	dce : String
 //	?modules : Hash<Module>,
 }
 
 typedef Module = {
 	name : String,
-	source : String,
-	dce : String
+	source : String
 }
 
 enum Target {

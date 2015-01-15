@@ -52,7 +52,7 @@ class Compiler {
 
 		Api.checkSanity( program.uid );
 		Api.checkSanity( program.main.name );
-		Api.checkDCE( program.main.dce );
+		Api.checkDCE( program.dce );
 
 		tmpDir = Api.tmp + "/" + program.uid + "/";
 
@@ -242,7 +242,7 @@ class Compiler {
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
 			"--times",
-			"-dce", program.main.dce
+			"-dce", program.dce
 			//"--dead-code-elimination"
 		];
 

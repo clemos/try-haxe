@@ -151,9 +151,9 @@ class Editor {
       uid : null,
       main : {
         name : "Test",
-		dce : "full",
         source : haxeSource.getValue()
       },
+      dce : "full",
       target : SWF( "test", 11.4 ),
       libs : new Array()
     };
@@ -181,7 +181,7 @@ class Editor {
   
   function setDCE(dce:String) 
   {
-	  program.main.dce = dce;
+	  program.dce = dce;
 	  var radio = new JQuery( 'input[name=\'dce\'][value=\'$dce\']' );
 	  radio.attr( "checked" ,"checked" );
   }
@@ -295,7 +295,7 @@ class Editor {
 
 	  haxeSource.setValue(program.main.source);
       setTarget( program.target );
-      setDCE(program.main.dce);
+      setDCE(program.dce);
 
       if( program.libs != null ){
         for( lib in libs.find("input.lib") ){
@@ -436,6 +436,7 @@ class Editor {
 	function updateProgram(){
 		program.main.source = haxeSource.getValue();
 		program.main.name = mainName.val();
+    program.dce = new JQuery( 'input[name=\'dce\']:checked' ).val();
 
 		var libs = new Array();
     var sel = Type.enumConstructor(program.target);

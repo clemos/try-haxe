@@ -110,9 +110,9 @@ class Api {
 			      uid : uid,
 			      main : {
 			        name : main,
-			        dce : dce,
 			        source : src
 			      },
+			      dce : dce,
 			      target : SWF( "test", 11.4 ),
 			      libs : new Array()
 				}
