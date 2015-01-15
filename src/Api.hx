@@ -25,6 +25,10 @@ class Api {
 		var alphaNum = ~/[^a-zA-Z0-9]/;
 		if( alphaNum.match(s) ) throw 'Unauthorized identifier : $s';
 	}
+	
+	public static function checkDCE(s : String){
+		if (s != "full" && s != "no" && s != "std") throw 'Invalid dce : $s';
+	}
 
 	public function doCompiler(){
 		var ctx = new Context();
@@ -82,6 +86,13 @@ class Api {
 		}else{
 			checkSanity( main );
 		}
+		var dce = d.params.get('dce');
+		if( dce == null ){
+			dce = "full";
+		}else{
+			checkDCE( dce );
+		}
+		
 		var uid = 'u'+haxe.crypto.Md5.encode(url);
 		var compiler = new api.Compiler();
 
@@ -99,6 +110,7 @@ class Api {
 			      uid : uid,
 			      main : {
 			        name : main,
+			        dce : dce,
 			        source : src
 			      },
 			      target : SWF( "test", 11.4 ),
@@ -117,7 +129,7 @@ class Api {
 			redirectToProgram( program.uid );
 		}
 	}
-
+	
 	function redirectToProgram( uid : String ) {
 		var tpl = '../redirect.html';
 		var redirect = File.getContent(tpl);
