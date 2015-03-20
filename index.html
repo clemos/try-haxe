@@ -25,15 +25,15 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-responsive.min.css" />
-  
+
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
-	
+
   <link rel="stylesheet" href="lib/CodeMirror-4/lib/codemirror.css"/>
   <link rel="stylesheet" href="lib/CodeMirror-4/addon/hint/show-hint.css"/>
   <link rel="stylesheet" href="lib/CodeMirror-4/theme/rubyblue.css"/>
   <link rel="stylesheet" href="lib/CodeMirror-4/theme/cobalt.css"/>
   <link rel="stylesheet" href="style.css"/>
-    
+
   <link rel="stylesheet" href="lib/CodeMirror-4/addon/fold/foldgutter.css">
   <link rel="stylesheet" href="lib/CodeMirror-4/addon/dialog/dialog.css">
   <link href="lib/CodeMirror-4/addon/lint/lint.css" type="text/css" rel="stylesheet">
@@ -44,12 +44,12 @@
   <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
 		<div class="pull-right">
-			<a href="http://haxe.org/documentation" target="_blank">Read the manual</a> | 
+			<a href="http://haxe.org/documentation" target="_blank">Read the manual</a> |
 			<a href="http://api.haxe.org/" target="_blank">API documentation</a>
 		</div>
 		<a href="http://try.haxe.org" class="logo-link"><strong>TRY</strong> <img src="http://www.haxe.org/img/haxe-logo-horizontal-on-dark.svg" alt="Haxe" onerror="this.src='http://www.haxe.org/img/haxe-logo-horizontal-on-dark.png'" height="21" width="107"></a> The Haxe Playground
     </div>
-  </nav> 
+  </nav>
   <div role="main" class="container-fluid">
     <div class="row-fluid">
       <div class="span6">
@@ -89,7 +89,8 @@
             					<option value="13">Access Control</option>
             					<option value="14">Inline constructors</option>
             					<option value="15">Conditional compilation</option>
-            					<option value="16">StringTools</option>
+                      <option value="16">StringTools</option>
+            					<option value="22">Unit testing</option>
             					<option value="20">Drawing</option>
           				  </select>
                   </div>
@@ -113,29 +114,29 @@ class Test {
                   </div>
                   <div class="control-group hx-targets">
                     <label class="control-label" for="libs-checkbox">Target</label>
-                    
+
                     <div class="controls">
                       <label class="radio"><input type="radio" name="target" value="JS" checked></input> Javascript</label>
                       <label class="radio"><input type="radio" name="target" value="SWF"></input> SWF</label>
                     </div>
-                    
+
                   </div>
                   <div class="control-group hx-dce-name">
                     <label class="control-label" for="main-class">DCE <a href="http://haxe.org/manual/cr-dce.html" target="_blank"><i class="icon-question-sign"></i></a></label>
                     <div class="controls">
-						
+
                       <label class="radio"><input type="radio" name="dce" value="full" checked></input> Full</label>
                       <label class="radio"><input type="radio" name="dce" value="no"></input> No</label>
                       <label class="radio"><input type="radio" name="dce" value="std"></input> Std</label>
-					  
+
                     </div>
                   </div>
                   <div class="control-group hx-libs">
                     <label class="control-label" for="libs-checkbox">Libraries</label>
-                    
+
                     <div class="controls SWF-libs"></div>
                     <div class="controls JS-libs"></div>
-                
+
                   </div>
               </form>
             </div>
@@ -143,7 +144,7 @@ class Test {
 				<h2>About Try-Haxe</h2>
 				<h4>The Haxe Playground</h4>
 
-				<strong><a href="http://haxe.org" target="_blank" title="Haxe">Haxe</a></strong> is an awesome language that compiles to <strong>Javascript</strong>, <strong>Flash</strong>, <strong>C++</strong>, <strong>PHP</strong>, <strong>Neko</strong>, <strong>Java</strong>, <strong>C#</strong> and <strong>Python</strong>. 
+				<strong><a href="http://haxe.org" target="_blank" title="Haxe">Haxe</a></strong> is an awesome language that compiles to <strong>Javascript</strong>, <strong>Flash</strong>, <strong>C++</strong>, <strong>PHP</strong>, <strong>Neko</strong>, <strong>Java</strong>, <strong>C#</strong> and <strong>Python</strong>.
 				  It thus allows to write applications that target native <strong>iOS</strong>, <strong>Android</strong> as well as traditional browsers (<strong>HTML5</strong> or <strong>SWF</strong>), servers and desktops (Mac, PC or Linux).
 				<hr/>
 				<div class="btn-toolbar">
@@ -178,7 +179,7 @@ class Test {
         <div class=" pull-right">-->
           <!--a href="#" class="fullscreen-btn btn disabled"><i class="icon-resize-full"></i> Fullscreen</a-->
         </div>
-        
+
         <ul class="nav nav-tabs">
               <li class="active"><a href="#js-output" data-toggle="tab" id="output">Output</a></li>
               <li><a href="#js-source" data-toggle="tab">JS Source</a></li>
@@ -192,7 +193,7 @@ class Test {
 				<iframe class="js-run" src="about:blank" name="js-run" frameborder="no" scrolling="no">
 				</iframe>
             </div>
-            
+
           </div>
           <div class="tab-pane js-source" id="js-source">
             <textarea name="js-source" class="code js-source">
@@ -207,9 +208,9 @@ class Test {
             </div>
           </div>
         </div>
-        
+
         <div class="messages">
-          
+
         </div>
 
       </div>
@@ -218,9 +219,9 @@ class Test {
           <span class="help-inline">Disclaimer: The code you enter on Try-Haxe is compiled and saved on our servers.</span>
           <div class="pull-right"><span class="help-inline">Haxe version: 3.1.3 rel.</span></div>
         </div>
-        
+
       </div>
-        
+
 	</div>
 
   </div>
@@ -248,7 +249,7 @@ class Test {
 	<script src="lib/CodeMirror-4/addon/lint/lint.js"></script>
 	<script src="lib/CodeMirror-4/addon/wrap/hardwrap.js"></script>
 	<script src="lib/CodeMirror-4/keymap/sublime.js"></script>
-	
+
 	<script src="lib/CodeMirror-4/addon/hint/show-hint.js"></script>
 	<script src="lib/CodeMirror-4/addon/edit/matchbrackets.js"></script>
 	<script src="lib/CodeMirror-4/addon/edit/closebrackets.js"></script>
