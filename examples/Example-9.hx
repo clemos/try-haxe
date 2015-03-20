@@ -13,7 +13,7 @@ class Test {
 		}
         
 		// a switch can directly return something
-		var winner = switch ([playerA.move, playerB.move])
+		var winner = switch [playerA.move, playerB.move]
 		{
 			case [Move.Rock, Move.Paper]: playerB;
 			case [Move.Rock, Move.Scissors]: playerA;
