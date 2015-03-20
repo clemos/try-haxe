@@ -18,7 +18,7 @@ class Test {
 		// possible because of requested access at Test constructor
         trace(MyClass.bar);
 		
-		// inpossible 
+		// impossible 
         // trace(MyClass.boo);
     }
 }
