@@ -15,7 +15,7 @@ class MyTests extends haxe.unit.TestCase {
         myInt = 1+1;
     }
     
-    /* Every test function name should start with 'test' */
+    /* Every test function name has to start with 'test' */
     
     public function testValue() {
         assertEquals("foo", myVal);
