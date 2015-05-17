@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-responsive.min.css" />
 
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="lib/CodeMirror-4/lib/codemirror.css"/>
   <link rel="stylesheet" href="lib/CodeMirror-4/addon/hint/show-hint.css"/>
@@ -43,11 +43,11 @@
 <body data-api=".">
   <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
-    <div class="pull-right">
-      <a href="http://haxe.org/documentation" target="_blank">Read the manual</a> |
-      <a href="http://api.haxe.org/" target="_blank">API documentation</a>
-    </div>
-    <a href="http://try.haxe.org" class="logo-link"><strong>TRY</strong> <img src="http://www.haxe.org/img/haxe-logo-horizontal-on-dark.svg" alt="Haxe" onerror="this.src='http://www.haxe.org/img/haxe-logo-horizontal-on-dark.png'" height="21" width="107"></a> The Haxe Playground
+		<div class="pull-right">
+			<a href="http://haxe.org/documentation" target="_blank">Read the manual</a> |
+			<a href="http://api.haxe.org/" target="_blank">API documentation</a>
+		</div>
+		<a href="http://try.haxe.org" class="logo-link"><strong>TRY</strong> <img src="http://www.haxe.org/img/haxe-logo-horizontal-on-dark.svg" alt="Haxe" onerror="this.src='http://www.haxe.org/img/haxe-logo-horizontal-on-dark.png'" height="21" width="107"></a> The Haxe Playground
     </div>
   </nav>
   <div role="main" class="container-fluid">
@@ -64,37 +64,37 @@
                 <li><a href="#hx-about" data-toggle="tab">About</a></li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane hx-source active" id="hx-source">
+    	  	  <div class="tab-pane hx-source active" id="hx-source">
               <div class="form-horizontal">
-                <div class="control-group">
-                  <label class="control-label" for="hx-example-select">Examples</label>
+        				<div class="control-group">
+        				  <label class="control-label" for="hx-example-select">Examples</label>
                   <div class="controls">
-                    <select id="hx-example-select">
-                      <option value="1">Hello world</option>
-                      <option value="2">Inheritance</option>
-                      <option value="17">Generic types</option>
-                      <option value="3">Enums</option>
-                      <option value="4">Maps</option>
-                      <option value="5">Abstracts</option>
-                      <option value="6">Static Extension</option>
-                      <option value="7">String interpolation</option>
-                      <option value="8">Array Comprehension</option>
-                      <option value="9">Pattern Matching - Array matching</option>
-                      <option value="21">Pattern Matching - Structure matching</option>
-                      <option value="18">Pattern Matching - Enum matching</option>
-                      <option value="10">Iterators</option>
-                      <option value="11">Function Bindings</option>
-                      <option value="12">Metadata</option>
-                      <option value="19">Load Json using Http</option>
-                      <option value="13">Access Control</option>
-                      <option value="14">Inline constructors</option>
-                      <option value="15">Conditional compilation</option>
+          				  <select id="hx-example-select">
+            					<option value="1">Hello world</option>
+            					<option value="2">Inheritance</option>
+            					<option value="17">Generic types</option>
+            					<option value="3">Enums</option>
+            					<option value="4">Maps</option>
+            					<option value="5">Abstracts</option>
+            					<option value="6">Static Extension</option>
+            					<option value="7">String interpolation</option>
+            					<option value="8">Array Comprehension</option>
+            					<option value="9">Pattern Matching - Array matching</option>
+            					<option value="21">Pattern Matching - Structure matching</option>
+            					<option value="18">Pattern Matching - Enum matching</option>
+            					<option value="10">Iterators</option>
+            					<option value="11">Function Bindings</option>
+            					<option value="12">Metadata</option>
+            					<option value="19">Load Json using Http</option>
+            					<option value="13">Access Control</option>
+            					<option value="14">Inline constructors</option>
+            					<option value="15">Conditional compilation</option>
                       <option value="16">StringTools</option>
-                      <option value="22">Unit testing</option>
-                      <option value="20">Drawing</option>
-                    </select>
+            					<option value="22">Unit testing</option>
+            					<option value="20">Drawing</option>
+          				  </select>
                   </div>
-                </div>
+        				</div>
               </div>
               <textarea name="hx-source" class="code haxe-source" rows="15">
 class Test {
@@ -149,36 +149,36 @@ class Test {
                   </div>
               </form>
             </div>
-      <div class="tab-pane hx-options" id="hx-about">
-        <h2>About Try-Haxe</h2>
-        <h4>The Haxe Playground</h4>
+			<div class="tab-pane hx-options" id="hx-about">
+				<h2>About Try-Haxe</h2>
+				<h4>The Haxe Playground</h4>
 
-        <strong><a href="http://haxe.org" target="_blank" title="Haxe">Haxe</a></strong> is an awesome language that compiles to <strong>Javascript</strong>, <strong>Flash</strong>, <strong>C++</strong>, <strong>PHP</strong>, <strong>Neko</strong>, <strong>Java</strong>, <strong>C#</strong> and <strong>Python</strong>.
-          It thus allows to write applications that target native <strong>iOS</strong>, <strong>Android</strong> as well as traditional browsers (<strong>HTML5</strong> or <strong>SWF</strong>), servers and desktops (Mac, PC or Linux).
-        <hr/>
-        <div class="btn-toolbar">
-          <img src="http://www.haxe.org/img/haxe-logo.svg" class="logo" onerror="this.src='http://www.haxe.org/img/haxe-logo.png'" width="90" height="90" style="margin-ri" />
-          <a href="http://www.haxe.org/download/" target="_blank" class="download btn btn-haxe"><strong>Download Haxe</strong></a>
-          <a href="http://haxe.org/#learn-more" target="_blank" class="learn-more btn btn-haxe">Learn More</a>
-        </div>
-        <hr/>
-        <span><img class="logo-github" src="https://assets-cdn.github.com/favicon.ico" align="left"/> The source code of <strong>try-haxe</strong> is <strong><a href="https://github.com/clemos/try-haxe" title="Try-Haxe">available on GitHub</a></strong>. <small>Of course, it's written in Haxe ;)</small></span>
+				<strong><a href="http://haxe.org" target="_blank" title="Haxe">Haxe</a></strong> is an awesome language that compiles to <strong>Javascript</strong>, <strong>Flash</strong>, <strong>C++</strong>, <strong>PHP</strong>, <strong>Neko</strong>, <strong>Java</strong>, <strong>C#</strong> and <strong>Python</strong>.
+				  It thus allows to write applications that target native <strong>iOS</strong>, <strong>Android</strong> as well as traditional browsers (<strong>HTML5</strong> or <strong>SWF</strong>), servers and desktops (Mac, PC or Linux).
+				<hr/>
+				<div class="btn-toolbar">
+					<img src="http://www.haxe.org/img/haxe-logo.svg" class="logo" onerror="this.src='http://www.haxe.org/img/haxe-logo.png'" width="90" height="90" style="margin-ri" />
+					<a href="http://www.haxe.org/download/" target="_blank" class="download btn btn-haxe"><strong>Download Haxe</strong></a>
+					<a href="http://haxe.org/#learn-more" target="_blank" class="learn-more btn btn-haxe">Learn More</a>
+				</div>
+				<hr/>
+				<span><img class="logo-github" src="https://assets-cdn.github.com/favicon.ico" align="left"/> The source code of <strong>try-haxe</strong> is <strong><a href="https://github.com/clemos/try-haxe" title="Try-Haxe">available on GitHub</a></strong>. <small>Of course, it's written in Haxe ;)</small></span>
             </div>
           </div>
-    </div>
-     <div class="social">
-      <div class="span3 span-plusone">
-        <g:plusone size="medium" href="http://try.haxe.org"></g:plusone>
-      </div>
+		</div>
+		 <div class="social">
+			<div class="span3 span-plusone">
+			  <g:plusone size="medium" href="http://try.haxe.org"></g:plusone>
+			</div>
 
-      <div class="span3 span-twitter">
-        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
-      </div>
+			<div class="span3 span-twitter">
+			  <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+			</div>
 
-      <div class="span3 span-fb">
-        <div class="fb-like" data-send="true" data-layout="button_count" data-width="100" data-show-faces="true"></div>
-      </div>
-    </div>
+			<div class="span3 span-fb">
+			  <div class="fb-like" data-send="true" data-layout="button_count" data-width="100" data-show-faces="true"></div>
+			</div>
+		</div>
       </div>
 
       <div class="compiler-out span6">
@@ -199,8 +199,8 @@ class Test {
           <div class="tab-pane js-output active" id="js-output">
 
             <div class="thumbnail js-canvas">
-        <iframe class="js-run" src="about:blank" name="js-run" frameborder="no" scrolling="no">
-        </iframe>
+				<iframe class="js-run" src="about:blank" name="js-run" frameborder="no" scrolling="no">
+				</iframe>
             </div>
 
           </div>
@@ -231,7 +231,7 @@ class Test {
 
       </div>
 
-  </div>
+	</div>
 
   </div>
 
@@ -252,20 +252,20 @@ class Test {
   <script src="lib/CodeMirror-4/mode/htmlmixed/htmlmixed.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js" ></script>
 <script src="lib/CodeMirror-4/addon/search/searchcursor.js"></script>
-  <script src="lib/CodeMirror-4/addon/search/search.js"></script>
-  <script src="lib/CodeMirror-4/addon/dialog/dialog.js"></script>
-  <script src="lib/CodeMirror-4/addon/comment/comment.js"></script>
-  <script src="lib/CodeMirror-4/addon/lint/lint.js"></script>
-  <script src="lib/CodeMirror-4/addon/wrap/hardwrap.js"></script>
-  <script src="lib/CodeMirror-4/keymap/sublime.js"></script>
+	<script src="lib/CodeMirror-4/addon/search/search.js"></script>
+	<script src="lib/CodeMirror-4/addon/dialog/dialog.js"></script>
+	<script src="lib/CodeMirror-4/addon/comment/comment.js"></script>
+	<script src="lib/CodeMirror-4/addon/lint/lint.js"></script>
+	<script src="lib/CodeMirror-4/addon/wrap/hardwrap.js"></script>
+	<script src="lib/CodeMirror-4/keymap/sublime.js"></script>
 
-  <script src="lib/CodeMirror-4/addon/hint/show-hint.js"></script>
-  <script src="lib/CodeMirror-4/addon/edit/matchbrackets.js"></script>
-  <script src="lib/CodeMirror-4/addon/edit/closebrackets.js"></script>
-  <script src="lib/CodeMirror-4/addon/fold/foldcode.js"></script>
-  <script src="lib/CodeMirror-4/addon/fold/foldgutter.js"></script>
-  <script src="lib/CodeMirror-4/addon/fold/brace-fold.js"></script>
-  <script src="lib/CodeMirror-4/addon/fold/comment-fold.js"></script>
+	<script src="lib/CodeMirror-4/addon/hint/show-hint.js"></script>
+	<script src="lib/CodeMirror-4/addon/edit/matchbrackets.js"></script>
+	<script src="lib/CodeMirror-4/addon/edit/closebrackets.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/foldcode.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/foldgutter.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/brace-fold.js"></script>
+	<script src="lib/CodeMirror-4/addon/fold/comment-fold.js"></script>
   <script src="app.js"></script>
   <!-- end scripts -->
 
