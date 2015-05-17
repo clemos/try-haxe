@@ -246,6 +246,8 @@ class Compiler {
 			//"--dead-code-elimination"
 		];
 
+		if (program.analyzer == "yes") args=args.concat(["-D", "analyzer"]);
+
 		var outputPath : String;
 		var htmlPath : String = tmpDir + "index.html";
 		var runUrl = '${Api.base}/program/${program.uid}/run';

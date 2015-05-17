@@ -92,6 +92,9 @@ class Api {
 		}else{
 			checkDCE( dce );
 		}
+
+		var analyzer = d.params.get('analyzer');
+		if( analyzer == null ) analyzer = "yes";	
 		
 		var uid = 'u'+haxe.crypto.Md5.encode(url);
 		var compiler = new api.Compiler();
@@ -113,6 +116,7 @@ class Api {
 			        source : src
 			      },
 			      dce : dce,
+			      analyzer: analyzer,
 			      target : SWF( "test", 11.4 ),
 			      libs : new Array()
 				}
