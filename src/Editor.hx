@@ -32,6 +32,7 @@ class Editor {
   var targets : JQuery;
   var mainName : JQuery;
   var dceName : JQuery;
+  var analyzerName : JQuery;
   var stage : JQuery;
   var jsTab : JQuery;
   var embedTab : JQuery;
@@ -117,6 +118,7 @@ class Editor {
     embedPreview = new JQuery("#embed-preview");
     mainName = new JQuery("#hx-options-form input[name='main']");
     dceName = new JQuery("#hx-options-form .hx-dce-name");
+    analyzerName = new JQuery("#hx-options-form .hx-analyzer-name");
 
     jsTab.hide();
     embedTab.hide();
@@ -140,6 +142,7 @@ class Editor {
 		});
 
     dceName.delegate("input[name='dce']" , "change" , onDce );
+    analyzerName.delegate("input[name='analyzer']" , "change" , onAnalyzer );
     targets.delegate("input[name='target']" , "change" , onTarget );
 		
 		compileBtn.bind( "click" , compile );
@@ -154,6 +157,7 @@ class Editor {
         source : haxeSource.getValue()
       },
       dce : "full",
+      analyzer : "yes",
       target : SWF( "test", 11.4 ),
       libs : new Array()
     };
@@ -181,8 +185,25 @@ class Editor {
   
   function setDCE(dce:String) 
   {
-	  program.dce = dce;
-	  var radio = new JQuery( 'input[name=\'dce\'][value=\'$dce\']' );
+    program.dce = dce;
+    var radio = new JQuery( 'input[name=\'dce\'][value=\'$dce\']' );
+    radio.attr( "checked" ,"checked" );
+  }
+
+  function  onAnalyzer(e : JqEvent){
+    var cb = new JQuery( e.target );
+    var name = cb.val();
+    switch( name ){
+      case "no", "yes": 
+        setAnalyzer(name);
+      default: 
+    }
+  }
+  
+  function setAnalyzer(analyzer:String) 
+  {
+	  program.analyzer = analyzer;
+	  var radio = new JQuery( 'input[name=\'analyzer\'][value=\'$analyzer\']' );
 	  radio.attr( "checked" ,"checked" );
   }
   
@@ -296,6 +317,7 @@ class Editor {
 	  haxeSource.setValue(program.main.source);
       setTarget( program.target );
       setDCE(program.dce);
+      setAnalyzer(program.analyzer);
 
       if( program.libs != null ){
         for( lib in libs.find("input.lib") ){
@@ -437,6 +459,7 @@ class Editor {
 		program.main.source = haxeSource.getValue();
 		program.main.name = mainName.val();
     program.dce = new JQuery( 'input[name=\'dce\']:checked' ).val();
+    program.analyzer = new JQuery( 'input[name=\'analyzer\']:checked' ).val();
 
 		var libs = new Array();
     var sel = Type.enumConstructor(program.target);

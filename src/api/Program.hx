@@ -5,7 +5,8 @@ typedef Program = {
 	main : Module,
 	target : Target,
 	libs:Array<String>,
-	dce : String
+	dce : String,
+	analyzer : String,
 //	?modules : Hash<Module>,
 }
 
