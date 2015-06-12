@@ -1,6 +1,8 @@
 try-haxe
 ========
 
+[![Build Status](https://travis-ci.org/clemos/try-haxe.png)](https://travis-ci.org/clemos/try-haxe)
+
 The try-haxe project is a browser-based IDE for testing Haxe code.  It provides a
 quick and easy environment for playing with the Haxe language and compiles to
 JavaScript or Flash, instantly viewable in the browser.  It also allows saving
