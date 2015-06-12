@@ -5,3 +5,5 @@ app/*
 *.sublime-workspace
 tmp/*
 *.hxproj
+tests/RunTravis.n
+examples/bin
