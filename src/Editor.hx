@@ -131,7 +131,7 @@ class Editor {
     });
 
     new JQuery(".fullscreen-btn").bind("click" , toggleFullscreenRunner);
-    new JQuery("#hx-example-select").bind("change" , toggleExampleChange);
+    new JQuery("a.hx-example").bind("click" , toggleExampleClick);
       
 		new JQuery("body").bind("keyup", onKey );
 
@@ -207,15 +207,16 @@ class Editor {
 	  radio.attr( "checked" ,"checked" );
   }
   
-  function toggleExampleChange(e : JqEvent) {
+  function toggleExampleClick(e : JqEvent) {
     var _this = new JQuery(e.target);
-	var ajax = untyped __js__("$.ajax");
-	ajax({
-		url:'examples/Example-${_this.val()}.hx',
-		dataType: "text"
-	}).done(function(data) {
-		haxeSource.setValue(data);
-	});
+    var ajax = untyped __js__("$.ajax");
+    ajax({
+      url:'examples/Example-${_this.data("value")}.hx',
+      dataType: "text"
+    }).done(function(data) {
+      haxeSource.setValue(data);
+    });
+    e.preventDefault();
   }
 
   function fullscreen(){
