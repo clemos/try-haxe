@@ -1,62 +1,52 @@
 body {
-	overflow-y:scroll;
-	font-size:14px;
-	font-family:"Open Sans", sans-serif;
-	color:#1E1E1E;
-	min-width:350px;
-}
-.navbar {
-	background:#000; 
-	color:#fff; 
-	padding:15px 0;
+  font-family: "Open Sans",sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #1e1e1e;
+  min-width:350px;
+  margin-top:75px;
 }
 
-@media (max-width: 767px) {
-	.navbar {
-		margin-left:-20px;
-		margin-right:-20px;
+body, body p, body td, body li {
+  line-height: 1.5;
+}
+
+textarea { 
+  width: 95%;
+  height:463px;
+}
+
+h2 {
+  margin-bottom:1em;
+}
+h2 small {font-weight:normal; }
+
+@media (max-width: 979px) {
+	body {
+		margin-top:0px;
 	}
-	
-	.navbar .container-fluid {
-		text-align:center;
-	}
-	
-	.navbar .pull-right {
-		display:block;
-		float:none;
-		margin-bottom:1em;
+	.nav.dark {
+		margin-bottom:15px;
 	}
 }
 
-.navbar a {
-    color: #F48821;
-}
-
-.navbar a.logo-link, .logo-link:hover, .logo-link:active, .logo-link:link {
-    text-decoration: none;
-    color: #FFF;
-}
-
-a.logo-link strong {
-    font-size: 18px;
-    vertical-align: middle;
-    padding-right: 3px;
-}
+.nav.nav-tabs { margin-bottom: 13px}
 
 .logo {
-    margin-right: 25px;
+  float:left;
+  margin-right:20px;
 }
 
 .logo-github {
-    margin-right: 15px;
+  margin-right: 15px;
 }
 
 .haxe-code-template {
-    display: none;
+  display: none;
 }
 
 a.btn i {
-    margin-top: 3px;
+  margin-top: 3px;
 }
 
 .CodeMirror-wrap, .hx-options, .js-canvas
@@ -90,10 +80,10 @@ a.btn i {
 	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 	-moz-box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 	box-shadow: 0 1px 1px rgba(0,0,0,0.075);
-	height:425px;
+	height:473px;
 }
 .js-source .CodeMirror {	
-	height:471px;
+	height:473px;
 }
 .embed-source .CodeMirror {
 	height:auto;
