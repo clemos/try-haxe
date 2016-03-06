@@ -13,7 +13,11 @@ body, body p, body td, body li {
 
 textarea { 
   width: 95%;
-  height:463px;
+  height:466px;
+}
+
+textarea.code {
+	visibility:hidden;
 }
 
 h2 {
@@ -27,6 +31,16 @@ h2 small {font-weight:normal; }
 	}
 	.nav.dark {
 		margin-bottom:15px;
+	}
+}
+
+@media (min-width: 980px) {
+	.main {
+		position:absolute;
+		top:60px;
+		left:0;
+		right:0;
+		bottom:0;
 	}
 }
 
@@ -55,7 +69,7 @@ a.btn i {
 }
 
 .hx-options {
-	height:473px;
+	height:476px;
 }
 .js-output .js-run {
 	height:461px;
@@ -101,7 +115,7 @@ a.btn i {
 }
 
 .compiler-out .tab-content {
-	height:491px;
+	overflow:hidden;
 }
 
 div.CodeMirror span.CodeMirror-matchingbracket {
@@ -149,7 +163,7 @@ div.CodeMirror span.CodeMirror-matchingbracket {
 }
 
 .span-fb, .span-plusone, .span-twitter {
-	padding:8px;
+	padding:0 8px 0 0;
 }
 .fullscreen-source .hx-source,
 .fullscreen-runner .js-run {
@@ -183,4 +197,12 @@ body.fullscreen-runner {
 	height: 25px;
 	position: fixed;
 	z-index: 10;
+}
+
+.text-muted {
+	color:#666;
+}
+
+.input-main {
+	width:160px;
 }

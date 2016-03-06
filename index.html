@@ -122,7 +122,7 @@
 		</div>
 	</div>
   </nav>
-  <div role="main" class="container-fluid">
+  <div role="main" class="container-fluid main">
     <div class="row-fluid">
       <div class="span6">
         <div class="compiler-in">
@@ -149,7 +149,7 @@ class Test {
                   <div class="control-group hx-main-name">
                     <label class="control-label" for="main-class">Main class</label>
                     <div class="controls">
-                      <input type="text" name="main" value="Test"></input>
+                      <input type="text" class="input-main" name="main" value="Test"></input>
                     </div>
                   </div>
                   <div class="control-group hx-targets">
@@ -172,7 +172,7 @@ class Test {
                     </div>
                   </div>
                   <div class="control-group hx-analyzer-name">
-                    <label class="control-label" for="main-class">Analyzer <a href="http://haxe.org/download" target="_blank"><i class="fa fa-question-circle"></i></a></a></label>
+                    <label class="control-label" for="main-class">Analyzer <a href="http://haxe.org/manual/cr-static-analyzer.html" target="_blank"><i class="fa fa-question-circle"></i></a></a></label>
                     <div class="controls">
 
                       <label class="radio"><input type="radio" name="analyzer" value="yes" checked></input> Yes</label>
@@ -189,7 +189,7 @@ class Test {
                   </div>
               </form>
             </div>
-			<div class="tab-pane" id="hx-about">
+			      <div class="tab-pane" id="hx-about">
               <h2>Try Haxe <small>- The Haxe Playground</small></h2>
               <a href="http://haxe.org" target="_blank" title="Haxe"><img src="http://www.haxe.org/img/haxe-logo.svg" class="logo" onerror="this.src='http://www.haxe.org/img/haxe-logo.png'" width="90" height="90" /></a>
               
@@ -202,20 +202,7 @@ class Test {
               <hr/>
             </div>
           </div>
-		</div>
-		 <div class="social">
-			<div class="span3 span-plusone">
-			  <g:plusone size="medium" href="http://try.haxe.org"></g:plusone>
-			</div>
-
-			<div class="span3 span-twitter">
-			  <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
-			</div>
-
-			<div class="span3 span-fb">
-			  <div class="fb-like" data-send="true" data-layout="button_count" data-width="100" data-show-faces="true"></div>
-			</div>
-		</div>
+		    </div>
       </div>
 
       <div class="compiler-out span6">
@@ -258,19 +245,39 @@ class Test {
         <div class="messages">
 
         </div>
-
       </div>
-      <div class="row-fluid">
-        <div class="span12">
-          <span class="help-inline">Disclaimer: The code you enter on Try-Haxe is compiled and saved on our servers.</span>
-          <div class="pull-right"><span class="help-inline">Haxe version: 3.2.0 release</span></div>
-        </div>
 
-      </div>
+      
 
 	</div>
+  <div class="foot">
+    <div class="row-fluid">
+      <div class="social span6">
+        <div class="row-fluid">
+          <div class="span3 span-plusone">
+            <g:plusone size="medium" href="http://try.haxe.org"></g:plusone>
+          </div>
 
+          <div class="span3 span-twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+          </div>
+
+          <div class="span3 span-fb">
+            <div class="fb-like" data-send="true" data-layout="button_count" data-width="100" data-show-faces="true"></div>
+          </div>
+        </div>
+      </div>
+      <div class="span6 text-muted">
+        <span class="pull-right">Haxe version: 3.2.0 release</span>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span12 text-center text-muted">
+        Disclaimer: The code you enter on Try-Haxe is compiled and saved on our servers.
+      </div>
+    </div>
   </div>
+</div>
 
   <!-- JavaScript at the bottom for fast page loading -->
 

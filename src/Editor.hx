@@ -171,6 +171,38 @@ class Editor {
       uid = uid.substr(1);
   		cnx.Compiler.getProgram.call([uid], onProgram);
     }
+
+    js.Browser.window.addEventListener('resize', resize);
+    resize();
+
+  }
+
+  function resize(?_) {
+
+    setHeight(10);
+
+    var win = js.Browser.window;
+    var body = new JQuery(win.document.body);
+    var main = new JQuery('.main');
+
+    var h = win.innerHeight - 160;
+
+    if( win.document.body.scrollHeight > body.height() ) {
+      h -= new JQuery('.foot').height();
+    }
+
+    setHeight(h);
+
+  }
+
+  function setHeight(h:Int){
+    haxeSource.getScrollerElement().style.height=h+'px';
+    haxeSource.getWrapperElement().style.height=h+'px';
+    haxeSource.refresh();
+    runner.height(h-12);
+    new JQuery('#hx-options').height(h+2);
+    new JQuery('#hx-about').height(h+10);
+
   }
   
   function  onDce(e : JqEvent){
