@@ -206,3 +206,15 @@ body.fullscreen-runner {
 .input-main {
 	width:160px;
 }
+
+.side-btn {
+	float:right;
+}
+
+@media( max-width:767px ) {
+	.side-btn {
+		float:none;
+		display:block;
+		margin:8px 0;
+	}
+}

@@ -186,10 +186,7 @@ class Editor {
     var main = new JQuery('.main');
 
     var h = win.innerHeight - 160;
-
-    if( win.document.body.scrollHeight > body.height() ) {
-      h -= new JQuery('.foot').height();
-    }
+    h -= new JQuery('.foot').height();
 
     setHeight(h);
 
