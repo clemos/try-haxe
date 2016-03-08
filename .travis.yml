@@ -2,7 +2,6 @@ language: haxe
 
 haxe:
   - "3.2.0"
-  - development
 
 env:
   - TARGET=swf
