@@ -244,6 +244,7 @@ class Editor {
       dataType: "text"
     }).done(function(data) {
       haxeSource.setValue(data);
+      new JQuery("input[name='main']").val("Test");
     });
     e.preventDefault();
   }
