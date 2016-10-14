@@ -126,7 +126,7 @@ class Compiler {
 	}
 
 	// TODO: topLevel competion
-	public function autocomplete( program : Program , idx : Int ) : CompletionResult{
+	public function autocomplete( program : Program , idx : Int, completionType: CompletionType ) : CompletionResult{
 		
 		try{
 			prepareProgram( program );
@@ -136,7 +136,12 @@ class Compiler {
 
 		var source = program.main.source;
 		var display = tmpDir + program.main.name + ".hx@" + idx;
-
+		
+		if (completionType == CompletionType.TOP_LEVEL)
+		{
+			display += "@toplevel";
+		}
+		
 		var args = [
 			"-cp" , tmpDir,
 			"-main" , program.main.name,
@@ -175,12 +180,27 @@ class Compiler {
 			}
 
 			var words = [];
-			for( e in xml.nodes.i ){
-				var w = e.att.n;
-				if( !words.has( w ) )
-					words.push( w );
+			
+			if (completionType == CompletionType.DEFAULT)
+			{
+				for( e in xml.nodes.i ){
+					var w = e.att.n;
+					if( !words.has( w ) )
+						words.push( w );
 
+				}
 			}
+			else if (completionType == CompletionType.TOP_LEVEL)
+			{
+				for (e in xml.nodes.i) {
+					var w = e.innerData;
+					if (!words.has(w))
+					{
+						words.push(w);
+					}
+				}
+			}
+			
 			return {list:words};
 
 		}catch(e:Dynamic){
