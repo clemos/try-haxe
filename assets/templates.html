@@ -1,150 +1,155 @@
 <template id="MAIN_TEMPLATE">
 	<!DOCTYPE html>
-	<html lang="en">
-	  <head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Try-Haxe - widget - $uid</title>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Try-Haxe - widget - $uid</title>
 
-		<link rel="stylesheet" href="http://shjs.sourceforge.net/css/sh_ide-eclipse.min.css"/>
-		<link rel="icon" href="http://haxe.org/img/haxe2/favicon.ico" type="image/x-icon"/>
-		<meta property="og:image" content="http://try.haxe.org/share.png" />
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-		<style>
-			html, body {
-				height: 100%;
-				width: 100%;
-				margin:0;
-				padding:0;
-				background:#fff;
-			}
-			
-			body {
-				font-size: 14px;
-				font-family: "Open Sans", sans-serif;
-				color: #1E1E1E;
-				overflow-y: auto;
-			}
-			
-			pre {
-				font:12px consolas, monospace;
-				padding-left:10px;
-			}
-			
-			#results {
-				height: 70%;
-				width: 99%;
-				position:relative;
-			}
-			
-			iframe {
-				height: 100%;
-				width: 99%;
-				position:relative;
-			}
-			
-			.top-bar {
-				background: #000;
-				color: #fff;
-				padding: 10px 10px;
-				margin-bottom: 5px;
-				vertical-align: middle;
-				
-			}
-			.top-bar a {
-				color: #F48821;
-			}
-			
-			a.logo-link, .logo-link:hover, .logo-link:active, .logo-link:link {
-				text-decoration: none;
-				color: #FFF;
-			}
-			
-			a.logo-link strong {
-				font-size: 18px;
-				padding-right: 3px;
-			}
-			.copy {
-				margin-top:-10px;
-				display:inline-block;
-				vertical-align: middle;
-			}
-			
-			#nav {
-				position:absolute;
-				top:6px;
-				right:5px;
-			}
-			
-			#nav a {
-				border:1px solid #ccc;
-				display:inline-block;
-				padding:5px 45px;
-				margin-right:5px;
-				border-radius:4px;
-				color:#444;
-				text-decoration:none;
-				background:#f0f0f0;
-			}
-			
-			#nav a:hover {
-				border-color:#999;
-				background:#e0e0e0;
-			}
-		</style>
-	</head>
-	<body>
-		<nav id="nav" role="navigation">
-			<a href="#code" onclick="showCode();return false">Code</a>
-			<a href="#results" onclick="run();return false">Run</a>
-		</nav>
-		<div class="top-bar">
-			<a href="http://try.haxe.org/#$uid" class="logo-link" target="_blank"><strong class="copy">TRY</strong> <img src="http://www.haxe.org/img/haxe-logo-horizontal-on-dark.svg" alt="Haxe" onerror="this.src='http://www.haxe.org/img/haxe-logo-horizontal-on-dark.png'" height="21" width="107"></a> 
-			<a href="http://try.haxe.org/#$uid" target="_blank" class="copy">Edit</a>
-		</div> 
-		<div id="code">
-			<pre class="sh_haxe">$source</pre>
-		</div>
-		<div id="results" style="display:none">
-			<iframe id="iframe" src="" width="99%" frameborder="0" scrolling="no" height="100%"></iframe>
-		</div>
-	  <script src="http://shjs.sourceforge.net/sh_main.min.js"></script>
-	  <script src="http://shjs.sourceforge.net/lang/sh_haxe.min.js"></script>
-	  <script>
-		window.onload = function()
-		{
-			sh_highlightDocument();
-		}
-		
-		function run()
-		{
-			$$("#code").style.display = "none";
-			$$("#results").style.display = "block";
-			$$("#iframe").setAttribute("src", "$frameUrl" + Math.random());
-		}
-		
-		function showCode()
-		{
-			$$("#code").style.display = "block";
-			$$("#results").style.display = "none";
-		}
-		
-		var _matches = {
-			'#': document.getElementById,
-			'.': document.getElementsByClassName,
-			'@': document.getElementsByName,
-			'=': document.getElementsByTagName,
-			'?': document.querySelectorAll
-		}
-		
-		window.$$ = function(s) 
-		{
-			return _matches[s[0]].call(document, s.slice(1));
-		}
-	  </script>
-	</body>
-	</html>
+  <link rel="icon" href="//haxe.org/favicon.ico" type="image/x-icon"/>
+  <meta property="og:image" content="http://try.haxe.org/share.png" />
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'/>
+  <style>
+  * { box-sizing: border-box }
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin:0;
+    padding:0;
+    background:transparent;
+  }
+
+  body {
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+    color: #1E1E1E;
+    overflow: hidden;
+  }
+
+  #results {
+    position:absolute;
+    top:12px;
+    bottom:0;
+    left:0;
+    right:0;
+    padding: 0.5em;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+  }
+
+  iframe {
+    position:absolute;
+    top:0.5em;;
+    bottom:0.5em;
+    left:0.5em;
+    right:1em;
+  }
+
+  a.logo-link, .logo-link:hover, .logo-link:active, .logo-link:link {
+    text-decoration: none;
+    color: #333;
+  }
+
+  a.logo-link strong {
+    font-size: 18px;
+    padding-right: 3px;
+  }
+
+  #nav {
+    position:absolute;
+    z-index:5;
+    top:0;
+    right:15px;
+  }
+
+  #nav a {
+    display:inline-block;
+    padding:5px 15px;
+    margin-right:3px;
+    border-radius:4px;
+    color:#fff;
+    text-decoration:none;
+    background:#13110f;
+  }
+ 
+  #nav a .fa {
+    padding-right:5px;
+    text-shadow: 0 0 5px #555;
+  }
+
+  #nav a:hover {
+    background:#555;
+  }
+
+  pre {
+    color: #333;
+    font:12px consolas, monospace;
+    padding-left:10px;
+    background-color: #f5f5f5;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    padding: 1em 0.5em;
+    overflow-y:auto;
+    margin:0;
+    line-height: 20px;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+  }
+</style>
+</head>
+<body>
+  <nav id="nav" role="navigation">
+    <a href="#code" onclick="showCode();return false" id="btn-code" style="display:none"><i class="fa fa-code"></i> Show code</a>
+    <a href="#results" onclick="run();return false" id="btn-results"><i class="fa fa-play-circle"></i> Run</a>
+    <a href="http://try.haxe.org/#$uid" target="_blank"><i class="fa fa-pencil"></i> Edit</a>
+  </nav>
+  <div id="code">
+    <pre><code class="prettyprint haxe">${source.split("\t").join("  ")}</code></pre>
+  </div>
+  <div id="results" style="display:none">
+    <iframe id="iframe" src="" width="99%" frameborder="0" scrolling="no" height="100%"></iframe>
+  </div>
+  <link href='http://code.haxe.org/css/highlighter.min.css' rel='stylesheet' type='text/css'/>
+  <script src="//haxe.org/js/jquery.min.js"></script>
+  <script src="http://code.haxe.org/js/highlighter.js"></script>
+  <script>
+  function run()
+  {
+    $$("#code").style.display = "none";
+    $$("#btn-code").style.display = "inline-block";
+    $$("#results").style.display = "block";
+    $$("#btn-results").style.display = "none";
+    $$("#iframe").setAttribute("src", "$frameUrl" + Math.random());
+  }
+  
+  function showCode()
+  {
+    $$("#code").style.display = "block";
+    $$("#btn-code").style.display = "none";
+    $$("#results").style.display = "none";
+    $$("#btn-results").style.display = "inline-block";
+  }
+  
+  var _matches = {
+    '#': document.getElementById,
+    '.': document.getElementsByClassName,
+    '@': document.getElementsByName,
+    '=': document.getElementsByTagName,
+    '?': document.querySelectorAll
+  }
+  
+  window.$$ = function(s) 
+  {
+    return _matches[s[0]].call(document, s.slice(1));
+  }
+  </script>
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css"/>
+</body>
+</html>
 </template>
 
 <template id="ERROR_TEMPLATE">
