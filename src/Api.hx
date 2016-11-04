@@ -41,7 +41,7 @@ class Api {
 		var program = new api.Compiler().getProgram( uid );
 		if( program != null ) {
 			var frameUrl = 'http://$host/$base/program/$uid/run?r=';
-			var source = program.main.source;
+			var source = program.main.source.htmlEscape();
 			var template = Templates.getCopy(Templates.MAIN_TEMPLATE);
 			Lib.println(template);
 		} else {
