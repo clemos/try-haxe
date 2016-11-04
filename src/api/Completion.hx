@@ -5,9 +5,10 @@ typedef Completion = {
 	contents : String
 }
 
-enum CompletionType {
-	DEFAULT;
-	TOP_LEVEL;
+@:enum
+abstract CompletionType(Int) {
+	var DEFAULT = 0;
+	var TOP_LEVEL = 1;
 }
 
 typedef CompletionResult = {

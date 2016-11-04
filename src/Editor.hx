@@ -374,13 +374,14 @@ class Editor {
 		updateProgram();
     var src = cm.getValue();
 
-    var completion = CompletionType.DEFAULT;
+    var completionType = CompletionType.DEFAULT;
 
     var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
-    if( idx == null ) {
-      return ;
+	
+	if( idx == null ) {
       // TODO: topLevel completion?
-      //idx = SourceTools.posToIndex(src, cm.getCursor());
+      idx = SourceTools.posToIndex(src, cm.getCursor());
+	  completionType = CompletionType.TOP_LEVEL;
     }
 
     // sometimes show incorrect result (time.getDate| change to value.length| -> completionIndex are equals)
@@ -393,8 +394,7 @@ class Editor {
       program.main.source = src.substring( 0 , completionIndex+1 );
     }
 	
-	
-    cnx.Compiler.autocomplete.call( [ program , idx ] , function( comps:CompletionResult ) displayCompletions( cm , comps ) );
+    cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) displayCompletions( cm , comps ) );
 	}
 
 //   function showHint( cm : CodeMirror ){
