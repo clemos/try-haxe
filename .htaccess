@@ -25,4 +25,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /app/index.php?_url=$1&_root= [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ app/index.php?_url=$1 [L,QSA]
