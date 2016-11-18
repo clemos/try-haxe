@@ -364,7 +364,7 @@ class Compiler {
 				args : args,
 				errors : errors,
 				success : false,
-				message : "Build failure"+program,
+				message : "Build failure",
 				href : "",
 				embed : "",
 				source : ""
