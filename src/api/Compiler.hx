@@ -63,6 +63,14 @@ class Compiler {
 
 		var source = program.main.source;
 
+		if(source.indexOf("class")<0){
+			source='class Test{
+				static function main() {
+					$source
+				}
+			}';
+		}
+
 		checkMacros( source );
 		
 		File.saveContent( mainFile , source );
