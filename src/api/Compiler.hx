@@ -36,7 +36,6 @@ class Compiler {
 	}
 
 	public function prepareProgram( program : Program ){
-
 		while( program.uid == null ){
 
 			var id = haxe.crypto.Md5.encode( Std.string( Math.random() ) +Std.string( Date.now().getTime() ) );
@@ -63,6 +62,7 @@ class Compiler {
 		mainFile = tmpDir + program.main.name + ".hx";
 
 		var source = program.main.source;
+
 		checkMacros( source );
 		
 		File.saveContent( mainFile , source );
@@ -284,7 +284,27 @@ class Compiler {
 				args.push( "-js" );
 				args.push( outputPath );
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
-				html.body.push("<script src='//markknol.github.io/console-log-viewer/console-log-viewer.js'></script>");
+				html.body.push('<script>
+					ConsoleLogViewer.TOTAL = 999999;
+					var d = document.getElementById("debug_console");
+					d.style.pointerEvents = "auto";
+					d.style.position = "absolute";
+					d.style.left = "auto";
+					d.style.top = "auto";
+					d.style.bottom = "auto";
+					d.style.right = "auto";
+					d.style.maxHeight = "100%";
+					d.style.width = "98%";
+					d.style.background = "rgba(250,250,250,.7)";
+					d.style.overflow = "auto";
+					var m = document.getElementById("debug_console_messages");
+					m.style.font = "11px monospace";
+					m.style.pointerEvents = "auto";
+					document.getElementById("debug_console_close_button").style.display="none";
+					document.getElementById("debug_console_minimize_button").style.display="none";
+					document.getElementById("debug_console_position_button").style.display="none";
+					document.getElementById("debug_console_pause_button").style.display="none";
+					</script>');
 				html.body.push("<style type='text/css'>
 					#debug_console {
 						background:#fff;
@@ -344,7 +364,7 @@ class Compiler {
 				args : args,
 				errors : errors,
 				success : false,
-				message : "Build failure",
+				message : "Build failure"+program,
 				href : "",
 				embed : "",
 				source : ""
