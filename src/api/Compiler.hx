@@ -63,12 +63,12 @@ class Compiler {
 
 		var source = program.main.source;
 
-		if(source.indexOf("class")<0){
+		if(isScript(source)){
 			source='class Test{
-				static function main() {
-					$source
-				}
-			}';
+ 						static function main() {
+ 							$source
+ 						}
+ 					}';
 		}
 
 		checkMacros( source );
@@ -80,6 +80,25 @@ class Compiler {
 		File.saveContent( tmpDir + "program", haxe.Serializer.run(program));
 		program.main.source = s;
 
+	}
+
+	private function isScript(source:String):Bool{
+		var resultPackage=false;
+		var resultImport=false;
+		var resultClass=false;
+		var tab=["package", "import", "class"];
+		for(i in tab){
+			if(i=="package"){
+				resultPackage=!StringTools.startsWith(StringTools.ltrim(source), i);
+			}
+			if(i=="import"){
+				resultImport=!StringTools.startsWith(StringTools.ltrim(source), i);
+			}
+			if(i=="class"){
+				resultClass=!StringTools.startsWith(StringTools.ltrim(source), i);
+			}
+		}
+		return resultPackage&&resultImport&&resultClass;
 	}
 
 	//public function getProgram(uid:String):{p:Program, o:Program.Output} 
