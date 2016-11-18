@@ -283,41 +283,9 @@ class Compiler {
 				outputPath = tmpDir + name + ".js";
 				args.push( "-js" );
 				args.push( outputPath );
+				html.head.push("<link rel='stylesheet' href='"+Api.root+"/console.css' type='text/css'>");
 				html.body.push("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>");
-				html.body.push('<script>
-					ConsoleLogViewer.TOTAL = 999999;
-					var d = document.getElementById("debug_console");
-					d.style.pointerEvents = "auto";
-					d.style.position = "absolute";
-					d.style.left = "auto";
-					d.style.top = "auto";
-					d.style.bottom = "auto";
-					d.style.right = "auto";
-					d.style.maxHeight = "100%";
-					d.style.width = "98%";
-					d.style.background = "rgba(250,250,250,.7)";
-					d.style.overflow = "auto";
-					var m = document.getElementById("debug_console_messages");
-					m.style.font = "11px monospace";
-					m.style.pointerEvents = "auto";
-					document.getElementById("debug_console_close_button").style.display="none";
-					document.getElementById("debug_console_minimize_button").style.display="none";
-					document.getElementById("debug_console_position_button").style.display="none";
-					document.getElementById("debug_console_pause_button").style.display="none";
-					</script>');
-				html.body.push("<style type='text/css'>
-					#debug_console {
-						background:#fff;
-						font-size:14px;
-					}
-					#debug_console font.log-normal {
-						color:#000;
-					}
-					#debug_console a.log-button  {
-						display:none;
-					}
-					</style>");
-				
+				html.body.push("<script src='//markknol.github.io/console-log-viewer/console-log-viewer.js'></script>");			
 
 			case SWF( name , version ):
 				Api.checkSanity( name );
