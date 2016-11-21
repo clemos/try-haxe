@@ -424,13 +424,15 @@ class Editor {
 
 	public function displayCompletions(cm : CodeMirror , comps : CompletionResult ) {
 	
-    if (comps.list != null) {
-		var completionManager = Completion.get();
+	var completionManager = Completion.get();
+	completionManager.completions = [];
 	
+    if (comps.list != null) {
         completionManager.completions = comps.list;
-        
-      	cm.execCommand("autocomplete");
     }
+	
+	cm.execCommand("autocomplete");
+	
     if (comps.type != null) {
       trace(comps.type);
        var pos = cm.getCursor();
