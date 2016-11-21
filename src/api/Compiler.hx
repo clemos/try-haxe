@@ -3,6 +3,7 @@ package api;
 #if php
 import api.Completion.CompletionResult;
 import api.Completion.CompletionType;
+import api.Completion.CompletionItem;
 import php.Web;
 import Sys;
 import php.Lib;
@@ -179,12 +180,24 @@ class Compiler {
 				return {type:res};
 			}
 
-			var words = [];
+			var words:Array<CompletionItem> = [];
 			
 			if (completionType == CompletionType.DEFAULT)
 			{
 				for( e in xml.nodes.i ){
-					var w = e.att.n;
+					var w:CompletionItem = {n: e.att.n, d: ""};
+					
+					if (e.hasNode.t)
+					{
+						w.t = e.node.t.innerData;
+						w.d = w.t + "</br>";
+					}
+					
+					if (e.hasNode.d)
+					{
+						w.d += e.node.d.innerData;
+					}
+					
 					if( !words.has( w ) )
 						words.push( w );
 
@@ -193,7 +206,28 @@ class Compiler {
 			else if (completionType == CompletionType.TOP_LEVEL)
 			{
 				for (e in xml.nodes.i) {
-					var w = e.innerData;
+					var w:CompletionItem = {n: e.innerData};
+					
+					var elements = [];
+					
+					if (e.has.k)
+					{
+						w.k = e.att.k;
+						elements.push(w.k);
+					}
+					
+					if (e.has.p)
+					{
+						elements.push(e.att.p);
+					}
+					else if (e.has.t)
+					{
+						w.t = e.att.t;
+						elements.push(w.t);
+					}
+					
+					w.d = elements.join(" ");
+					
 					if (!words.has(w))
 					{
 						words.push(w);

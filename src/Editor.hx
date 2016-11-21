@@ -1,5 +1,6 @@
 import api.Completion.CompletionResult;
 import api.Completion.CompletionType;
+import api.Completion.CompletionItem;
 import api.Program;
 import haxe.remoting.HttpAsyncConnection;
 import js.Browser;
@@ -42,7 +43,7 @@ class Editor {
   var markers : Array<CodeMirror.MarkedText>;
   var lineHandles : Array<CodeMirror.LineHandle>;
 
-  var completions : Array<String>;
+  //var completions : Array<CompletionItem>;
   var completionIndex : Int;
 
 	public function new(){
@@ -90,7 +91,8 @@ class Editor {
         ColorPreview.scroll(haxeSource);
     });   
         
-    Completion.registerHelper();
+	var completionManager = Completion.get();
+    completionManager.registerHelper();
     haxeSource.on("change", onChange);
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
@@ -422,16 +424,10 @@ class Editor {
 
 	public function displayCompletions(cm : CodeMirror , comps : CompletionResult ) {
 	
-    completions = null;
     if (comps.list != null) {
-  		completions = comps.list;
-        
-        Completion.completions = [];
-        
-        for (completion in completions)
-        {
-        	Completion.completions.push({n: completion});
-        }
+		var completionManager = Completion.get();
+	
+        completionManager.completions = comps.list;
         
       	cm.execCommand("autocomplete");
     }
