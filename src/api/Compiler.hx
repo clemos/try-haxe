@@ -63,15 +63,15 @@ class Compiler {
 
 		var source = program.main.source;
 
-		if(isScript(source)){
+		checkMacros( source );
+
+		if(!startWithKeyWords(source)){
 			source='class Test{
  						static function main() {
  							$source
  						}
  					}';
 		}
-
-		checkMacros( source );
 		
 		File.saveContent( mainFile , source );
 
@@ -82,23 +82,19 @@ class Compiler {
 
 	}
 
-	private function isScript(source:String):Bool{
-		var resultPackage=false;
-		var resultImport=false;
-		var resultClass=false;
-		var tab=["package", "import", "class"];
-		for(i in tab){
-			if(i=="package"){
-				resultPackage=!StringTools.startsWith(StringTools.ltrim(source), i);
-			}
-			if(i=="import"){
-				resultImport=!StringTools.startsWith(StringTools.ltrim(source), i);
-			}
-			if(i=="class"){
-				resultClass=!StringTools.startsWith(StringTools.ltrim(source), i);
-			}
+	private function startWithKeyWords(source:String):Bool{
+		// first, ltrim the source
+		source = StringTools.ltrim(source);
+		// then check each token
+		for( token in ["package","import","class"] ) {
+   			// if source starts with either token, we know it's a script, 
+   			// and thus we can return true and break the loop
+   			if(StringTools.startsWith( source, token )) {
+       			return true;
+   			}
 		}
-		return resultPackage&&resultImport&&resultClass;
+		// otherwise, we know it's not a script
+		return false;
 	}
 
 	//public function getProgram(uid:String):{p:Program, o:Program.Output} 
