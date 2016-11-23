@@ -65,7 +65,7 @@ class Compiler {
 
 		checkMacros( source );
 
-		if(!startWithKeyWords(source)){
+		if(!isScript(source)){
 			source='class Test{
  						static function main() {
  							$source
@@ -82,7 +82,7 @@ class Compiler {
 
 	}
 
-	private function startWithKeyWords(source:String):Bool{
+	private function isScript(source:String):Bool{
 		// first, ltrim the source
 		source = StringTools.ltrim(source);
 		// then check each token
