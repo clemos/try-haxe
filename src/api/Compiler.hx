@@ -64,6 +64,14 @@ class Compiler {
 		var source = program.main.source;
 
 		checkMacros( source );
+
+		if(!isScript(source)){
+			source='class Test{
+ 						static function main() {
+ 							$source
+ 						}
+ 					}';
+		}
 		
 		File.saveContent( mainFile , source );
 
@@ -72,6 +80,21 @@ class Compiler {
 		File.saveContent( tmpDir + "program", haxe.Serializer.run(program));
 		program.main.source = s;
 
+	}
+
+	private function isScript(source:String):Bool{
+		// first, ltrim the source
+		source = StringTools.ltrim(source);
+		// then check each token
+		for( token in ["package","import","class"] ) {
+   			// if source starts with either token, we know it's a script, 
+   			// and thus we can return true and break the loop
+   			if(StringTools.startsWith( source, token )) {
+       			return true;
+   			}
+		}
+		// otherwise, we know it's not a script
+		return false;
 	}
 
 	//public function getProgram(uid:String):{p:Program, o:Program.Output} 
