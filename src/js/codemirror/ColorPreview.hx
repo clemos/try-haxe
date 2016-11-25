@@ -32,7 +32,7 @@ class ColorPreview
 	public static function update(cm:CodeMirror):Void 
 	{
 		var completionManager = Completion.get();
-		var word = completionManager.getCurrentWord(cm, {word:~/[A-Fx0-9#]+$/i}, cm.getCursor());
+		var word = completionManager.getCurrentWord(cm, {word:~/[A-Fx0-9#]+$/i}, cm.getCursor()).word;
 		var color:String = null;
 		
 		if (word != null && word.length > 2) 

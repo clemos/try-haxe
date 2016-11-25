@@ -5,8 +5,6 @@ package js.codemirror;
 //With few additional functions
 //==========
 
-//Ported from HIDE
-
 import js.html.DivElement;
 import js.html.Element;
 
@@ -29,10 +27,20 @@ find : Void->Pos
 typedef LineHandle = {};
 
 typedef ChangeEvent = {
+origin : String,
 from : Pos,
 to : Pos,
 text : Array<String>,
+removed : Array<String>,
 ?next : ChangeEvent
+}
+
+typedef TokenData = {
+start: Int,
+end: Int,
+string: String,
+type: String,
+state: Dynamic
 }
 
 typedef LineWidgetOptions = {
@@ -43,25 +51,51 @@ typedef LineWidgetOptions = {
 typedef DocHistory = {
 	var generation:Int;
 }
+	
+@:native('CodeMirror.TextMarker') extern class TextMarker
+{
+	function find():{from:Pos, to:Pos};
+	
+	var atomic: Bool;
+	var clearOnEnter: Bool;
+	var collapsed: Bool;
+	var doc: CodeMirror.Doc;
+	var id:Int;
+	var lines: Array<LineHandle>;
+	var type: String;
+	var widgetNode: Dynamic;
+}
 
 @:native('CodeMirror.Doc') extern class Doc 
 {
 	public function new(body: Dynamic, mode: String, ?firstLineNumber:Int);
-	public function getValue():String;
+	function getValue():String;
 	function somethingSelected():Bool;
 	function setValue(value:String):Void;
 	function getSelection(?lineSep:String):String;
 	function markClean():Void;
+	function changeGeneration(?closeEvent:Bool):Int;
+	function isClean(?generation: Int):Bool;
 	function clearHistory():Void;
 	function historySize():Int;
+	function getMode(): { name:String };
+	function lineCount():Int;
+	function getAllMarks():Array<Dynamic>;
+	function getRange(from: Pos, to: Pos, ?separator: String):String;
+	function getCursor( ?start : Bool ) : Pos;
+	function setCursor(pos: Pos, ?ch: Int, ?options: Dynamic):Void;
+	function listSelections():Array<{anchor:Pos, head:Pos}>;
+	function setSelection(anchor: Pos, ?head: Pos, ?options: Dynamic):Void;
+	function replaceSelection(replacement: String, ?select: String):Void;
+	function getLine(line:Int):String;
 	var history:DocHistory;
 }
 
-@:native('CodeMirror') extern class CodeMirror {
+@:native('CodeMirror') extern class CodeMirror extends Doc {
 
 static var keyMap:Dynamic;
 public var gutters:Array<String>;
-public var state:Dynamic;
+public var state:{completionActive:Dynamic};
 
 public static var prototype:Dynamic;
 
@@ -73,55 +107,59 @@ public static function fromTextArea( textarea : Dynamic , ?config : Dynamic ) : 
 public static function registerHelper(type:String, mode:String, onCompletion:Dynamic):Void;
 
 @:overload(function (object:Dynamic, event:String, callback_function:Dynamic):Void {})
-public function on(event:String, callback_function:Dynamic):Void;
+function on(event:String, callback_function:Dynamic):Void;
 
-public function setValue( v : String ) : Void;
-public function getValue() : String;
-public function refresh() : Void;
+function refresh() : Void;
+function getLineNumber(pos:Pos):Int;
 
-public function getCursor( ?start : Bool ) : Pos;
+function firstLine():Int;
+function lastLine():Int;
 
-public function getLine(line:Int):String;
-public function getLineNumber(pos:Pos):Int;
-	
-public function firstLine():Dynamic;
-public function lastLine():Dynamic;
-
-public function setOption(option:String, value:Dynamic):Void;
-public function swapDoc(doc:Dynamic):Void;
-public function getDoc():Dynamic;
+function setOption(option:String, value:Dynamic):Void;
+function swapDoc(doc:Dynamic):Void;
+function getDoc():Dynamic;
 
 @:overload(function (lineHandle: LineHandle, gutterID: String, value: Element):LineHandle {})
-public function setGutterMarker(line: Int, gutterID: String, value: Element):LineHandle;
-public function indexFromPos(pos:Pos):Int;
-public function posFromIndex(index:Int):Pos;
-public function getMode():Dynamic;
+function setGutterMarker(line: Int, gutterID: String, value: Element):LineHandle;
+function indexFromPos(pos:Pos):Int;
+function posFromIndex(index:Int):Pos;
 
-public function addLineWidget(line:Int, msg:DivElement, options:LineWidgetOptions):Dynamic;
-public function removeLineWidget(widget:Dynamic):Void;
+function addLineWidget(line:Int, msg:DivElement, options:LineWidgetOptions):Dynamic;
+function removeLineWidget(widget:Dynamic):Void;
 
-public function getScrollInfo():Dynamic;
-public function scrollTo(param1:Dynamic, y:Int):Void;
-public function charCoords(param1:Dynamic, param2:String):Dynamic;
+function getScrollInfo():Dynamic;
+function scrollTo(param1:Dynamic, y:Int):Void;
+function charCoords(param1:Dynamic, param2:String):Dynamic;
 function cursorCoords(start:Bool):{left:Int, right:Int, top:Int, bottom:Int};
-public function getScrollerElement():Dynamic;
-public function scrollIntoView(from:Pos, to:Pos):Dynamic;
-public static function defineExtension(name:String, func:Dynamic):Void;
-public function centerOnLine(line:Int):Void;
-public function scanForBracket(pos:CodeMirror.Pos, dir:Int, ?style:Dynamic, ?config:Dynamic): { ch:String, pos:CodeMirror.Pos };
-public function execCommand(command:String):Void;
-public function replaceRange(replacement: String, from: Pos, to: Pos, ?origin: String):Void;
-public function setSelection(anchor: Pos, ?head: Pos, ?options: Dynamic):Void;
-    
-public function markText(from : Pos, to : Pos, className : String ) : MarkedText;
+function getScrollerElement():Dynamic;
+function scrollIntoView(from:Pos, to:Pos):Dynamic;
+static function defineExtension(name:String, func:Dynamic):Void;
+function centerOnLine(line:Int):Void;
+function scanForBracket(pos:CodeMirror.Pos, dir:Int, ?style:Dynamic, ?config:Dynamic): { ch:String, pos:CodeMirror.Pos };
+function findMatchingBracket(pos:CodeMirror.Pos, strict:Bool, config:Dynamic):{from:CodeMirror.Pos, to:CodeMirror.Pos,
+            match: String, forward: Bool};
 
-public function setMarker( line : Int , ?text : String , ?className : String ) : LineHandle;
+function execCommand(command:String):Void;
+function replaceRange(replacement: String, from: Pos, to: Pos, ?origin: String):Void;
+
+function markText(from : Pos, to : Pos, options:{className : String} ) : MarkedText;
+
+function setMarker( line : Int , ?text : String , ?className : String ) : LineHandle;
 @:overload( function( line : LineHandle ) : Void {})
-public function clearMarker(line:Int) : Void;
+function clearMarker(line:Int) : Void;
+function getTokenAt(pos: Pos, ?precise:Bool):TokenData;
+function getTokenTypeAt(pos: Pos):String;
+function indentLine(line: Int, ?dir: Dynamic): Void;
+function showHint(options:Dynamic):Void;
+   
+function foldCode(pos:Pos, ?options:{call:Dynamic}, ?force:String):Void;
+function isFolded(pos:Pos):Bool;
 
-public function getWrapperElement() : DivElement;
+function operation(func:Dynamic):Void;
+	
+function getWrapperElement() : DivElement;
 
-public function somethingSelected() : Bool;
-public function focus() : Void;
+function focus() : Void;
+function getOption(name:String): Dynamic;
 
 }

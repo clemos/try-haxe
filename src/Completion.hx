@@ -89,7 +89,7 @@ class Completion
 		});
 	}
 
-	public function getCurrentWord(cm:CodeMirror, ?options:Dynamic, ?pos:CodeMirror.Pos):String
+	public function getCurrentWord(cm:CodeMirror, ?options:Dynamic, ?pos:CodeMirror.Pos):{word:String, from:CodeMirror.Pos, to:CodeMirror.Pos}
 	{
 		if (options != null && options.word != null)
 		{
@@ -120,7 +120,7 @@ class Completion
 			curWord = curLine.substring(start, end);
 		}
 		
-		return curWord;
+		return {word:curWord, from: {line:cur.line, ch: start}, to: {line:cur.line, ch: end}};
 	}
 	
 	function searchImage(name:String, ?type:String, ?description:String, ?k:String)

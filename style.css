@@ -335,3 +335,15 @@ body.fullscreen-runner {
   border: solid silver 1px;
   box-shadow: 2px 3px 5px rgba(0,0,0,.2);
 }
+
+.lint-error {background: #F8F8BE;
+color: #000;
+padding: 2px 5px 2px;
+font-weight: bold;
+font-size: small;
+opacity: 0.7; }
+
+.selectedParameter
+{
+	background-color: #F7EA5F;
+}

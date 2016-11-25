@@ -45,9 +45,11 @@ class Editor {
 
   //var completions : Array<CompletionItem>;
   var completionIndex : Int;
+  
+  static var instance:Editor;
 
 	public function new(){
-        
+	instance = this;
     markers = [];
     lineHandles = [];
 
@@ -80,10 +82,13 @@ class Editor {
 		} );
 
     ColorPreview.create(haxeSource);
+	
+	var functionParametersHelper:FunctionParametersHelper = FunctionParametersHelper.get();
         
     haxeSource.on("cursorActivity", function()
     {
-        ColorPreview.update(haxeSource);             
+        ColorPreview.update(haxeSource);
+		functionParametersHelper.update(haxeSource);
     });  
       
     haxeSource.on("scroll", function ()
@@ -177,6 +182,10 @@ class Editor {
     js.Browser.window.addEventListener('resize', resize);
     resize();
 
+  }
+  
+  public static function get():Editor {
+	return instance;
   }
 
   function resize(?_) {
@@ -369,34 +378,62 @@ class Editor {
 		}
 
 	}
+	
+	function saveCompletion( cm:CodeMirror, comps:CompletionResult, onComplete:CodeMirror->CompletionResult->Void) {
+		var completionManager = Completion.get();
+		completionManager.completions = [];
+		
+		if (comps.list != null) {
+			completionManager.completions = comps.list;
+		}
+		
+		onComplete(cm, comps);
+	}
+	
+	public function getCompletion( cm:CodeMirror, onComplete: CodeMirror->CompletionResult->Void, ?pos: CodeMirror.Pos, ?targetCompletionType: CompletionType){
+		updateProgram();
+		var src = cm.getValue();
 
+		var completionType = CompletionType.DEFAULT;
+
+		var cursorPos = pos;
+		
+		if (cursorPos == null) {
+			cursorPos = cm.getCursor();
+		}
+		
+		var idx = SourceTools.getAutocompleteIndex( src , cursorPos );
+		
+		if( idx == null ) {
+		  // TODO: topLevel completion?
+		  idx = SourceTools.posToIndex(src, cm.getCursor());
+		  completionType = CompletionType.TOP_LEVEL;
+		}
+
+		// sometimes show incorrect result (time.getDate| change to value.length| -> completionIndex are equals)
+		// if( idx == completionIndex && completions != null ){ 
+		//   displayCompletions( cm , {list:completions} ); 
+		//   return;
+		// }
+		completionIndex = idx;
+		if( src.length > 1000 ){
+		  program.main.source = src.substring( 0 , completionIndex+1 );
+		}
+		
+		if (targetCompletionType == null)
+		{
+			cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) saveCompletion(cm, comps, onComplete));
+		}
+		else if (targetCompletionType == completionType)
+		{
+			cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) saveCompletion(cm, comps, onComplete));
+		}
+	}
+	
 	public function autocomplete( cm : CodeMirror ){
     clearErrors();
     messages.fadeOut(0);
-		updateProgram();
-    var src = cm.getValue();
-
-    var completionType = CompletionType.DEFAULT;
-
-    var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
-	
-	if( idx == null ) {
-      // TODO: topLevel completion?
-      idx = SourceTools.posToIndex(src, cm.getCursor());
-	  completionType = CompletionType.TOP_LEVEL;
-    }
-
-    // sometimes show incorrect result (time.getDate| change to value.length| -> completionIndex are equals)
-    // if( idx == completionIndex && completions != null ){ 
-    //   displayCompletions( cm , {list:completions} ); 
-    //   return;
-    // }
-    completionIndex = idx;
-    if( src.length > 1000 ){
-      program.main.source = src.substring( 0 , completionIndex+1 );
-    }
-	
-    cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) displayCompletions( cm , comps ) );
+	getCompletion(cm, displayCompletions);
 	}
 
 //   function showHint( cm : CodeMirror ){
@@ -424,12 +461,7 @@ class Editor {
 
 	public function displayCompletions(cm : CodeMirror , comps : CompletionResult ) {
 	
-	var completionManager = Completion.get();
-	completionManager.completions = [];
 	
-    if (comps.list != null) {
-        completionManager.completions = comps.list;
-    }
 	
 	cm.execCommand("autocomplete");
 	
