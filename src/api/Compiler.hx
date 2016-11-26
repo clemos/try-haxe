@@ -190,7 +190,7 @@ class Compiler {
 					if (e.hasNode.t)
 					{
 						w.t = e.node.t.innerData;
-						w.d = w.t + "</br>";
+						w.d = w.t + "<br/>";
 					}
 					
 					if (e.hasNode.d)

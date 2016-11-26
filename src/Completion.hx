@@ -35,26 +35,17 @@ class Completion
 	public var curWord:String;
 	public var completions:Array<CompletionItem> = [];
 	var backupDocValue:String;
-	
-	static var instance:Completion;
-	
-	public static function get()
-	{
-		if (instance == null)
-		{
-			instance = new Completion();
-		}
-		
-		return instance;
-	}
+	var functionParametersHelper:FunctionParametersHelper;
 	
 	public function new()
 	{
 		
 	}
 	
-	public function registerHelper() 
-	{		
+	public function registerHelper(p_functionParametersHelper:FunctionParametersHelper) 
+	{
+		functionParametersHelper = p_functionParametersHelper;
+	
 		CodeMirror.registerHelper("hint", "haxe", function(cm:CodeMirror, options) {
 			word = null;
 			
@@ -125,8 +116,6 @@ class Completion
 	
 	function searchImage(name:String, ?type:String, ?description:String, ?k:String)
 	{
-		var functionParametersHelper = FunctionParametersHelper.get();
-		
 		var functionData = functionParametersHelper.parseFunctionParams(name, type, description);
 		
 		var info:String = null;

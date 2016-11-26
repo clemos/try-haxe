@@ -17,21 +17,9 @@ class FunctionParametersHelper
 	public var widgets:Array<LineWidget> = [];
 	var lastPos:Pos;
 	
-	static var instance:FunctionParametersHelper = null;
-	
 	public function new()
 	{
 			
-	}
-	
-	public static function get()
-	{
-		if (instance == null)
-		{
-			instance = new FunctionParametersHelper();
-		}
-		
-		return instance;
 	}
 	
 	public function addWidget(cm:CodeMirror, type:String, name:String, parameters:Array<String>, retType:String, description:String, currentParameter:Int, pos:Pos):Void
@@ -66,7 +54,7 @@ class FunctionParametersHelper
 		widgets = [];
 	}
 	
-	public function update(cm:CodeMirror):Void
+	public function update(completionInstance:Completion, editorInstance:Editor, cm:CodeMirror):Void
 	{
 		var doc = cm.getDoc();
 		
@@ -81,13 +69,13 @@ class FunctionParametersHelper
 
 				if (cursor != null && data.charAt(cursor.ch - 1) != ".")
 				{
-					scanForBracket(cm, cursor);
+					scanForBracket(completionInstance, editorInstance, cm, cursor);
 				}
 			}
 		}
 	}
 	
-	function scanForBracket(cm:CodeMirror, cursor:Pos):Void
+	function scanForBracket(completionInstance:Completion, editorInstance:Editor, cm:CodeMirror, cursor:Pos):Void
 	{
 		//{bracketRegex: untyped __js__("/[([\\]]/")}
         //{bracketRegex: untyped __js__("/[({}]/")}
@@ -109,7 +97,7 @@ class FunctionParametersHelper
                 
                 if (lastPos == null || lastPos.ch != pos.ch || lastPos.line != pos.line)
                 {
-                    getFunctionParams(cm, pos, currentParameter);  
+                    getFunctionParams(completionInstance, editorInstance, cm, pos, currentParameter);  
                 }
                 else if (alreadyShown())
                 {
@@ -134,15 +122,11 @@ class FunctionParametersHelper
 		}
 	}
 	
-	function getFunctionParams(cm:CodeMirror, pos:Pos, currentParameter:Int):Void
+	function getFunctionParams(completionInstance:Completion, editorInstance:Editor, cm:CodeMirror, pos:Pos, currentParameter:Int):Void
 	{
 		var posBeforeBracket:Pos = {line:pos.line, ch:pos.ch - 1};
 		
-		var completionInstance = Completion.get();
-		
 		var word = completionInstance.getCurrentWord(cm, {}, posBeforeBracket).word;
-		
-		var editorInstance = Editor.get();
         
 		editorInstance.getCompletion(cm, function (cm:CodeMirror, comps:CompletionResult)
 		{

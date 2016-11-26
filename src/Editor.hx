@@ -46,10 +46,12 @@ class Editor {
   //var completions : Array<CompletionItem>;
   var completionIndex : Int;
   
-  static var instance:Editor;
+  var completionManager:Completion;
+  
+  var colorPreview:ColorPreview;
+  var functionParametersHelper:FunctionParametersHelper;
 
 	public function new(){
-	instance = this;
     markers = [];
     lineHandles = [];
 
@@ -80,24 +82,25 @@ class Editor {
             tabSize: 4,
             keyMap: "sublime"
 		} );
-
-    ColorPreview.create(haxeSource);
+        
+	colorPreview = new ColorPreview(haxeSource);
 	
-	var functionParametersHelper:FunctionParametersHelper = FunctionParametersHelper.get();
+	functionParametersHelper = new FunctionParametersHelper();
+	
+	completionManager = new Completion();
+    completionManager.registerHelper(functionParametersHelper);
         
     haxeSource.on("cursorActivity", function()
     {
-        ColorPreview.update(haxeSource);
-		functionParametersHelper.update(haxeSource);
+        colorPreview.update(completionManager, haxeSource);
+		functionParametersHelper.update(completionManager, this, haxeSource);
     });  
       
     haxeSource.on("scroll", function ()
     {
-        ColorPreview.scroll(haxeSource);
+        colorPreview.scroll(haxeSource);
     });   
-        
-	var completionManager = Completion.get();
-    completionManager.registerHelper();
+	
     haxeSource.on("change", onChange);
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
@@ -182,10 +185,6 @@ class Editor {
     js.Browser.window.addEventListener('resize', resize);
     resize();
 
-  }
-  
-  public static function get():Editor {
-	return instance;
   }
 
   function resize(?_) {
@@ -380,7 +379,6 @@ class Editor {
 	}
 	
 	function saveCompletion( cm:CodeMirror, comps:CompletionResult, onComplete:CodeMirror->CompletionResult->Void) {
-		var completionManager = Completion.get();
 		completionManager.completions = [];
 		
 		if (comps.list != null) {
