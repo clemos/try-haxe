@@ -93,7 +93,7 @@ class Test{
 		// first, ltrim the source
 		source = StringTools.ltrim(source);
 		// then check each token
-		for( token in ["package","import","class"] ) {
+		for( token in ["package","import","class","abstract"] ) {
    			// if source starts with either token, we know it's a script, 
    			// and thus we can return true and break the loop
    			if(StringTools.startsWith( source, token )) {
