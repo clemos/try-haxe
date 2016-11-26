@@ -211,7 +211,6 @@ class Completion
 			infoSpan.appendChild(infoTypeSpan);
 
 			infoSpan.appendChild(Browser.document.createElement("br"));
-			infoSpan.appendChild(Browser.document.createElement("br"));
 		}
 
 		if (description != null)
