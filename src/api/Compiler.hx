@@ -24,6 +24,16 @@ class Compiler {
 	var tmpDir : String;
 	var mainFile : String;
 	public static var haxePath = "haxe";
+	static inline var SCRIPT_HEADER = "
+#if js 
+import js.Browser.*;
+#end
+class Test{
+	static function main() {
+		";
+	static inline var SCRIPT_FOOTER = "
+	}
+}";
 
 	public function new(){}
 
@@ -66,11 +76,7 @@ class Compiler {
 		checkMacros( source );
 
 		if(isScript(source)){
-			source='class Test{
-	static function main() {
-		$source
-	}
-}';
+			source='$SCRIPT_HEADER$source$SCRIPT_FOOTER';
 		}
 		
 		File.saveContent( mainFile , source );
@@ -160,6 +166,11 @@ class Compiler {
 		}
 
 		var source = program.main.source;
+
+		if( isScript(source) ) {
+			idx += SCRIPT_HEADER.length;
+		}
+
 		var display = tmpDir + program.main.name + ".hx@" + idx;
 		
 		if (completionType == CompletionType.TOP_LEVEL)
