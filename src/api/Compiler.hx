@@ -65,7 +65,7 @@ class Compiler {
 
 		checkMacros( source );
 
-		if(!isScript(source)){
+		if(isScript(source)){
 			source='class Test{
 	static function main() {
 		$source
@@ -90,11 +90,11 @@ class Compiler {
    			// if source starts with either token, we know it's a script, 
    			// and thus we can return true and break the loop
    			if(StringTools.startsWith( source, token )) {
-       			return true;
+       			return false;
    			}
 		}
 		// otherwise, we know it's not a script
-		return false;
+		return true;
 	}
 
 	//public function getProgram(uid:String):{p:Program, o:Program.Output} 
