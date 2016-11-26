@@ -29,7 +29,7 @@ class Libs
 			{name:"thx.core", help:"https://github.com/haxetink/tink_core"},
 			{name:"hxColorToolkit", help:"https://github.com/andyli/hxColorToolkit"},
 			{name:"threejs", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]},
-			{name:"pixijs"},
+			{name:"pixijs", head: ["<script src='../../../lib/js/pixi.min.js'></script>"]},
 		],
 		"SWF" => new Array<LibConf>().concat([
 			{name:"actuate" , help:"https://github.com/openfl/actuate",args : []},
