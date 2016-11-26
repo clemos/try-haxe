@@ -11,8 +11,19 @@ abstract CompletionType(Int) {
 	var TOP_LEVEL = 1;
 }
 
+typedef CompletionItem = 
+{
+	@:optional
+	var d:String;
+	@:optional
+	var t:String;
+	@:optional
+	var k:String;
+	var n:String;
+}
+
 typedef CompletionResult = {
 	@:optional var type:String;
-	@:optional var list:Array<String>;
+	@:optional var list:Array<CompletionItem>;
 	@:optional var errors:Array<String>;
 }

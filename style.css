@@ -218,3 +218,132 @@ body.fullscreen-runner {
 		margin:8px 0;
 	}
 }
+
+.CodeMirror-hint 
+{
+  max-width: 100em;
+}
+
+.completionDescription
+{
+	
+}
+
+.CodeMirror-Tern-completion {
+  padding-left: 22px;
+  position: relative;
+}
+.CodeMirror-Tern-completion:before {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  height: 15px;
+  width: 15px;
+  line-height: 16px;
+  text-align: center;
+  color: white;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.CodeMirror-Tern-completion-unknown:before {
+  content: "?";
+  background: #4bb;
+}
+
+.CodeMirror-Tern-completion-object:before {
+  content: "O";
+  background: #77c;
+}
+.CodeMirror-Tern-completion-fn:before {
+  content: "F";
+  background: #7c7;
+}
+.CodeMirror-Tern-completion-array:before {
+  content: "A";
+  background: #c55;
+}
+.CodeMirror-Tern-completion-map:before {
+  content: "M";
+  background: #118A4E;
+}
+.CodeMirror-Tern-completion-number:before {
+  content: "1";
+  background: #555;
+}
+.CodeMirror-Tern-completion-string:before {
+  content: "S";
+  background: #555;
+}
+.CodeMirror-Tern-completion-bool:before {
+  content: "B";
+  background: #555;
+}
+
+.CodeMirror-Tern-completion-template:before {
+  content: "T";
+  background: #77c;
+}
+
+.CodeMirror-Tern-completion-define:before {
+  content: "D";
+  background: #536F79;
+}
+
+.CodeMirror-Tern-completion-lib:before {
+  content: "L";
+  background: #536F79;
+}
+
+.CodeMirror-Tern-completion-import:before {
+  content: "I";
+  background: #536F79;
+}
+
+.CodeMirror-Tern-completion-class:before {
+  content: "C";
+  background: #536F79;
+}
+
+.CodeMirror-Tern-completion-package:before {
+  content: "P";
+  background: #536F79;
+}
+
+.CodeMirror-Tern-completion-type:before {
+  content: "T";
+  background: #B0B355;
+}
+
+.CodeMirror-hints {
+  width: 200px;
+}
+
+.CodeMirror-hints-contextInfo {
+  position: absolute;
+  z-index: 10;
+  max-height: 200px;
+  max-width: 400px;
+  overflow: auto;
+  background: #FFFFFF;
+  font-family: Tahoma;
+  font-size: 12px;
+  padding: 5px;
+  border: solid silver 1px;
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+}
+
+.lint-error {background: #F8F8BE;
+color: #000;
+padding: 2px 5px 2px;
+font-weight: bold;
+font-size: small;
+opacity: 0.7; }
+
+.selectedParameter
+{
+	background-color: #F7EA5F;
+}

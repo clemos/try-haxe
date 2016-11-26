@@ -1,5 +1,6 @@
 import api.Completion.CompletionResult;
 import api.Completion.CompletionType;
+import api.Completion.CompletionItem;
 import api.Program;
 import haxe.remoting.HttpAsyncConnection;
 import js.Browser;
@@ -42,11 +43,15 @@ class Editor {
   var markers : Array<CodeMirror.MarkedText>;
   var lineHandles : Array<CodeMirror.LineHandle>;
 
-  var completions : Array<String>;
+  //var completions : Array<CompletionItem>;
   var completionIndex : Int;
+  
+  var completionManager:Completion;
+  
+  var colorPreview:ColorPreview;
+  var functionParametersHelper:FunctionParametersHelper;
 
 	public function new(){
-        
     markers = [];
     lineHandles = [];
 
@@ -77,20 +82,25 @@ class Editor {
             tabSize: 4,
             keyMap: "sublime"
 		} );
-
-    ColorPreview.create(haxeSource);
+        
+	colorPreview = new ColorPreview(haxeSource);
+	
+	functionParametersHelper = new FunctionParametersHelper();
+	
+	completionManager = new Completion();
+    completionManager.registerHelper(functionParametersHelper);
         
     haxeSource.on("cursorActivity", function()
     {
-        ColorPreview.update(haxeSource);             
+        colorPreview.update(completionManager, haxeSource);
+		functionParametersHelper.update(completionManager, this, haxeSource);
     });  
       
     haxeSource.on("scroll", function ()
     {
-        ColorPreview.scroll(haxeSource);
+        colorPreview.scroll(haxeSource);
     });   
-        
-    Completion.registerHelper();
+	
     haxeSource.on("change", onChange);
    
 		jsSource = CodeMirror.fromTextArea( cast new JQuery("textarea[name='js-source']")[0] , {
@@ -367,34 +377,61 @@ class Editor {
 		}
 
 	}
+	
+	function saveCompletion( cm:CodeMirror, comps:CompletionResult, onComplete:CodeMirror->CompletionResult->Void) {
+		completionManager.completions = [];
+		
+		if (comps.list != null) {
+			completionManager.completions = comps.list;
+		}
+		
+		onComplete(cm, comps);
+	}
+	
+	public function getCompletion( cm:CodeMirror, onComplete: CodeMirror->CompletionResult->Void, ?pos: CodeMirror.Pos, ?targetCompletionType: CompletionType){
+		updateProgram();
+		var src = cm.getValue();
 
+		var completionType = CompletionType.DEFAULT;
+
+		var cursorPos = pos;
+		
+		if (cursorPos == null) {
+			cursorPos = cm.getCursor();
+		}
+		
+		var idx = SourceTools.getAutocompleteIndex( src , cursorPos );
+		
+		if( idx == null ) {
+		  // TODO: topLevel completion?
+		  idx = SourceTools.posToIndex(src, cm.getCursor());
+		  completionType = CompletionType.TOP_LEVEL;
+		}
+
+		// sometimes show incorrect result (time.getDate| change to value.length| -> completionIndex are equals)
+		// if( idx == completionIndex && completions != null ){ 
+		//   displayCompletions( cm , {list:completions} ); 
+		//   return;
+		// }
+		completionIndex = idx;
+		if( src.length > 1000 ){
+		  program.main.source = src.substring( 0 , completionIndex+1 );
+		}
+		
+		if (targetCompletionType == null)
+		{
+			cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) saveCompletion(cm, comps, onComplete));
+		}
+		else if (targetCompletionType == completionType)
+		{
+			cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) saveCompletion(cm, comps, onComplete));
+		}
+	}
+	
 	public function autocomplete( cm : CodeMirror ){
     clearErrors();
     messages.fadeOut(0);
-		updateProgram();
-    var src = cm.getValue();
-
-    var completionType = CompletionType.DEFAULT;
-
-    var idx = SourceTools.getAutocompleteIndex( src , cm.getCursor() );
-	
-	if( idx == null ) {
-      // TODO: topLevel completion?
-      idx = SourceTools.posToIndex(src, cm.getCursor());
-	  completionType = CompletionType.TOP_LEVEL;
-    }
-
-    // sometimes show incorrect result (time.getDate| change to value.length| -> completionIndex are equals)
-    // if( idx == completionIndex && completions != null ){ 
-    //   displayCompletions( cm , {list:completions} ); 
-    //   return;
-    // }
-    completionIndex = idx;
-    if( src.length > 1000 ){
-      program.main.source = src.substring( 0 , completionIndex+1 );
-    }
-	
-    cnx.Compiler.autocomplete.call( [ program , idx, completionType ] , function( comps:CompletionResult ) displayCompletions( cm , comps ) );
+	getCompletion(cm, displayCompletions);
 	}
 
 //   function showHint( cm : CodeMirror ){
@@ -422,19 +459,10 @@ class Editor {
 
 	public function displayCompletions(cm : CodeMirror , comps : CompletionResult ) {
 	
-    completions = null;
-    if (comps.list != null) {
-  		completions = comps.list;
-        
-        Completion.completions = [];
-        
-        for (completion in completions)
-        {
-        	Completion.completions.push({n: completion});
-        }
-        
-      	cm.execCommand("autocomplete");
-    }
+	
+	
+	cm.execCommand("autocomplete");
+	
     if (comps.type != null) {
       trace(comps.type);
        var pos = cm.getCursor();
