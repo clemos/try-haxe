@@ -20,16 +20,23 @@ class Libs
 	static var available : Map<String, Array<LibConf>> = [
 		"JS" => [
 			//{name:"nme", args : ["--remap","flash:browser"], head : ["<link rel='stylesheet' href='../swf.css' type='text/css'/>"], body:["<div id='haxe:jeash'></div>"]},
-			{name:"actuate"},
+			{name:"actuate" , help:"https://github.com/openfl/actuate",args : []},
 			//{name:"selecthx"},
 			//{name:"modernizr"},
 			//{name:"browserhx"},
-			{name:"format" },
-			//{name:"three.js", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]}
+			{name:"format", help:"https://github.com/HaxeFoundation/format"},
+			{name:"tink_core", help:"https://github.com/fponticelli/thx.core"},
+			{name:"thx.core", help:"https://github.com/haxetink/tink_core"},
+			{name:"hxColorToolkit", help:"https://github.com/andyli/hxColorToolkit"},
+			{name:"threejs", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]},
+			{name:"pixijs"},
 		],
 		"SWF" => new Array<LibConf>().concat([
-			{name:"actuate" , args : []},
-			{name:"format"},
+			{name:"actuate" , help:"https://github.com/openfl/actuate",args : []},
+			{name:"format", help:"https://github.com/HaxeFoundation/format"},
+			{name:"tink_core", help:"https://github.com/fponticelli/thx.core"},
+			{name:"thx.core", help:"https://github.com/haxetink/tink_core"},
+			{name:"hxColorToolkit", help:"https://github.com/andyli/hxColorToolkit"},
 			{name:"away3d", swf:{src:"away3d4.swf"}, help:"http://away3d.com/livedocs/away3d/4.0/"},
 			//{name:"starling" },
 		])
