@@ -67,18 +67,18 @@ class Compiler {
 
 		if(!isScript(source)){
 			source='class Test{
- 						static function main() {
- 							$source
- 						}
- 					}';
+	static function main() {
+		$source
+	}
+}';
 		}
 		
 		File.saveContent( mainFile , source );
 
-		var s = program.main.source;
-		program.main.source = null;
+		//var s = program.main.source;
+		//program.main.source = null;
 		File.saveContent( tmpDir + "program", haxe.Serializer.run(program));
-		program.main.source = s;
+		//program.main.source = s;
 
 	}
 
@@ -111,7 +111,9 @@ class Compiler {
 
 			mainFile = tmpDir + p.main.name + ".hx";
 
-			p.main.source = File.getContent(mainFile);
+			if( p.main.source == null ) {
+				p.main.source = File.getContent(mainFile);
+			}
 
 			/*
 			var o:Program.Output = null;

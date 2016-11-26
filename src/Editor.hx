@@ -188,7 +188,7 @@ class Editor {
     var h = win.innerHeight - 160;
     h -= new JQuery('.foot').height();
 
-    setHeight(h);
+    setHeight(Std.int(h));
 
   }
 
