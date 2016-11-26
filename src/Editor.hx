@@ -334,7 +334,7 @@ class Editor {
           + (Lambda.has(def, l.name) ? "checked='checked'" : "") 
           + ' /> ${l.name}'
           + "<span class='help-inline'><a href='" + (l.help == null ? "http://lib.haxe.org/p/" + l.name : l.help) 
-          + "' target='_blank'><i class='icon-question-sign'></i></a></span>"
+          + "' target='_blank'><i class='fa fa-question-circle'></i></a></span>"
           + "</label>"
           );
     
@@ -463,13 +463,13 @@ class Editor {
 	
 	cm.execCommand("autocomplete");
 	
-    if (comps.type != null) {
-      trace(comps.type);
-       var pos = cm.getCursor();
-       var end = {line:pos.line, ch:pos.ch+comps.type.length};
-       cm.replaceRange(comps.type, pos, pos);
-       cm.setSelection(pos, end);
-    } 
+    // if (comps.type != null) {
+    //   trace(comps.type);
+    //    var pos = cm.getCursor();
+    //    var end = {line:pos.line, ch:pos.ch+comps.type.length};
+    //    cm.replaceRange(comps.type, pos, pos);
+    //    cm.setSelection(pos, end);
+    // } 
     if (comps.errors != null) {
       messages.html( "<div class='alert alert-error'><h4 class='alert-heading'>Completion error</h4><div class='message'></div></div>" );
       for( m in comps.errors ){
