@@ -28,7 +28,7 @@ class Libs
 			{name:"tink_core", help:"https://github.com/fponticelli/thx.core"},
 			{name:"thx.core", help:"https://github.com/haxetink/tink_core"},
 			{name:"hxColorToolkit", help:"https://github.com/andyli/hxColorToolkit"},
-			{name:"threejs", head: ["<script src='../../../lib/js/stats-min.js'></script>", "<script src='../../../lib/js/three-min.js'></script>"]},
+			{name:"threejs", head: ["<script src='../../../lib/js/three.min.js'></script>"]},
 			{name:"pixijs", head: ["<script src='../../../lib/js/pixi.min.js'></script>"]},
 		],
 		"SWF" => new Array<LibConf>().concat([
