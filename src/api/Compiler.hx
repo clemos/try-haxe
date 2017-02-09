@@ -336,7 +336,7 @@ class Test{
 			//"--dead-code-elimination"
 		];
 
-		if (program.analyzer == "yes") args=args.concat(["-D", "analyzer"]);
+		if (program.analyzer == "yes") args=args.concat(["-D", "analyzer-optimize"]);
 
 		var outputPath : String;
 		var htmlPath : String = tmpDir + "index.html";
