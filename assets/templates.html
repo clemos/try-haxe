@@ -8,7 +8,7 @@
   <title>Try-Haxe - widget - $uid</title>
 
   <link rel="icon" href="//haxe.org/favicon.ico" type="image/x-icon"/>
-  <meta property="og:image" content="http://try.haxe.org/share.png" />
+  <meta property="og:image" content="https://try.haxe.org/share.png" />
   <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'/>
   <style>
   * { box-sizing: border-box }
@@ -105,7 +105,7 @@
   <nav id="nav" role="navigation">
     <a href="#code" onclick="showCode();return false" id="btn-code" style="display:none"><i class="fa fa-code"></i> Show code</a>
     <a href="#results" onclick="run();return false" id="btn-results"><i class="fa fa-play-circle"></i> Run</a>
-    <a href="http://try.haxe.org/#$uid" target="_blank"><i class="fa fa-pencil"></i> Edit</a>
+    <a href="https://try.haxe.org/#$uid" target="_blank"><i class="fa fa-pencil"></i> Edit</a>
   </nav>
   <div id="code">
     <pre><code class="prettyprint haxe">${source.split("\t").join("  ")}</code></pre>
@@ -113,9 +113,9 @@
   <div id="results" style="display:none">
     <iframe id="iframe" src="" width="99%" frameborder="0" scrolling="no" height="100%"></iframe>
   </div>
-  <link href='http://code.haxe.org/css/highlighter.min.css' rel='stylesheet' type='text/css'/>
+  <link href='/highlighter.min.css' rel='stylesheet' type='text/css'/>
   <script src="//haxe.org/js/jquery.min.js"></script>
-  <script src="http://code.haxe.org/js/highlighter.js"></script>
+  <script src="/highlighter.js"></script>
   <script>
   function run()
   {

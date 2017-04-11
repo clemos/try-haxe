@@ -5,7 +5,10 @@ RewriteEngine on
 
 # redirecting to new url
 RewriteCond %{HTTP_HOST} aaaliasing\.net
-RewriteRule ^(.*)$ http://try.haxe.org/$1 [R=301]
+RewriteRule ^(.*)$ https://try.haxe.org/$1 [R=301,L]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://try.haxe.org/$1 [R=301,L]
 
 # local userdir :S
 RewriteCond %{HTTP_HOST} localhost

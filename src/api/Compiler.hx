@@ -341,8 +341,8 @@ class Test{
 		var outputPath : String;
 		var htmlPath : String = tmpDir + "index.html";
 		var runUrl = '${Api.base}/program/${program.uid}/run';
-		var embedSrc = '<iframe src="http://${Api.host}${Api.base}/embed/${program.uid}" width="100%" height="300" frameborder="no" allowfullscreen>
-	<a href="http://${Api.host}/#${program.uid}">Try Haxe !</a>
+		var embedSrc = '<iframe src="https://${Api.host}${Api.base}/embed/${program.uid}" width="100%" height="300" frameborder="no" allowfullscreen>
+	<a href="https://${Api.host}/#${program.uid}">Try Haxe !</a>
 </iframe>';
 		
 		var html:HTMLConf = {head:[], body:[]};
