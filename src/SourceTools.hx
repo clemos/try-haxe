@@ -3,7 +3,7 @@ using Lambda;
 class SourceTools {
 
 	public static function splitLines(str:String):Array<String> {
-		return ~/[\n|\r|\r\n]/g.split(str);
+		return ~/\r\n|\n|\r/g.split(str);
 	}
 
 	public static function indexToPos( src :String , idx : Int ) : { line : Int , ch : Int } {
