@@ -8,7 +8,7 @@ RewriteCond %{HTTP_HOST} aaaliasing\.net
 RewriteRule ^(.*)$ https://try.haxe.org/$1 [R=301,L]
 
 RewriteCond %{HTTPS} off
-RewriteCond %{HTTP_HOST} !localhost
+RewriteCond %{HTTP_HOST} try\.haxe\.org
 RewriteRule ^(.*)$ https://try.haxe.org/$1 [R=301,L]
 
 # local userdir :S
