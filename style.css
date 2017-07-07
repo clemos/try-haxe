@@ -3,7 +3,6 @@ body {
   font-weight: 400;
   font-size: 14px;
   color: #1e1e1e;
-  min-width:350px;
   margin-top:75px;
   overflow-y:scroll;
 }
