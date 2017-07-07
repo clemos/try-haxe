@@ -20,8 +20,8 @@ class Editor {
 	var program : Program;
 	var output : Output;
 	
-	
 	var gateway : String;
+  var apiRoot : String;
 	
 	var form : JQuery;
 	var haxeSource : CodeMirror;
@@ -157,7 +157,7 @@ class Editor {
 		
 		compileBtn.bind( "click" , compile );
 
-		var apiRoot = new JQuery("body").data("api");
+	  apiRoot = new JQuery("body").data("api");
 		cnx = HttpAsyncConnection.urlConnect(apiRoot+"/compiler");
 
     program = {
@@ -538,11 +538,11 @@ class Editor {
 
 	public function run(){
 		if( output.success ){
-  		var run = output.href ;
-  		runner.attr("src" , run + "?r=" + Std.string(Math.random()) );
+  		var run = output.href;
+  		runner.attr("src" , apiRoot + run + "?r=" + Std.string(Math.random()) );
       new JQuery(".link-btn, .fullscreen-btn")
         .buttonReset()
-        .attr("href" , run + "?r=" + Std.string(Math.random()) );
+        .attr("href" , apiRoot + run + "?r=" + Std.string(Math.random()) );
 
 		}else{
 			runner.attr("src" , "about:blank" );

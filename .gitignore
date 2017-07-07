@@ -7,3 +7,4 @@ tmp/*
 *.hxproj
 tests/RunTravis.n
 examples/bin
+npm-debug.log

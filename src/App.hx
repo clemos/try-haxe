@@ -33,6 +33,14 @@ class App {
 	  		}
 	  		Api.host = Web.getHostName();
 
+	  		var origin = Web.getClientHeader('Origin');
+
+	  		if( StringTools.endsWith(origin,'try.haxe.org') 
+	  			|| StringTools.endsWith(origin, 'localhost:8080') ) {
+	  			Web.setHeader('Access-Control-Allow-Origin', origin);
+	  			Web.setHeader('Access-Control-Allow-Headers', 'X-Haxe-Remoting');
+	  	  }
+
 	  		var api = new Api();
 
 	  		haxe.web.Dispatch.run( url , params , api );   
