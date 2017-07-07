@@ -15,6 +15,9 @@ using haxe.EnumTools;
 
 class Editor {
 
+  // min height is 420 to be bigger than the "options" tab, so it never has scrollbars 
+  static inline var MIN_HEIGHT = 420;
+
 	var cnx : HttpAsyncConnection;
 	
 	var program : Program;
@@ -188,15 +191,18 @@ class Editor {
   }
 
   function resize(?_) {
-
+    // reset
     setHeight(10);
 
     var win = js.Browser.window;
     var body = new JQuery(win.document.body);
     var main = new JQuery('.main');
 
+    // window height - 160 - footer height
     var h = win.innerHeight - 160;
     h -= new JQuery('.foot').height();
+
+    h = Math.max(h, MIN_HEIGHT);
 
     setHeight(Std.int(h));
 
