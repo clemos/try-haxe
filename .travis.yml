@@ -1,7 +1,7 @@
 language: haxe
 
 haxe:
-  - "3.2.0"
+  - "3.4.2"
 
 env:
   - TARGET=swf
